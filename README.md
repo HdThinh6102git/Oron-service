@@ -13,18 +13,10 @@ Node.js framework NestJS project structure
 ## Installation
 
 ```sh
-# 1. node_modules
-npm ci
 # 1-1. npm < v7 or Node.js <= v18.14.0
 npm i
 # 2. When synchronize database from existing entities
-npm run entity:sync
-# 2-1. When import entities from an existing database
-npm run entity:load
-# 3-1. Setup Husky, Lint-Staged
-npx husky install
-npx husky add .husky/pre-commit "yarn lint-staged"
-npx husky add .husky/commit-msg ""
+npm run migrate:up
 ```
 
 If you use multiple databases in `entity:load`, [modify them.](bin/entity.ts#L45)
