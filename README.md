@@ -1,10 +1,10 @@
-#Resources needed:
+# Resources needed:
 
 1. VS Code
 2. Download PostgreSQL, pgAdmin4, and DBeaver
 3. Download Node.js v18.14.2 (the project is currently using this version)
-
-#How to run source code:
+ 
+# How to run source code:
 
 1. Clone the source code from GitHub
    > Repository URL: https://github.com/HdThinh6102git/Oron-service
