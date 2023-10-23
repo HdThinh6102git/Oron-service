@@ -1,3 +1,24 @@
+#Resources needed:
+
+1. VS Code
+2. Download PostgreSQL, pgAdmin4, and DBeaver
+3. Download Node.js v18.14.2 (the project is currently using this version)
+
+#How to run source code:
+
+1. Clone the source code from GitHub
+   > Repository URL: https://github.com/HdThinh6102git/Oron-service
+   > If you have already cloned the repository, make sure to run "git pull" each time you want to get the latest code.
+2. Open the project in VS Code.
+3. Open the terminal and run "npm i" to install dependencies.
+4. Copy the ".env.dev" file and create a new file named ".env".
+5. In pgAdmin, create a new database with the specified database name, password, user, and port (matching the configuration in the ".env" file).
+6. Run "npm run start:dev" in the terminal.
+7. Run the command "npm run migrate:up" to apply migrations to the database. Then, check if the tables have been created in the database.
+8. Use the API to import address data by calling the "import address" endpoint.
+9. Use DBeaver or pgAdmin to add data to the "Role" table with the name "USER".
+10. Run tests on the APIs.
+11. 
 # Service
 
 Node.js framework NestJS project structure
@@ -15,11 +36,6 @@ Node.js framework NestJS project structure
 ```sh
 # 1-1. npm < v7 or Node.js <= v18.14.0
 npm i
-# 2. When synchronize database from existing entities
-npm run migrate:up
-```
-
-If you use multiple databases in `entity:load`, [modify them.](bin/entity.ts#L45)
 
 ## Development
 
@@ -29,27 +45,7 @@ npm run start:dev
 npm run start:repl
 ```
 
-Run [http://localhost:3000](http://localhost:3000)
-
-## Test
-
-```sh
-npm test # exclude e2e
-npm run test:e2e
-```
-
-## Production
-
-```sh
-npm run lint
-npm run build
-# define environment variable yourself.
-# NODE_ENV=production PORT=8000 NO_COLOR=true node dist/app
-node dist/app
-# OR
-npm start
-```
-
+Run [http://localhost:3500](http://localhost:3500)
 ## Folders
 
 ```js
@@ -131,45 +127,6 @@ class FooController {} //= foo.controller.ts
 class BarQueryDto {} //= bar-query.dto.ts
 ```
 
-### Interface Naming
-
-```ts
-// https://stackoverflow.com/questions/541912
-// https://stackoverflow.com/questions/2814805
-interface User {}
-interface CustomeUser extends User {}
-interface ThirdCustomeUser extends CustomeUser {}
-```
-
-### Index Exporting
-
-```diff
-# It is recommended to place index.ts in each folder and export.
-# Unless it's a special case, it is import from a folder instead of directly from a file.
-- import { FooController } from './controllers/foo.controller';
-- import { BarController } from './controllers/bar.controller';
-+ import { FooController, BarController } from './controllers';
-# My preferred method is to place only one fileOrFolder name at the end of the path.
-- import { UtilService } from '../common/providers/util.service';
-+ import { UtilService } from '../common';
-```
-
-#### Circular dependency
-
-<https://docs.nestjs.com/fundamentals/circular-dependency>
-
-```diff
-# Do not use a path that ends with a dot.
-- import { FooService } from '.';
-- import { BarService } from '..';
-+ import { FooService } from './foo.service';
-+ import { BarService } from '../providers';
-```
-
-### Variables Naming
-
-> refer to [Naming cheatsheet](https://github.com/kettanaito/naming-cheatsheet)
-
 ### Links
 
 - [Better Nodejs Project](https://github.com/CatsMiaow/better-nodejs-project)
@@ -195,9 +152,6 @@ type ở trên có thể là:
     - style: Changes that do not affect the meaning of the code (Eg: adding white-space, formatting, missing semi-colons, etc)
     - test: Adding missing tests or correcting existing tests
 ```
-
-### Migrate:
-```angular2html
 migrate generate (auto generate all changes (foreign drop table)): npm run migrate:generate
 migrate up (up all migrate files to the database): npm run migrate:up
 migrate down (rollback file latest database): npm run migrate:down
