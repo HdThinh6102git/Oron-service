@@ -18,7 +18,7 @@
 8. Use the API to import address data by calling the "import address" endpoint.
 9. Use DBeaver or pgAdmin to add data to the "Role" table with the name "USER".
 10. Run tests on the APIs.
-11. 
+
 # Service
 
 Node.js framework NestJS project structure
