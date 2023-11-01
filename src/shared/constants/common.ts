@@ -7,6 +7,7 @@ export const REQUEST_ID_TOKEN_HEADER = 'x-request-id';
 export const FORWARDED_FOR_TOKEN_HEADER = 'x-forwarded-for';
 export const VERIFICATION_TIME = 5; //minutes
 export const MESSAGES = {
+  CATEGORY_NAME_EXIST: 'category_name_exist',
   VERIFICATION_CODE_NOT_EXPIRED: 'verification_code_not_expired',
   SEND_MAIL_SUCCESSFULLY: 'send_mail_successfully',
   VERIFICATION_INCORRECT: 'verification_incorrect',

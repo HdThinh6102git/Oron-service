@@ -17,6 +17,12 @@ export class Category {
   })
   name: string;
 
+  @Column('text', {
+    nullable: false,
+    name: 'description',
+  })
+  description: string;
+
   @Column('varchar', {
     nullable: false,
     name: 'status',
