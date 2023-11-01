@@ -1,10 +1,12 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../user/user.entity';
 import { Category } from './category.entity';
@@ -70,14 +72,14 @@ export class Post {
   @Column('text', { nullable: true, name: 'specific_address' })
   specificAddress: string;
 
-  @Column('timestamp', {
+  @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
     name: 'created_at',
   })
   createdAt: Date;
 
-  @Column('timestamp', {
+  @UpdateDateColumn({
     nullable: true,
     name: 'updated_at',
   })

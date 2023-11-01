@@ -1,9 +1,11 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Post } from './post/post.entity';
 import { User } from './user/user.entity';
@@ -31,14 +33,14 @@ export class Comment {
   })
   status: string;
 
-  @Column('timestamp', {
+  @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
     name: 'created_at',
   })
   createdAt: Date;
 
-  @Column('timestamp', {
+  @UpdateDateColumn({
     nullable: true,
     name: 'updated_at',
   })

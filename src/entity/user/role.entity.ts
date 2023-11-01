@@ -1,10 +1,12 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Permission } from './permission.entity';
 import { User } from './user.entity';
@@ -29,18 +31,18 @@ export class Role {
   })
   status: string;
 
-  @Column('timestamp', {
-    nullable: true,
-    name: 'updated_at',
-  })
-  updatedAt: Date;
-
-  @Column('timestamp', {
+  @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
     name: 'created_at',
   })
   createdAt: Date;
+
+  @UpdateDateColumn({
+    nullable: true,
+    name: 'updated_at',
+  })
+  updatedAt: Date;
 
   @ManyToMany(() => Permission)
   @JoinTable()

@@ -1,4 +1,12 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Post } from './post.entity';
 
 export enum CATEGORY_STATUS {
@@ -14,6 +22,7 @@ export class Category {
   @Column('varchar', {
     nullable: false,
     name: 'name',
+    unique: true,
   })
   name: string;
 
@@ -30,20 +39,20 @@ export class Category {
   })
   status: string;
 
-  @Column('timestamp', {
+  @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
     name: 'created_at',
   })
   createdAt: Date;
 
-  @Column('timestamp', {
+  @UpdateDateColumn({
     nullable: true,
     name: 'updated_at',
   })
   updatedAt: Date;
 
-  @Column('timestamp', {
+  @DeleteDateColumn({
     nullable: true,
     name: 'deleted_at',
   })

@@ -6,6 +6,9 @@ import {
   ManyToOne,
   JoinColumn,
   OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
 } from 'typeorm';
 import { Role } from './role.entity';
 import { Province } from './address/province.entity';
@@ -94,20 +97,20 @@ export class User extends BaseEntity {
   @Column('varchar', { nullable: true, name: 'phone_verify_code' })
   phoneVerifyCode: string;
 
-  @Column('timestamp', {
-    nullable: true,
-    name: 'updated_at',
-  })
-  updatedAt: Date;
-
-  @Column('timestamp', {
+  @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
     name: 'created_at',
   })
   createdAt: Date;
 
-  @Column('timestamp', {
+  @UpdateDateColumn({
+    nullable: true,
+    name: 'updated_at',
+  })
+  updatedAt: Date;
+
+  @DeleteDateColumn({
     nullable: true,
     name: 'deleted_at',
   })

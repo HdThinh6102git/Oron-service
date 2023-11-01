@@ -1,4 +1,12 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { User } from '../user.entity';
 
 @Entity({ name: 'district', schema: process.env.DB_SCHEMA })
@@ -12,20 +20,20 @@ export class District {
   @Column('varchar', { nullable: false, name: 'level' })
   level: string;
 
-  @Column('timestamp', {
+  @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
     name: 'created_at',
   })
   createdAt: Date;
 
-  @Column('timestamp', {
+  @UpdateDateColumn({
     nullable: true,
     name: 'updated_at',
   })
   updatedAt: Date;
 
-  @Column('timestamp', {
+  @DeleteDateColumn({
     nullable: true,
     name: 'deleted_at',
   })

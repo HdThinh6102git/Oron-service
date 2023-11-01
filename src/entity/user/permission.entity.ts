@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 export enum PERMISSION_STATUS {
   IN_ACTIVE = 'IN_ACTIVE',
@@ -20,16 +26,16 @@ export class Permission {
   })
   status: string;
 
-  @Column('timestamp', {
-    nullable: true,
-    name: 'updated_at',
-  })
-  updatedAt: Date;
-
-  @Column('timestamp', {
+  @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
     name: 'created_at',
   })
   createdAt: Date;
+
+  @UpdateDateColumn({
+    nullable: true,
+    name: 'updated_at',
+  })
+  updatedAt: Date;
 }

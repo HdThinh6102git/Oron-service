@@ -1,4 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 export enum VERIFICATION_TYPE {
   FORGOT_PASSWORD = 'FORGOT_PASSWORD',
@@ -29,7 +34,7 @@ export class Verification {
   @Column({ type: 'numeric', nullable: true, name: 'verification_time' })
   verificationTime: number;
 
-  @Column('timestamp', {
+  @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
     name: 'created_at',
