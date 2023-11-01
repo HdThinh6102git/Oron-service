@@ -5,11 +5,16 @@ import {
   BaseEntity,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { Role } from './role.entity';
-import { Province } from './province.entity';
-import { District } from './district.entity';
-import { Ward } from './ward.entity';
+import { Province } from './address/province.entity';
+import { District } from './address/district.entity';
+import { Ward } from './address/ward.entity';
+import { Post } from '../post/post.entity';
+import { Comment } from '../comment.entity';
+import { Review } from '../review.entity';
+import { Reaction } from '../reaction.entity';
 
 export enum USER_STATUS {
   IN_ACTIVE = 'IN_ACTIVE',
@@ -123,4 +128,16 @@ export class User extends BaseEntity {
   @ManyToOne(() => Ward, (ward) => ward.users)
   @JoinColumn({ name: 'ward_id', referencedColumnName: 'id' })
   ward: Ward;
+
+  @OneToMany(() => Post, (post) => post.user)
+  posts: Post[];
+
+  @OneToMany(() => Comment, (comment) => comment.user)
+  comments: Comment[];
+
+  @OneToMany(() => Review, (review) => review.user)
+  reviews: Review[];
+
+  @OneToMany(() => Reaction, (reaction) => reaction.user)
+  reactions: Reaction[];
 }

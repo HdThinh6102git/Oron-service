@@ -5,7 +5,7 @@ export enum RESULT_STATUS {
 export const IS_VERIFIED = true;
 export const REQUEST_ID_TOKEN_HEADER = 'x-request-id';
 export const FORWARDED_FOR_TOKEN_HEADER = 'x-forwarded-for';
-export const VERIFICATION_TIME = 1; //minutes
+export const VERIFICATION_TIME = 5; //minutes
 export const MESSAGES = {
   VERIFICATION_CODE_NOT_EXPIRED: 'verification_code_not_expired',
   SEND_MAIL_SUCCESSFULLY: 'send_mail_successfully',
