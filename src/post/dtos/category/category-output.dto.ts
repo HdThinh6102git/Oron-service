@@ -16,7 +16,7 @@ export class CategoryOutput {
 
   @Expose()
   @ApiProperty()
-  public status: string;
+  public status: number;
 
   @Expose()
   @ApiProperty()

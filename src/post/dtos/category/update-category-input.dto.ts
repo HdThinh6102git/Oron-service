@@ -8,4 +8,8 @@ export class UpdateCategoryInput {
   @IsOptional()
   @IsString()
   description: string;
+
+  @IsOptional()
+  @IsString()
+  status: number;
 }

@@ -10,8 +10,8 @@ import {
 import { Post } from './post.entity';
 
 export enum CATEGORY_STATUS {
-  IN_ACTIVE = 'IN_ACTIVE',
-  ACTIVE = 'ACTIVE',
+  IN_ACTIVE = 0,
+  ACTIVE = 1,
 }
 
 @Entity({ name: 'category', schema: process.env.DB_SCHEMA })
@@ -32,12 +32,12 @@ export class Category {
   })
   description: string;
 
-  @Column('varchar', {
+  @Column('numeric', {
     nullable: false,
     name: 'status',
     default: CATEGORY_STATUS.ACTIVE,
   })
-  status: string;
+  status: number;
 
   @CreateDateColumn({
     nullable: false,
