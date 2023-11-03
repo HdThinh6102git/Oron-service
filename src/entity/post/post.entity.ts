@@ -14,8 +14,8 @@ import { Comment } from '../comment.entity';
 import { Review } from '../review.entity';
 import { Reaction } from '../reaction.entity';
 export enum POST_STATUS {
-  IN_ACTIVE = 'IN_ACTIVE',
-  ACTIVE = 'ACTIVE',
+  IN_ACTIVE = 0,
+  ACTIVE = 1,
 }
 
 @Entity({ name: 'post', schema: process.env.DB_SCHEMA })
@@ -41,12 +41,12 @@ export class Post {
   })
   videoURL: string;
 
-  @Column('varchar', {
+  @Column('numeric', {
     nullable: false,
     name: 'status',
     default: POST_STATUS.ACTIVE,
   })
-  status: string;
+  status: number;
 
   @Column('varchar', {
     nullable: true,

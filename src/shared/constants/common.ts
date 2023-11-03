@@ -7,6 +7,7 @@ export const REQUEST_ID_TOKEN_HEADER = 'x-request-id';
 export const FORWARDED_FOR_TOKEN_HEADER = 'x-forwarded-for';
 export const VERIFICATION_TIME = 5; //minutes
 export const MESSAGES = {
+  POST_NOT_FOUND: 'post_not_found',
   CATEGORY_NOT_FOUND: 'category_not_found',
   CATEGORY_NAME_EXIST: 'category_name_exist',
   VERIFICATION_CODE_NOT_EXPIRED: 'verification_code_not_expired',
