@@ -17,6 +17,7 @@ export const MESSAGES = {
   USER_VERIFIED: 'user_verified',
   GET_SUCCEED: 'get_succeed',
   CREATED_SUCCEED: 'created_succeed',
+  DELETED_SUCCEED: 'deleted_succeed',
   UPLOADED_SUCCEED: 'uploaded_succeed',
   UPDATE_SUCCEED: 'update_succeed',
   EMAIL_NOT_FOUND: `email_not_found`,

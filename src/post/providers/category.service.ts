@@ -193,7 +193,7 @@ export class CategoryService {
     return {
       error: false,
       data: null,
-      message: MESSAGES.GET_SUCCEED,
+      message: MESSAGES.DELETED_SUCCEED,
       code: 0,
     };
   }

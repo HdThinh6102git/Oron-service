@@ -266,4 +266,24 @@ export class PostService {
       code: 0,
     };
   }
+
+  public async deletePost(postId: string): Promise<BaseApiResponse<null>> {
+    const post = await this.postRepo.findOne({
+      where: { id: postId },
+    });
+    if (!post) {
+      throw new NotFoundException({
+        error: true,
+        message: MESSAGES.POST_NOT_FOUND,
+        code: 4,
+      });
+    }
+    await this.postRepo.delete(postId);
+    return {
+      error: false,
+      data: null,
+      message: MESSAGES.DELETED_SUCCEED,
+      code: 0,
+    };
+  }
 }

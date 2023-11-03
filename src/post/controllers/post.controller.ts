@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -51,5 +52,12 @@ export class PostController {
     @Param('id') postId: string,
   ): Promise<BaseApiResponse<PostOutput>> {
     return await this.postService.getPostById(postId);
+  }
+
+  @Delete(':id')
+  public async deletePost(
+    @Param('id') postId: string,
+  ): Promise<BaseApiResponse<null>> {
+    return this.postService.deletePost(postId);
   }
 }
