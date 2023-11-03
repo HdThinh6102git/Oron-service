@@ -174,4 +174,27 @@ export class CategoryService {
       code: 0,
     };
   }
+
+  public async deleteCategory(
+    categoryId: string,
+  ): Promise<BaseApiResponse<null>> {
+    const category = await this.categoryRepo.findOne({
+      where: { id: categoryId },
+    });
+    if (!category) {
+      throw new NotFoundException({
+        error: true,
+        message: MESSAGES.CATEGORY_NOT_FOUND,
+        code: 4,
+      });
+    }
+    category.deletedAt = new Date();
+    await this.categoryRepo.save(category);
+    return {
+      error: false,
+      data: null,
+      message: MESSAGES.GET_SUCCEED,
+      code: 0,
+    };
+  }
 }

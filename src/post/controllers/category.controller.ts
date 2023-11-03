@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -46,5 +47,11 @@ export class CategoryController {
     @Param('id') categoryId: string,
   ): Promise<BaseApiResponse<CategoryOutput>> {
     return await this.categoryService.getCategoryById(categoryId);
+  }
+  @Delete(':id')
+  public async deleteCategory(
+    @Param('id') categoryId: string,
+  ): Promise<BaseApiResponse<null>> {
+    return this.categoryService.deleteCategory(categoryId);
   }
 }
