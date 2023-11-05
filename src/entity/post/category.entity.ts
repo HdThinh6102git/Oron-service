@@ -1,7 +1,6 @@
 import {
   Column,
   CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -52,11 +51,12 @@ export class Category {
   })
   updatedAt: Date;
 
-  @DeleteDateColumn({
+  @Column({
     nullable: true,
     name: 'deleted_at',
+    type: 'timestamptz',
   })
-  deletedAt: Date;
+  deletedAt: Date | null;
 
   @OneToMany(() => Post, (post) => post.category)
   posts: Post[];

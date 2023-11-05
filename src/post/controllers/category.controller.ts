@@ -54,4 +54,18 @@ export class CategoryController {
   ): Promise<BaseApiResponse<null>> {
     return this.categoryService.deleteCategory(categoryId);
   }
+
+  @Delete('permanently/:id')
+  public async deleteCategoryPermanently(
+    @Param('id') categoryId: string,
+  ): Promise<BaseApiResponse<null>> {
+    return this.categoryService.deleteCategoryPermanently(categoryId);
+  }
+
+  @Patch('restoration/:id')
+  public async retoreCategory(
+    @Param('id') categoryId: string,
+  ): Promise<BaseApiResponse<CategoryOutput>> {
+    return await this.categoryService.restoreCategory(categoryId);
+  }
 }

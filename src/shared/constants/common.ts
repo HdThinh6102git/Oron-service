@@ -8,7 +8,9 @@ export const FORWARDED_FOR_TOKEN_HEADER = 'x-forwarded-for';
 export const VERIFICATION_TIME = 5; //minutes
 export const MESSAGES = {
   POST_NOT_FOUND: 'post_not_found',
+  POST_NOT_FOUND_IN_TRASH_BIN: 'post_not_found_in_trash_bin',
   CATEGORY_NOT_FOUND: 'category_not_found',
+  CATEGORY_NOT_FOUND_IN_TRASH_BIN: 'category_not_found_in_trash_bin',
   CATEGORY_NAME_EXIST: 'category_name_exist',
   VERIFICATION_CODE_NOT_EXPIRED: 'verification_code_not_expired',
   SEND_MAIL_SUCCESSFULLY: 'send_mail_successfully',

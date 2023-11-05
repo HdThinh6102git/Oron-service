@@ -85,6 +85,13 @@ export class Post {
   })
   updatedAt: Date;
 
+  @Column({
+    nullable: true,
+    name: 'deleted_at',
+    type: 'timestamptz',
+  })
+  deletedAt: Date | null;
+
   @ManyToOne(() => User, (user) => user.posts)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   user: User;

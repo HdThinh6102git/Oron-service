@@ -43,6 +43,7 @@ export class PostService {
       where: {
         id: userId,
       },
+      relations: ['province', 'district', 'ward'],
     });
     const inputValue: any = {};
     if (user) {
@@ -83,6 +84,9 @@ export class PostService {
         ] = `${ward.level} ${ward.name}, ${district.level} ${district.name}, ${province.level} ${province.name}`;
       }
     } else {
+      inputValue['provinceId'] = user?.province;
+      inputValue['districtId'] = user?.district;
+      inputValue['wardId'] = user?.ward;
       inputValue['fullAddress'] = user?.fullAddress;
     }
     //set specific address of post
@@ -98,6 +102,9 @@ export class PostService {
       fullAddress: inputValue.fullAddress,
       category: inputValue.category,
       specificAddress: inputValue.specificAddress,
+      provinceId: inputValue.provinceId,
+      districtId: inputValue.districtId,
+      wardId: inputValue.wardId,
     });
     //convert to output
     const postOutput = plainToClass(PostOutput, post, {
@@ -119,6 +126,7 @@ export class PostService {
     const postIdExist = await this.postRepo.findOne({
       where: {
         id: postId,
+        deletedAt: IsNull(),
       },
       relations: ['user', 'category'],
     });
@@ -203,6 +211,7 @@ export class PostService {
     let wheres: any[] = [];
     const where: any = {
       id: Not(IsNull()),
+      deletedAt: IsNull(),
     };
     if (typeof filter.status === 'number') {
       where['status'] = filter.status;
@@ -246,7 +255,7 @@ export class PostService {
     postId: string,
   ): Promise<BaseApiResponse<PostOutput>> {
     const post = await this.postRepo.findOne({
-      where: { id: postId },
+      where: { id: postId, deletedAt: IsNull() },
       relations: ['user', 'category'],
     });
     if (!post) {
@@ -267,14 +276,16 @@ export class PostService {
     };
   }
 
-  public async deletePost(postId: string): Promise<BaseApiResponse<null>> {
+  public async deletePostPermanently(
+    postId: string,
+  ): Promise<BaseApiResponse<null>> {
     const post = await this.postRepo.findOne({
-      where: { id: postId },
+      where: { id: postId, deletedAt: Not(IsNull()) },
     });
     if (!post) {
       throw new NotFoundException({
         error: true,
-        message: MESSAGES.POST_NOT_FOUND,
+        message: MESSAGES.POST_NOT_FOUND_IN_TRASH_BIN,
         code: 4,
       });
     }
@@ -283,6 +294,53 @@ export class PostService {
       error: false,
       data: null,
       message: MESSAGES.DELETED_SUCCEED,
+      code: 0,
+    };
+  }
+
+  public async deletePost(postId: string): Promise<BaseApiResponse<null>> {
+    const post = await this.postRepo.findOne({
+      where: { id: postId, deletedAt: IsNull() },
+    });
+    if (!post) {
+      throw new NotFoundException({
+        error: true,
+        message: MESSAGES.POST_NOT_FOUND,
+        code: 4,
+      });
+    }
+    post.deletedAt = new Date();
+    await this.postRepo.save(post);
+    return {
+      error: false,
+      data: null,
+      message: MESSAGES.UPDATE_SUCCEED,
+      code: 0,
+    };
+  }
+
+  public async restorePost(
+    postId: string,
+  ): Promise<BaseApiResponse<PostOutput>> {
+    const post = await this.postRepo.findOne({
+      where: { id: postId, deletedAt: Not(IsNull()) },
+    });
+    if (!post) {
+      throw new NotFoundException({
+        error: true,
+        message: MESSAGES.POST_NOT_FOUND_IN_TRASH_BIN,
+        code: 4,
+      });
+    }
+    post.deletedAt = null;
+    const updatedPost = await this.postRepo.save(post);
+    const postOutput = plainToClass(PostOutput, updatedPost, {
+      excludeExtraneousValues: true,
+    });
+    return {
+      error: false,
+      data: postOutput,
+      message: MESSAGES.UPDATE_SUCCEED,
       code: 0,
     };
   }

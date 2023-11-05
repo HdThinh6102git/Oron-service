@@ -28,7 +28,7 @@ export class CategoryService {
     input: CreateCategoryInput,
   ): Promise<BaseApiResponse<CategoryOutput>> {
     const categoryExist = await this.categoryRepo.findOne({
-      where: { name: input.name },
+      where: { name: input.name, deletedAt: IsNull() },
     });
     if (categoryExist) {
       throw new HttpException(
@@ -56,7 +56,11 @@ export class CategoryService {
   ): Promise<BaseApiResponse<CategoryOutput>> {
     if (input.name) {
       const categoryNameExist = await this.categoryRepo.findOne({
-        where: { id: Not(In([categoryId])), name: input.name },
+        where: {
+          id: Not(In([categoryId])),
+          name: input.name,
+          deletedAt: IsNull(),
+        },
       });
       if (categoryNameExist) {
         throw new HttpException(
@@ -73,6 +77,7 @@ export class CategoryService {
     const categoryIdExist = await this.categoryRepo.findOne({
       where: {
         id: categoryId,
+        deletedAt: IsNull(),
       },
     });
     if (!categoryIdExist) {
@@ -109,6 +114,7 @@ export class CategoryService {
     let wheres: any[] = [];
     const where: any = {
       id: Not(IsNull()),
+      deletedAt: IsNull(),
     };
     if (typeof filter.status === 'number') {
       where['status'] = filter.status;
@@ -155,7 +161,7 @@ export class CategoryService {
     categoryId: string,
   ): Promise<BaseApiResponse<CategoryOutput>> {
     const category = await this.categoryRepo.findOne({
-      where: { id: categoryId },
+      where: { id: categoryId, deletedAt: IsNull() },
     });
     if (!category) {
       throw new NotFoundException({
@@ -179,7 +185,7 @@ export class CategoryService {
     categoryId: string,
   ): Promise<BaseApiResponse<null>> {
     const category = await this.categoryRepo.findOne({
-      where: { id: categoryId },
+      where: { id: categoryId, deletedAt: IsNull() },
     });
     if (!category) {
       throw new NotFoundException({
@@ -193,7 +199,58 @@ export class CategoryService {
     return {
       error: false,
       data: null,
+      message: MESSAGES.UPDATE_SUCCEED,
+      code: 0,
+    };
+  }
+
+  public async deleteCategoryPermanently(
+    categoryId: string,
+  ): Promise<BaseApiResponse<null>> {
+    const category = await this.categoryRepo.findOne({
+      where: {
+        id: categoryId,
+        deletedAt: Not(IsNull()),
+      },
+    });
+    if (!category) {
+      throw new NotFoundException({
+        error: true,
+        message: MESSAGES.CATEGORY_NOT_FOUND_IN_TRASH_BIN,
+        code: 4,
+      });
+    }
+    await this.categoryRepo.delete(categoryId);
+    return {
+      error: false,
+      data: null,
       message: MESSAGES.DELETED_SUCCEED,
+      code: 0,
+    };
+  }
+
+  public async restoreCategory(
+    categoryId: string,
+  ): Promise<BaseApiResponse<CategoryOutput>> {
+    const category = await this.categoryRepo.findOne({
+      where: { id: categoryId, deletedAt: Not(IsNull()) },
+    });
+    if (!category) {
+      throw new NotFoundException({
+        error: true,
+        message: MESSAGES.CATEGORY_NOT_FOUND_IN_TRASH_BIN,
+        code: 4,
+      });
+    }
+    category.deletedAt = null;
+    const updatedCategory = await this.categoryRepo.save(category);
+    const categoryOutput = plainToClass(CategoryOutput, updatedCategory, {
+      excludeExtraneousValues: true,
+    });
+    return {
+      error: false,
+      data: categoryOutput,
+      message: MESSAGES.UPDATE_SUCCEED,
       code: 0,
     };
   }

@@ -54,10 +54,24 @@ export class PostController {
     return await this.postService.getPostById(postId);
   }
 
+  @Delete('permanently/:id')
+  public async deletePostPermanently(
+    @Param('id') postId: string,
+  ): Promise<BaseApiResponse<null>> {
+    return this.postService.deletePostPermanently(postId);
+  }
+
   @Delete(':id')
   public async deletePost(
     @Param('id') postId: string,
   ): Promise<BaseApiResponse<null>> {
     return this.postService.deletePost(postId);
+  }
+
+  @Patch('restoration/:id')
+  public async retorePost(
+    @Param('id') postId: string,
+  ): Promise<BaseApiResponse<PostOutput>> {
+    return await this.postService.restorePost(postId);
   }
 }
