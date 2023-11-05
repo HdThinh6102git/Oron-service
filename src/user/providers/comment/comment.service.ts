@@ -13,7 +13,6 @@ import {
 } from '../../dtos';
 import { MESSAGES } from '../../../shared/constants';
 import { plainToClass, plainToInstance } from 'class-transformer';
-import { isEmpty } from '@nestjs/common/utils/shared.utils';
 
 @Injectable()
 export class CommentService {
@@ -140,26 +139,28 @@ export class CommentService {
   public async getAllComments(
     filter: CommentFilter,
   ): Promise<BasePaginationResponse<CommentOutput>> {
-    let wheres: any[] = [];
     const where: any = {
       id: Not(IsNull()),
     };
     if (typeof filter.status === 'number') {
       where['status'] = filter.status;
     }
-    if (filter.keyword) {
-      wheres = [
-        {
-          ...where,
-          description: ILike(`%${filter.keyword}%`),
-        },
-      ];
+    if (filter.userKeyword) {
+      const user = await this.userRepo.findOne({
+        where: [
+          {
+            username: ILike(`%${filter.userKeyword}%`),
+          },
+          { email: ILike(`%${filter.userKeyword}%`) },
+        ],
+      });
+      where['user'] = { id: user?.id };
     }
-    if (isEmpty(wheres)) {
-      wheres.push(where);
+    if (filter.keyword) {
+      where['description'] = filter.keyword;
     }
     const comments = await this.commentRepo.find({
-      where: wheres,
+      where: where,
       take: filter.limit,
       skip: filter.skip,
       order: {
@@ -168,7 +169,7 @@ export class CommentService {
       relations: ['user', 'post'],
     });
     const count = await this.commentRepo.count({
-      where: wheres,
+      where: where,
     });
     const commentsOutput = plainToInstance(CommentOutput, comments, {
       excludeExtraneousValues: true,

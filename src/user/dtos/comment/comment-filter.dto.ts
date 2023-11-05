@@ -19,4 +19,7 @@ export class CommentFilter extends PaginationParamsDto {
 
   @IsOptional()
   keyword: string;
+
+  @IsOptional()
+  userKeyword: string;
 }
