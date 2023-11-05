@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Param,
   Patch,
   Post,
@@ -29,10 +30,19 @@ export class CommentController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   public async updateComment(
     @Param('id') commentId: string,
     @Body() body: UpdateCommentInput,
   ): Promise<BaseApiResponse<CommentOutput>> {
     return await this.commentService.updateComment(body, commentId);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  public async deleteComment(
+    @Param('id') commentId: string,
+  ): Promise<BaseApiResponse<null>> {
+    return this.commentService.deleteComment(commentId);
   }
 }

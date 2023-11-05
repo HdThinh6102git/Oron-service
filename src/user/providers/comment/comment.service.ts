@@ -110,4 +110,28 @@ export class CommentService {
       code: 0,
     };
   }
+
+  public async deleteComment(
+    commentId: string,
+  ): Promise<BaseApiResponse<null>> {
+    const commentExist = await this.commentRepo.findOne({
+      where: {
+        id: commentId,
+      },
+    });
+    if (!commentExist) {
+      throw new NotFoundException({
+        error: true,
+        message: MESSAGES.COMMENT_NOT_FOUND,
+        code: 4,
+      });
+    }
+    await this.commentRepo.delete(commentId);
+    return {
+      error: false,
+      data: null,
+      message: MESSAGES.DELETED_SUCCEED,
+      code: 0,
+    };
+  }
 }
