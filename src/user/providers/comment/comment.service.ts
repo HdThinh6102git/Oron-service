@@ -1,17 +1,19 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, IsNull, Not, Repository } from 'typeorm';
 import { Comment } from '#entity/comment.entity';
 import { Post, POST_STATUS } from '#entity/post/post.entity';
 import { User } from '#entity/user/user.entity';
-import { BaseApiResponse } from '../../../shared/dtos';
+import { BaseApiResponse, BasePaginationResponse } from '../../../shared/dtos';
 import {
+  CommentFilter,
   CommentOutput,
   CreateCommentInput,
   UpdateCommentInput,
 } from '../../dtos';
 import { MESSAGES } from '../../../shared/constants';
-import { plainToClass } from 'class-transformer';
+import { plainToClass, plainToInstance } from 'class-transformer';
+import { isEmpty } from '@nestjs/common/utils/shared.utils';
 
 @Injectable()
 export class CommentService {
@@ -132,6 +134,48 @@ export class CommentService {
       data: null,
       message: MESSAGES.DELETED_SUCCEED,
       code: 0,
+    };
+  }
+
+  public async getAllComments(
+    filter: CommentFilter,
+  ): Promise<BasePaginationResponse<CommentOutput>> {
+    let wheres: any[] = [];
+    const where: any = {
+      id: Not(IsNull()),
+    };
+    if (typeof filter.status === 'number') {
+      where['status'] = filter.status;
+    }
+    if (filter.keyword) {
+      wheres = [
+        {
+          ...where,
+          description: ILike(`%${filter.keyword}%`),
+        },
+      ];
+    }
+    if (isEmpty(wheres)) {
+      wheres.push(where);
+    }
+    const comments = await this.commentRepo.find({
+      where: wheres,
+      take: filter.limit,
+      skip: filter.skip,
+      order: {
+        createdAt: 'DESC',
+      },
+      relations: ['user', 'post'],
+    });
+    const count = await this.commentRepo.count({
+      where: wheres,
+    });
+    const commentsOutput = plainToInstance(CommentOutput, comments, {
+      excludeExtraneousValues: true,
+    });
+    return {
+      listData: commentsOutput,
+      total: count,
     };
   }
 }
