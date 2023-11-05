@@ -2,10 +2,14 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Comment } from '#entity/comment.entity';
-import { Post } from '#entity/post/post.entity';
+import { Post, POST_STATUS } from '#entity/post/post.entity';
 import { User } from '#entity/user/user.entity';
 import { BaseApiResponse } from '../../../shared/dtos';
-import { CommentOutput, CreateCommentInput } from '../../dtos';
+import {
+  CommentOutput,
+  CreateCommentInput,
+  UpdateCommentInput,
+} from '../../dtos';
 import { MESSAGES } from '../../../shared/constants';
 import { plainToClass } from 'class-transformer';
 
@@ -19,6 +23,7 @@ export class CommentService {
     @InjectRepository(User)
     private userRepo: Repository<User>,
   ) {}
+
   public async createNewComment(
     input: CreateCommentInput,
     userId: string,
@@ -60,6 +65,48 @@ export class CommentService {
       error: false,
       data: commentOutput,
       message: MESSAGES.CREATED_SUCCEED,
+      code: 0,
+    };
+  }
+
+  public async updateComment(
+    input: UpdateCommentInput,
+    commentId: string,
+  ): Promise<BaseApiResponse<CommentOutput>> {
+    const commentExist = await this.commentRepo.findOne({
+      where: {
+        id: commentId,
+      },
+    });
+    if (!commentExist) {
+      throw new NotFoundException({
+        error: true,
+        message: MESSAGES.COMMENT_NOT_FOUND,
+        code: 4,
+      });
+    }
+    //check data input to update
+    if (input.description) {
+      commentExist.description = input.description;
+    }
+    if (typeof input.status === 'number') {
+      if (input.status == 0) {
+        commentExist.status = POST_STATUS.IN_ACTIVE;
+      }
+      if (input.status == 1) {
+        commentExist.status = POST_STATUS.ACTIVE;
+      }
+    }
+    //save
+    const updatedComment = await this.commentRepo.save(commentExist);
+    //convert to output
+    const commentOutput = plainToClass(CommentOutput, updatedComment, {
+      excludeExtraneousValues: true,
+    });
+    return {
+      error: false,
+      data: commentOutput,
+      message: MESSAGES.UPDATE_SUCCEED,
       code: 0,
     };
   }

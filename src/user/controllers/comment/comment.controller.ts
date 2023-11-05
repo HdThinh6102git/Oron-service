@@ -1,9 +1,20 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { CommentService } from '../../providers/comment';
 import { JwtAuthGuard } from '../../../auth/guards';
 import { ReqContext, RequestContext } from '../../../shared/request-context';
 import { BaseApiResponse } from '../../../shared/dtos';
-import { CommentOutput, CreateCommentInput } from '../../dtos';
+import {
+  CommentOutput,
+  CreateCommentInput,
+  UpdateCommentInput,
+} from '../../dtos';
 
 @Controller('comment')
 export class CommentController {
@@ -15,5 +26,13 @@ export class CommentController {
     @Body() body: CreateCommentInput,
   ): Promise<BaseApiResponse<CommentOutput>> {
     return await this.commentService.createNewComment(body, ctx.user.id);
+  }
+
+  @Patch(':id')
+  public async updateComment(
+    @Param('id') commentId: string,
+    @Body() body: UpdateCommentInput,
+  ): Promise<BaseApiResponse<CommentOutput>> {
+    return await this.commentService.updateComment(body, commentId);
   }
 }

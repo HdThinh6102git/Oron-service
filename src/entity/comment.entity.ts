@@ -11,8 +11,8 @@ import { Post } from './post/post.entity';
 import { User } from './user/user.entity';
 
 export enum COMMENT_STATUS {
-  IN_ACTIVE = 'IN_ACTIVE',
-  ACTIVE = 'ACTIVE',
+  IN_ACTIVE = 0,
+  ACTIVE = 1,
 }
 
 @Entity({ name: 'comment', schema: process.env.DB_SCHEMA })
@@ -26,12 +26,12 @@ export class Comment {
   })
   description: string;
 
-  @Column('varchar', {
+  @Column('numeric', {
     nullable: false,
     name: 'status',
     default: COMMENT_STATUS.ACTIVE,
   })
-  status: string;
+  status: number;
 
   @CreateDateColumn({
     nullable: false,
