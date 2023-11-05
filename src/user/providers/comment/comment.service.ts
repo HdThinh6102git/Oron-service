@@ -215,4 +215,62 @@ export class CommentService {
       total: count,
     };
   }
+
+  public async getUserCommentsOnPost(
+    postId: string,
+    filter: CommentFilter,
+    userId: string,
+  ): Promise<BasePaginationResponse<CommentOutput>> {
+    const post = await this.postRepo.findOne({
+      where: {
+        id: postId,
+      },
+    });
+    if (!post) {
+      throw new NotFoundException({
+        error: true,
+        message: MESSAGES.POST_NOT_FOUND,
+        code: 4,
+      });
+    }
+    const user = await this.userRepo.findOne({
+      where: {
+        id: userId,
+      },
+    });
+    if (!user) {
+      throw new NotFoundException({
+        error: true,
+        message: MESSAGES.NOT_FOUND_USER,
+        code: 4,
+      });
+    }
+    const comments = await this.commentRepo.find({
+      where: {
+        post: { id: post.id },
+        user: { id: user.id },
+        status: COMMENT_STATUS.ACTIVE,
+      },
+      take: filter.limit,
+      skip: filter.skip,
+      order: {
+        createdAt: 'DESC',
+      },
+      relations: ['user', 'post'],
+    });
+    const count = await this.commentRepo.count({
+      where: {
+        post: { id: post.id },
+        user: { id: user.id },
+        status: COMMENT_STATUS.ACTIVE,
+      },
+    });
+    const commentsOutput = plainToInstance(CommentOutput, comments, {
+      excludeExtraneousValues: true,
+    });
+    return {
+      listData: commentsOutput,
+      total: count,
+    };
+  }
 }

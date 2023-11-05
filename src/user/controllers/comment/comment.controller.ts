@@ -63,4 +63,18 @@ export class CommentController {
   ): Promise<BasePaginationResponse<CommentOutput>> {
     return await this.commentService.getCommentsByPostId(postId, query);
   }
+
+  @Get('/post/:postId/user')
+  @UseGuards(JwtAuthGuard)
+  public async getUserCommentsOnPost(
+    @Param('postId') postId: string,
+    @Query() query: CommentFilter,
+    @ReqContext() ctx: RequestContext,
+  ): Promise<BasePaginationResponse<CommentOutput>> {
+    return await this.commentService.getUserCommentsOnPost(
+      postId,
+      query,
+      ctx.user.id,
+    );
+  }
 }
