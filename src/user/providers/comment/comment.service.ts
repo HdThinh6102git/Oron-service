@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, IsNull, Not, Repository } from 'typeorm';
-import { Comment } from '#entity/comment.entity';
+import { Comment, COMMENT_STATUS } from '#entity/comment.entity';
 import { Post, POST_STATUS } from '#entity/post/post.entity';
 import { User } from '#entity/user/user.entity';
 import { BaseApiResponse, BasePaginationResponse } from '../../../shared/dtos';
@@ -169,6 +169,43 @@ export class CommentService {
     });
     const count = await this.commentRepo.count({
       where: wheres,
+    });
+    const commentsOutput = plainToInstance(CommentOutput, comments, {
+      excludeExtraneousValues: true,
+    });
+    return {
+      listData: commentsOutput,
+      total: count,
+    };
+  }
+
+  public async getCommentsByPostId(
+    postId: string,
+    filter: CommentFilter,
+  ): Promise<BasePaginationResponse<CommentOutput>> {
+    const post = await this.postRepo.findOne({
+      where: {
+        id: postId,
+      },
+    });
+    if (!post) {
+      throw new NotFoundException({
+        error: true,
+        message: MESSAGES.POST_NOT_FOUND,
+        code: 4,
+      });
+    }
+    const comments = await this.commentRepo.find({
+      where: { post: { id: post.id }, status: COMMENT_STATUS.ACTIVE },
+      take: filter.limit,
+      skip: filter.skip,
+      order: {
+        createdAt: 'DESC',
+      },
+      relations: ['user', 'post'],
+    });
+    const count = await this.commentRepo.count({
+      where: { post: { id: post.id }, status: COMMENT_STATUS.ACTIVE },
     });
     const commentsOutput = plainToInstance(CommentOutput, comments, {
       excludeExtraneousValues: true,

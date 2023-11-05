@@ -55,4 +55,12 @@ export class CommentController {
   ): Promise<BasePaginationResponse<CommentOutput>> {
     return this.commentService.getAllComments(query);
   }
+
+  @Get('/post/:postId')
+  public async getCommentsByPostId(
+    @Param('postId') postId: string,
+    @Query() query: CommentFilter,
+  ): Promise<BasePaginationResponse<CommentOutput>> {
+    return await this.commentService.getCommentsByPostId(postId, query);
+  }
 }
