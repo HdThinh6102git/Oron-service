@@ -13,6 +13,7 @@ import { ConfigService } from '@nestjs/config';
 import { Comment } from '#entity/comment.entity';
 import { Review } from '#entity/review.entity';
 import { Reaction } from '#entity/reaction.entity';
+import { Post } from '#entity/post/post.entity';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { Reaction } from '#entity/reaction.entity';
       Comment,
       Review,
       Reaction,
+      Post,
     ]),
   ],
   controllers: Object.values(controllers),
