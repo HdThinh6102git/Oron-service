@@ -8,7 +8,12 @@ import {
 } from 'typeorm';
 import { User } from './user/user.entity';
 import { Post } from './post/post.entity';
-
+export enum REACTION_TYPE {
+  LIKE = 0,
+  HEART = 1,
+  HAHA = 2,
+  ANGRY = 3,
+}
 @Entity({ name: 'reaction', schema: process.env.DB_SCHEMA })
 export class Reaction {
   @PrimaryGeneratedColumn('uuid')
