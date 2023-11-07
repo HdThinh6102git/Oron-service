@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from '#entity/post/post.entity';
 import { Repository } from 'typeorm';
@@ -48,10 +53,25 @@ export class ReactionService {
     if (!user) {
       throw new NotFoundException({
         error: true,
-        data: null,
         message: MESSAGES.NOT_FOUND_USER,
         code: 4,
       });
+    }
+    const existUserReaction = await this.reactionRepo.findOne({
+      where: {
+        user: { id: userId },
+        post: { id: input.postId },
+      },
+    });
+    if (existUserReaction) {
+      throw new HttpException(
+        {
+          error: true,
+          message: MESSAGES.USER_REACTION_EXIST,
+          code: 4,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
     }
     let type;
     if (typeof input.type === 'number') {
