@@ -7,6 +7,7 @@ export const REQUEST_ID_TOKEN_HEADER = 'x-request-id';
 export const FORWARDED_FOR_TOKEN_HEADER = 'x-forwarded-for';
 export const VERIFICATION_TIME = 5; //minutes
 export const MESSAGES = {
+  CAN_NOT_DELETE_OTHER_USER_REACTION: 'can_not_delete_other_user_reaction',
   USER_REACTION_EXIST: 'user_reaction_exist',
   TYPE_NOT_FOUND: 'type_not_found',
   COMMENT_NOT_FOUND: 'comment_not_found',

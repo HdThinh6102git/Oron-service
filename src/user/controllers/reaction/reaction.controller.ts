@@ -37,8 +37,9 @@ export class ReactionController {
   @UseGuards(JwtAuthGuard)
   public async deleteReaction(
     @Param('id') reactionId: string,
+    @ReqContext() ctx: RequestContext,
   ): Promise<BaseApiResponse<null>> {
-    return this.reactionService.deleteReaction(reactionId);
+    return this.reactionService.deleteReaction(reactionId, ctx.user.id);
   }
 
   @Get('/post/:postId')

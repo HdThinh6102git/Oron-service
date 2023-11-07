@@ -114,7 +114,24 @@ export class ReactionService {
 
   public async deleteReaction(
     reactionId: string,
+    userId: string,
   ): Promise<BaseApiResponse<null>> {
+    const myReaction = await this.reactionRepo.findOne({
+      where: {
+        user: { id: userId },
+        id: reactionId,
+      },
+    });
+    if (!myReaction) {
+      throw new HttpException(
+        {
+          error: true,
+          message: MESSAGES.CAN_NOT_DELETE_OTHER_USER_REACTION,
+          code: 4,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     await this.reactionRepo.delete(reactionId);
     return {
       error: false,
