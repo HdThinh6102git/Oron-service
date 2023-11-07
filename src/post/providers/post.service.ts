@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, IsNull, Not, Repository } from 'typeorm';
 import { Post, POST_STATUS } from '#entity/post/post.entity';
@@ -298,7 +303,10 @@ export class PostService {
     };
   }
 
-  public async deletePost(postId: string): Promise<BaseApiResponse<null>> {
+  public async deletePost(
+    postId: string,
+    userId: string,
+  ): Promise<BaseApiResponse<null>> {
     const post = await this.postRepo.findOne({
       where: { id: postId, deletedAt: IsNull() },
     });
@@ -308,6 +316,19 @@ export class PostService {
         message: MESSAGES.POST_NOT_FOUND,
         code: 4,
       });
+    }
+    const myPost = await this.postRepo.findOne({
+      where: { id: postId, deletedAt: IsNull(), user: { id: userId } },
+    });
+    if (!myPost) {
+      throw new HttpException(
+        {
+          error: true,
+          message: MESSAGES.CAN_NOT_DELETE_OTHER_USER_POST,
+          code: 4,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
     }
     post.deletedAt = new Date();
     await this.postRepo.save(post);

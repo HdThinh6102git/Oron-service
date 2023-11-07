@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, IsNull, Not, Repository } from 'typeorm';
 import { Comment, COMMENT_STATUS } from '#entity/comment.entity';
@@ -114,6 +119,7 @@ export class CommentService {
 
   public async deleteComment(
     commentId: string,
+    userId: string,
   ): Promise<BaseApiResponse<null>> {
     const commentExist = await this.commentRepo.findOne({
       where: {
@@ -126,6 +132,22 @@ export class CommentService {
         message: MESSAGES.COMMENT_NOT_FOUND,
         code: 4,
       });
+    }
+    const myComment = await this.commentRepo.findOne({
+      where: {
+        id: commentId,
+        user: { id: userId },
+      },
+    });
+    if (!myComment) {
+      throw new HttpException(
+        {
+          error: true,
+          message: MESSAGES.CAN_NOT_DELETE_OTHER_USER_COMMENT,
+          code: 4,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
     }
     await this.commentRepo.delete(commentId);
     return {

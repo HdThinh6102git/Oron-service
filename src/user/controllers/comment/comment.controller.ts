@@ -44,9 +44,10 @@ export class CommentController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   public async deleteComment(
+    @ReqContext() ctx: RequestContext,
     @Param('id') commentId: string,
   ): Promise<BaseApiResponse<null>> {
-    return this.commentService.deleteComment(commentId);
+    return this.commentService.deleteComment(commentId, ctx.user.id);
   }
 
   @Get('/filter')

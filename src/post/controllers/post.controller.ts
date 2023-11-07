@@ -55,6 +55,7 @@ export class PostController {
   }
 
   @Delete('permanently/:id')
+  @UseGuards(JwtAuthGuard)
   public async deletePostPermanently(
     @Param('id') postId: string,
   ): Promise<BaseApiResponse<null>> {
@@ -62,10 +63,12 @@ export class PostController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   public async deletePost(
     @Param('id') postId: string,
+    @ReqContext() ctx: RequestContext,
   ): Promise<BaseApiResponse<null>> {
-    return this.postService.deletePost(postId);
+    return this.postService.deletePost(postId, ctx.user.id);
   }
 
   @Patch('restoration/:id')
