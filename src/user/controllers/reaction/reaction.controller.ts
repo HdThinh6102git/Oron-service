@@ -1,4 +1,11 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ReactionService } from '../../providers';
 import { JwtAuthGuard } from '../../../auth/guards';
 import { ReqContext, RequestContext } from '../../../shared/request-context';
@@ -15,5 +22,13 @@ export class ReactionController {
     @Body() body: CreateReactionInput,
   ): Promise<BaseApiResponse<ReactionOutput>> {
     return await this.reactionService.createNewReaction(body, ctx.user.id);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  public async deleteReaction(
+    @Param('id') reactionId: string,
+  ): Promise<BaseApiResponse<null>> {
+    return this.reactionService.deleteReaction(reactionId);
   }
 }

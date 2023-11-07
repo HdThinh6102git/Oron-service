@@ -78,4 +78,16 @@ export class ReactionService {
       code: 0,
     };
   }
+
+  public async deleteReaction(
+    reactionId: string,
+  ): Promise<BaseApiResponse<null>> {
+    await this.reactionRepo.delete(reactionId);
+    return {
+      error: false,
+      data: null,
+      message: MESSAGES.DELETED_SUCCEED,
+      code: 0,
+    };
+  }
 }
