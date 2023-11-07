@@ -4,10 +4,14 @@ import { Post } from '#entity/post/post.entity';
 import { Repository } from 'typeorm';
 import { User } from '#entity/user/user.entity';
 import { Reaction, REACTION_TYPE } from '#entity/reaction.entity';
-import { CreateReactionInput, ReactionOutput } from '../../dtos';
-import { BaseApiResponse } from '../../../shared/dtos';
+import {
+  CreateReactionInput,
+  ReactionFilter,
+  ReactionOutput,
+} from '../../dtos';
+import { BaseApiResponse, BasePaginationResponse } from '../../../shared/dtos';
 import { MESSAGES } from '../../../shared/constants';
-import { plainToClass } from 'class-transformer';
+import { plainToClass, plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class ReactionService {
@@ -59,6 +63,12 @@ export class ReactionService {
         type = REACTION_TYPE.HAHA;
       } else if (input.type == 3) {
         type = REACTION_TYPE.ANGRY;
+      } else {
+        throw new NotFoundException({
+          error: true,
+          message: MESSAGES.TYPE_NOT_FOUND,
+          code: 4,
+        });
       }
     }
     const reaction = await this.reactionRepo.save({
@@ -88,6 +98,50 @@ export class ReactionService {
       data: null,
       message: MESSAGES.DELETED_SUCCEED,
       code: 0,
+    };
+  }
+
+  public async getReactionsByPostId(
+    postId: string,
+    filter: ReactionFilter,
+  ): Promise<BasePaginationResponse<ReactionOutput>> {
+    let query = 'r.id IS NOT NULL ';
+    if (typeof filter.type === 'number') {
+      query += `and r.type = ${filter.type} `;
+    }
+    const post = await this.postRepo
+      .createQueryBuilder('p')
+      .where(`p.id = '${postId}'`)
+      .getOne();
+    if (!post) {
+      throw new NotFoundException({
+        error: true,
+        message: MESSAGES.POST_NOT_FOUND,
+        code: 4,
+      });
+    }
+    query += `and r.post_id = '${postId}'`;
+    const reactions = await this.reactionRepo
+      .createQueryBuilder('r')
+      .select(['r.type AS type', 'u.username AS username'])
+      .innerJoin('r.user', 'u')
+      .where(query)
+      .orderBy('r.created_at', 'DESC')
+      .limit(filter.limit)
+      .offset(filter.skip)
+      .getRawMany();
+    const count = await this.reactionRepo
+      .createQueryBuilder('r')
+      .select(['COUNT(r.id) AS count'])
+      .innerJoin('r.user', 'u')
+      .where(query)
+      .getRawOne();
+    const reactionsOutput = plainToInstance(ReactionOutput, reactions, {
+      excludeExtraneousValues: true,
+    });
+    return {
+      listData: reactionsOutput,
+      total: Number(count?.count) || 0,
     };
   }
 }

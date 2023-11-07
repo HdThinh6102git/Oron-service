@@ -7,6 +7,7 @@ export const REQUEST_ID_TOKEN_HEADER = 'x-request-id';
 export const FORWARDED_FOR_TOKEN_HEADER = 'x-forwarded-for';
 export const VERIFICATION_TIME = 5; //minutes
 export const MESSAGES = {
+  TYPE_NOT_FOUND: 'type_not_found',
   COMMENT_NOT_FOUND: 'comment_not_found',
   POST_NOT_FOUND: 'post_not_found',
   POST_NOT_FOUND_IN_TRASH_BIN: 'post_not_found_in_trash_bin',
