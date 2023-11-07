@@ -14,7 +14,10 @@ import {
   ReactionFilter,
   ReactionOutput,
 } from '../../dtos';
-import { BaseApiResponse, BasePaginationResponse } from '../../../shared/dtos';
+import {
+  BaseApiResponse,
+  ReactionPaginationResponse,
+} from '../../../shared/dtos';
 import { MESSAGES } from '../../../shared/constants';
 import { plainToClass, plainToInstance } from 'class-transformer';
 
@@ -124,7 +127,7 @@ export class ReactionService {
   public async getReactionsByPostId(
     postId: string,
     filter: ReactionFilter,
-  ): Promise<BasePaginationResponse<ReactionOutput>> {
+  ): Promise<ReactionPaginationResponse<ReactionOutput>> {
     let query = 'r.id IS NOT NULL ';
     if (typeof filter.type === 'number') {
       query += `and r.type = ${filter.type} `;
@@ -156,12 +159,20 @@ export class ReactionService {
       .innerJoin('r.user', 'u')
       .where(query)
       .getRawOne();
+    const types = await this.reactionRepo
+      .createQueryBuilder('r')
+      .select('r.type AS type')
+      .where(query)
+      .groupBy('r.type')
+      .getRawMany();
+    const typeValues = types.map((item) => parseInt(item.type, 10));
     const reactionsOutput = plainToInstance(ReactionOutput, reactions, {
       excludeExtraneousValues: true,
     });
     return {
       listData: reactionsOutput,
       total: Number(count?.count) || 0,
+      listType: typeValues,
     };
   }
 }

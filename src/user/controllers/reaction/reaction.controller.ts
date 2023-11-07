@@ -11,7 +11,10 @@ import {
 import { ReactionService } from '../../providers';
 import { JwtAuthGuard } from '../../../auth/guards';
 import { ReqContext, RequestContext } from '../../../shared/request-context';
-import { BaseApiResponse, BasePaginationResponse } from '../../../shared/dtos';
+import {
+  BaseApiResponse,
+  ReactionPaginationResponse,
+} from '../../../shared/dtos';
 import {
   CreateReactionInput,
   ReactionFilter,
@@ -42,7 +45,7 @@ export class ReactionController {
   public async getReactionsByPostId(
     @Param('postId') postId: string,
     @Query() query: ReactionFilter,
-  ): Promise<BasePaginationResponse<ReactionOutput>> {
+  ): Promise<ReactionPaginationResponse<ReactionOutput>> {
     return await this.reactionService.getReactionsByPostId(postId, query);
   }
 }

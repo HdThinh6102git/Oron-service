@@ -26,3 +26,8 @@ export class BasePaginationResponse<T> {
   @Expose()
   total: number;
 }
+
+export class ReactionPaginationResponse<T> extends BasePaginationResponse<T> {
+  @Expose()
+  listType: number[];
+}
