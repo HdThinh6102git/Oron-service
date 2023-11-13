@@ -13,6 +13,7 @@ import { Category } from './category.entity';
 import { Comment } from '../comment.entity';
 import { Review } from '../review.entity';
 import { Reaction } from '../reaction.entity';
+import { PostRegistration } from '../post-registration.entity';
 export enum POST_STATUS {
   IN_ACTIVE = 0,
   ACTIVE = 1,
@@ -108,4 +109,10 @@ export class Post {
 
   @OneToMany(() => Reaction, (reaction) => reaction.post)
   reactions: Reaction[];
+
+  @OneToMany(
+    () => PostRegistration,
+    (postRegistration) => postRegistration.post,
+  )
+  postRegistrations: PostRegistration[];
 }
