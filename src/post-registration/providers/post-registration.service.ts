@@ -78,14 +78,6 @@ export class PostRegistrationService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    if (!user) {
-      throw new NotFoundException({
-        error: true,
-        data: null,
-        message: MESSAGES.NOT_FOUND_USER,
-        code: 4,
-      });
-    }
     const postRegistration = await this.postRegistrationRepo.save({
       ...input,
       post: post,
