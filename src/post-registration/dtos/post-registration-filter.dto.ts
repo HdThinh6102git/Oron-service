@@ -1,5 +1,5 @@
 import { PaginationParamsDto } from '../../shared/dtos';
-import {IsEnum, IsOptional, IsUUID} from 'class-validator';
+import { IsEnum, IsOptional, IsUUID } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { POST_REGISTRATION_STATUS } from '#entity/post-registration.entity';
 

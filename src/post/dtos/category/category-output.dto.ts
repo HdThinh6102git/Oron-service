@@ -16,6 +16,7 @@ export class CategoryOutput {
 
   @Expose()
   @ApiProperty()
+  @Type(() => Number)
   public status: number;
 
   @Expose()

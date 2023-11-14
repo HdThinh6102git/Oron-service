@@ -22,6 +22,7 @@ export class PostOutput {
 
   @Expose()
   @ApiProperty()
+  @Type(() => Number)
   public status: number;
 
   @Expose()

@@ -1,9 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 
 export class ReactionOutput {
   @Expose()
   @ApiProperty()
+  @Type(() => Number)
   type: number;
 
   @Expose()
