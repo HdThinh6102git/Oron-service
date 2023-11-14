@@ -11,8 +11,8 @@ import { Post } from './post/post.entity';
 import { User } from './user/user.entity';
 
 export enum REVIEW_STATUS {
-  IN_ACTIVE = 'IN_ACTIVE',
-  ACTIVE = 'ACTIVE',
+  IN_ACTIVE = 0,
+  ACTIVE = 1,
 }
 
 @Entity({ name: 'review', schema: process.env.DB_SCHEMA })
@@ -26,12 +26,12 @@ export class Review {
   })
   description: string;
 
-  @Column('varchar', {
+  @Column('numeric', {
     nullable: false,
     name: 'status',
     default: REVIEW_STATUS.ACTIVE,
   })
-  status: string;
+  status: number;
 
   @Column('numeric', {
     nullable: true,

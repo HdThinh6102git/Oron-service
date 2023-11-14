@@ -9,3 +9,4 @@ export * from './user-profile-output.dto';
 export * from './change-password.dto';
 export * from './comment';
 export * from './reaction';
+export * from './review';

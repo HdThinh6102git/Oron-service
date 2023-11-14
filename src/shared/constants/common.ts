@@ -7,7 +7,11 @@ export const REQUEST_ID_TOKEN_HEADER = 'x-request-id';
 export const FORWARDED_FOR_TOKEN_HEADER = 'x-forwarded-for';
 export const VERIFICATION_TIME = 5; //minutes
 export const MESSAGES = {
+  CAN_NOT_REVIEW_MULTIPLE_TIME: 'can_not_review_multiple_time',
+  CAN_NOT_REVIEW_POST_HAVE_NOT_RECEIVED:
+    'can_not_review_post_have_not_received',
   USER_REGISTERED_THIS_POST: 'user_registered_this_post',
+  CAN_NOT_DELETE_OTHER_USER_REVIEW: 'can_not_delete_other_user_review',
   CAN_NOT_DELETE_OTHER_USER_POST_REGISTRATION:
     'can_not_delete_other_user_post_registration',
   CAN_NOT_DELETE_OTHER_USER_COMMENT: 'can_not_delete_other_user_comment',
@@ -15,6 +19,7 @@ export const MESSAGES = {
   CAN_NOT_DELETE_OTHER_USER_REACTION: 'can_not_delete_other_user_reaction',
   USER_REACTION_EXIST: 'user_reaction_exist',
   TYPE_NOT_FOUND: 'type_not_found',
+  REVIEW_NOT_FOUND: 'review_not_found',
   POST_REGISTRATION_NOT_FOUND: 'post_registration_not_found',
   COMMENT_NOT_FOUND: 'comment_not_found',
   POST_NOT_FOUND: 'post_not_found',
