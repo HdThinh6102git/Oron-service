@@ -106,6 +106,7 @@ export class PostRegistrationService {
       where: {
         id: postRegistrationId,
       },
+      relations: ['user', 'post'],
     });
     if (!postRegistrationExist) {
       throw new NotFoundException({
