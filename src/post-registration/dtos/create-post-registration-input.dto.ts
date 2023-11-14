@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import {IsNotEmpty, IsString, IsUUID} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePostRegistrationInput {
@@ -10,5 +10,6 @@ export class CreatePostRegistrationInput {
   @IsNotEmpty()
   @ApiProperty()
   @IsString()
+  @IsUUID()
   postId: string;
 }
