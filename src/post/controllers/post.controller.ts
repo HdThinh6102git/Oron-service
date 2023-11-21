@@ -41,10 +41,10 @@ export class PostController {
   }
 
   @Get('/filter')
-  public async getAllPosts(
+  public async getPosts(
     @Query() query: PostFilter,
   ): Promise<BasePaginationResponse<PostOutput>> {
-    return this.postService.getAllPosts(query);
+    return this.postService.getPosts(query);
   }
 
   @Get(':id')

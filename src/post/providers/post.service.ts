@@ -210,7 +210,7 @@ export class PostService {
     };
   }
 
-  public async getAllPosts(
+  public async getPosts(
     filter: PostFilter,
   ): Promise<BasePaginationResponse<PostOutput>> {
     let wheres: any[] = [];
@@ -220,6 +220,9 @@ export class PostService {
     };
     if (typeof filter.status === 'number') {
       where['status'] = filter.status;
+    }
+    if (filter.userId) {
+      where['user'] = { id: filter.userId };
     }
     if (filter.keyword) {
       wheres = [

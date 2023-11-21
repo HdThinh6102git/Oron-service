@@ -19,4 +19,7 @@ export class PostFilter extends PaginationParamsDto {
 
   @IsOptional()
   keyword: string;
+
+  @IsOptional()
+  userId: string;
 }
