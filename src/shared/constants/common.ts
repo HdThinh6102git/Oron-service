@@ -2,6 +2,10 @@ export enum RESULT_STATUS {
   FAILED = 0,
   SUCCEED = 1,
 }
+export enum TYPE_PIC {
+  PROFILE = 0,
+  BACKGROUND = 1,
+}
 export const IS_VERIFIED = true;
 export const REQUEST_ID_TOKEN_HEADER = 'x-request-id';
 export const FORWARDED_FOR_TOKEN_HEADER = 'x-forwarded-for';

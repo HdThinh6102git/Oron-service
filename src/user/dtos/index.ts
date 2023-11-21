@@ -10,3 +10,4 @@ export * from './change-password.dto';
 export * from './comment';
 export * from './reaction';
 export * from './review';
+export * from './update-user-input.dto';

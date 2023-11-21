@@ -2,6 +2,7 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,9 +12,14 @@ import { Role } from '#entity/user/role.entity';
 import { ConfigService } from '@nestjs/config';
 import { RegisterInput } from '../../auth/dtos';
 import * as bcrypt from 'bcrypt';
-import { MESSAGES } from '../../shared/constants';
+import { MESSAGES, TYPE_PIC } from '../../shared/constants';
 
-import { UpdateProfileInput, UserOutputDto, UserProfileOutput } from '../dtos';
+import {
+  UpdateProfileInput,
+  UpdateUserInput,
+  UserOutputDto,
+  UserProfileOutput,
+} from '../dtos';
 import { plainToClass, plainToInstance } from 'class-transformer';
 import { Province } from '#entity/user/address/province.entity';
 import { District } from '#entity/user/address/district.entity';
@@ -312,6 +318,115 @@ export class UserService {
       data: null,
       code: 0,
       message: MESSAGES.UPDATE_SUCCEED,
+    };
+  }
+
+  public async updateProfile(
+    input: UpdateUserInput,
+    userId: string,
+  ): Promise<BaseApiResponse<UserProfileOutput>> {
+    const userExist = await this.userRepository.findOne({
+      where: {
+        id: userId,
+      },
+      relations: ['role'],
+    });
+    if (!userExist) {
+      throw new NotFoundException({
+        error: true,
+        message: MESSAGES.NOT_FOUND_USER,
+        code: 4,
+      });
+    }
+    if (input.status) {
+      userExist.status = input.status;
+    }
+    if (input.name) {
+      userExist.name = input.name;
+    }
+    if (input.phoneNumber) {
+      const userWithPhoneExist = await this.userRepository.findOne({
+        where: {
+          phoneNumber: input.phoneNumber,
+        },
+      });
+      if (userWithPhoneExist)
+        throw new HttpException(
+          {
+            error: true,
+            data: null,
+            message: MESSAGES.PHONE_NUMBER_EXISTS,
+            code: 1,
+          },
+          HttpStatus.BAD_REQUEST,
+        );
+      userExist.phoneNumber = input.phoneNumber;
+    }
+    if (input.specificAddress) {
+      userExist.specificAddress = input.specificAddress;
+    }
+    if (input.province && input.district && input.ward) {
+      const province = await this.provinceRepository.findOne({
+        where: { id: input.province },
+      });
+      const district = await this.districtRepository.findOne({
+        where: { id: input.district },
+      });
+      const ward = await this.wardRepository.findOne({
+        where: { id: input.ward },
+      });
+      if (province && district && ward) {
+        userExist.province = province;
+        userExist.district = district;
+        userExist.ward = ward;
+        //set full address
+        userExist.fullAddress = `${ward.level} ${ward.name}, ${district.level} ${district.name}, ${province.level} ${province.name}`;
+      }
+    }
+    const updatedUser = await this.userRepository.save(userExist);
+    const userOutput = plainToClass(UserProfileOutput, updatedUser, {
+      excludeExtraneousValues: true,
+    });
+    return {
+      error: false,
+      data: userOutput,
+      message: MESSAGES.UPDATE_SUCCEED,
+      code: 0,
+    };
+  }
+
+  public async updateProfileImgUrl(
+    status: number,
+    imgUrl: string,
+    userId: string,
+  ): Promise<BaseApiResponse<UserProfileOutput>> {
+    const userExist = await this.userRepository.findOne({
+      where: {
+        id: userId,
+      },
+      relations: ['role'],
+    });
+    if (!userExist) {
+      throw new NotFoundException({
+        error: true,
+        message: MESSAGES.NOT_FOUND_USER,
+        code: 4,
+      });
+    }
+    if (status == TYPE_PIC.BACKGROUND) {
+      userExist.backgroundPic = imgUrl;
+    } else if (status == TYPE_PIC.PROFILE) {
+      userExist.profilePic = imgUrl;
+    }
+    const updatedUser = await this.userRepository.save(userExist);
+    const userOutput = plainToClass(UserProfileOutput, updatedUser, {
+      excludeExtraneousValues: true,
+    });
+    return {
+      error: false,
+      data: userOutput,
+      message: MESSAGES.UPDATE_SUCCEED,
+      code: 0,
     };
   }
 }
