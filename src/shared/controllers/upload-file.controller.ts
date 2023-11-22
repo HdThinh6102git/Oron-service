@@ -145,33 +145,31 @@ export class UploadFileController {
     res.sendFile(path.join(__dirname, '../../../uploads/' + file.fileName));
   }
 
-  @Get('user-profile')
+  @Get('user-profile/:fileName')
   @UseGuards(JwtAuthGuard)
   getUserProfilePicture(
     @Res() res: Response,
-    @Body() file: FilePictureInputDto,
+    @Param('fileName') fileName: string,
   ) {
     res.sendFile(
-      path.join(__dirname, '../../../uploads/user-profile/' + file.fileName),
+      path.join(__dirname, '../../../uploads/user-profile/' + fileName),
     );
   }
 
-  @Get('user-background')
+  @Get('user-background/:fileName')
   @UseGuards(JwtAuthGuard)
   getUserBackgroundPicture(
     @Res() res: Response,
-    @Body() file: FilePictureInputDto,
+    @Param('fileName') fileName: string,
   ) {
     res.sendFile(
-      path.join(__dirname, '../../../uploads/user-background/' + file.fileName),
+      path.join(__dirname, '../../../uploads/user-background/' + fileName),
     );
   }
 
-  @Get('post')
+  @Get('post/:fileName')
   @UseGuards(JwtAuthGuard)
-  getPostPicture(@Res() res: Response, @Body() file: FilePictureInputDto) {
-    res.sendFile(
-      path.join(__dirname, '../../../uploads/post/' + file.fileName),
-    );
+  getPostPicture(@Res() res: Response, @Param('fileName') fileName: string) {
+    res.sendFile(path.join(__dirname, '../../../uploads/post/' + fileName));
   }
 }
