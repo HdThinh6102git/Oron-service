@@ -84,14 +84,17 @@ export class PostService {
       });
       //set full address of post
       if (province && district && ward) {
+        inputValue['provinceId'] = input.provinceId;
+        inputValue['districtId'] = input.districtId;
+        inputValue['wardId'] = input.wardId;
         inputValue[
           'fullAddress'
         ] = `${ward.level} ${ward.name}, ${district.level} ${district.name}, ${province.level} ${province.name}`;
       }
     } else {
-      inputValue['provinceId'] = user?.province;
-      inputValue['districtId'] = user?.district;
-      inputValue['wardId'] = user?.ward;
+      inputValue['provinceId'] = user?.province.id;
+      inputValue['districtId'] = user?.district.id;
+      inputValue['wardId'] = user?.ward.id;
       inputValue['fullAddress'] = user?.fullAddress;
     }
     //set specific address of post
