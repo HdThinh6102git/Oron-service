@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Res,
   UploadedFile,
@@ -17,10 +18,14 @@ import { MESSAGES, TYPE_PIC } from '../constants';
 import { UserService } from '../../user/providers';
 import { JwtAuthGuard } from '../../auth/guards';
 import { ReqContext, RequestContext } from '../request-context';
+import { PostService } from '../../post/providers';
 
 @Controller('picture')
 export class UploadFileController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly postService: PostService,
+  ) {}
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -106,6 +111,35 @@ export class UploadFileController {
     );
   }
 
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads/post',
+        filename: (req, file, cb) => {
+          const randomFileName = `${Math.floor(
+            100000 + Math.random() * 900000,
+          )}-${file.originalname}`;
+          cb(null, randomFileName);
+          console.log(req);
+        },
+      }),
+    }),
+  )
+  @UseGuards(JwtAuthGuard)
+  @Post('upload/post/:id')
+  async uploadPostPicture(
+    @UploadedFile()
+    file: Express.Multer.File,
+    @ReqContext() ctx: RequestContext,
+    @Param('id') postId: string,
+  ) {
+    return await this.postService.updateImgUrl(
+      file.filename,
+      ctx.user.id,
+      postId,
+    );
+  }
+
   @Get()
   getPicture(@Res() res: Response, @Body() file: FilePictureInputDto) {
     res.sendFile(path.join(__dirname, '../../../uploads/' + file.fileName));
@@ -130,6 +164,14 @@ export class UploadFileController {
   ) {
     res.sendFile(
       path.join(__dirname, '../../../uploads/user-background/' + file.fileName),
+    );
+  }
+
+  @Get('post')
+  @UseGuards(JwtAuthGuard)
+  getPostPicture(@Res() res: Response, @Body() file: FilePictureInputDto) {
+    res.sendFile(
+      path.join(__dirname, '../../../uploads/post/' + file.fileName),
     );
   }
 }

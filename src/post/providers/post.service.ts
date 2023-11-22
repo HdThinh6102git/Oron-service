@@ -368,4 +368,48 @@ export class PostService {
       code: 0,
     };
   }
+
+  public async updateImgUrl(
+    imgUrl: string,
+    userId: string,
+    postId: string,
+  ): Promise<BaseApiResponse<PostOutput>> {
+    const userExist = await this.userRepo.findOne({
+      where: {
+        id: userId,
+      },
+    });
+    if (!userExist) {
+      throw new NotFoundException({
+        error: true,
+        message: MESSAGES.NOT_FOUND_USER,
+        code: 4,
+      });
+    }
+    const postExist = await this.postRepo.findOne({
+      where: {
+        id: postId,
+      },
+    });
+    if (!postExist) {
+      throw new NotFoundException({
+        error: true,
+        message: MESSAGES.POST_NOT_FOUND,
+        code: 4,
+      });
+    }
+    if (imgUrl) {
+      postExist.imageURL = imgUrl;
+    }
+    const updatedPost = await this.postRepo.save(postExist);
+    const postOutput = plainToClass(PostOutput, updatedPost, {
+      excludeExtraneousValues: true,
+    });
+    return {
+      error: false,
+      data: postOutput,
+      message: MESSAGES.UPDATE_SUCCEED,
+      code: 0,
+    };
+  }
 }
