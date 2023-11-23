@@ -1,20 +1,17 @@
 import {
-  Body,
+  BadRequestException,
   Controller,
-  Get,
   Param,
   Post,
-  Res,
+  Req,
   UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { FilePictureInputDto } from '../dtos';
 import * as path from 'path';
-import { Response } from 'express';
 import { diskStorage } from 'multer';
-import { MESSAGES, TYPE_PIC } from '../constants';
+import { TYPE_PIC } from '../constants';
 import { UserService } from '../../user/providers';
 import { JwtAuthGuard } from '../../auth/guards';
 import { ReqContext, RequestContext } from '../request-context';
@@ -26,59 +23,59 @@ export class UploadFileController {
     private readonly userService: UserService,
     private readonly postService: PostService,
   ) {}
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: diskStorage({
-        destination: './uploads',
-        filename: (req, file, cb) => {
-          const randomFileName = `${Math.floor(
-            100000 + Math.random() * 900000,
-          )}-${file.originalname}`;
-          cb(null, randomFileName);
-          console.log(req);
-        },
-      }),
-    }),
-  )
-  @Post('upload/local')
-  async uploadPictureLocal(
-    @UploadedFile()
-    file: Express.Multer.File,
-  ) {
-    return {
-      error: false,
-      data: {
-        fileName: file.filename,
-      },
-      message: MESSAGES.UPLOADED_SUCCEED,
-      code: 0,
-    };
-  }
 
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
         destination: './uploads/user-profile',
         filename: (req, file, cb) => {
-          const randomFileName = `${Math.floor(
-            100000 + Math.random() * 900000,
-          )}-${file.originalname}`;
+          const randomFileName = `${Date.now()}-${file.originalname}`;
           cb(null, randomFileName);
-          console.log(req);
+          console.log(req.baseUrl);
         },
       }),
+      fileFilter: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
+        const allowedExtArr = [
+          '.jpg',
+          '.png',
+          '.jpeg',
+          '.JPG',
+          '.PNG',
+          '.JPEG',
+        ];
+        if (!allowedExtArr.includes(ext)) {
+          req.fileValidationError = `Wrong extension type. Accepted file ext are : ${allowedExtArr.toString()}`;
+          cb(null, false);
+        } else {
+          const fileSize = parseInt(req.headers['content-length']);
+          if (fileSize > 1024 * 1024 * 5) {
+            req.fileValidationError = `File size is too large. Accepted file size is less than 5 MB`;
+            cb(null, false);
+          } else {
+            cb(null, true);
+          }
+        }
+      },
     }),
   )
   @UseGuards(JwtAuthGuard)
   @Post('upload/user-profile')
   async uploadUserProfilePicture(
+    @Req() req: any,
     @UploadedFile()
     file: Express.Multer.File,
     @ReqContext() ctx: RequestContext,
   ) {
+    if (req.fileValidationError) {
+      throw new BadRequestException(req.fileValidationError);
+    }
+    if (!file) {
+      throw new BadRequestException('File is required');
+    }
     return await this.userService.updateProfileImgUrl(
       TYPE_PIC.PROFILE,
-      file.filename,
+      `user-profile/${file.filename}`,
       ctx.user.id,
     );
   }
@@ -88,25 +85,53 @@ export class UploadFileController {
       storage: diskStorage({
         destination: './uploads/user-background',
         filename: (req, file, cb) => {
-          const randomFileName = `${Math.floor(
-            100000 + Math.random() * 900000,
-          )}-${file.originalname}`;
+          const randomFileName = `${Date.now()}-${file.originalname}`;
           cb(null, randomFileName);
-          console.log(req);
+          console.log(req.baseUrl);
         },
       }),
+      fileFilter: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
+        const allowedExtArr = [
+          '.jpg',
+          '.png',
+          '.jpeg',
+          '.JPG',
+          '.PNG',
+          '.JPEG',
+        ];
+        if (!allowedExtArr.includes(ext)) {
+          req.fileValidationError = `Wrong extension type. Accepted file ext are : ${allowedExtArr.toString()}`;
+          cb(null, false);
+        } else {
+          const fileSize = parseInt(req.headers['content-length']);
+          if (fileSize > 1024 * 1024 * 5) {
+            req.fileValidationError = `File size is too large. Accepted file size is less than 5 MB`;
+            cb(null, false);
+          } else {
+            cb(null, true);
+          }
+        }
+      },
     }),
   )
   @Post('upload/user-background')
   @UseGuards(JwtAuthGuard)
   async uploadUserBackgroundPicture(
+    @Req() req: any,
     @UploadedFile()
     file: Express.Multer.File,
     @ReqContext() ctx: RequestContext,
   ) {
+    if (req.fileValidationError) {
+      throw new BadRequestException(req.fileValidationError);
+    }
+    if (!file) {
+      throw new BadRequestException('File is required');
+    }
     return await this.userService.updateProfileImgUrl(
       TYPE_PIC.BACKGROUND,
-      file.filename,
+      `user-background/${file.filename}`,
       ctx.user.id,
     );
   }
@@ -116,60 +141,55 @@ export class UploadFileController {
       storage: diskStorage({
         destination: './uploads/post',
         filename: (req, file, cb) => {
-          const randomFileName = `${Math.floor(
-            100000 + Math.random() * 900000,
-          )}-${file.originalname}`;
+          const randomFileName = `${Date.now()}-${file.originalname}`;
           cb(null, randomFileName);
-          console.log(req);
+          console.log(req.baseUrl);
         },
       }),
+      fileFilter: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
+        const allowedExtArr = [
+          '.jpg',
+          '.png',
+          '.jpeg',
+          '.JPG',
+          '.PNG',
+          '.JPEG',
+        ];
+        if (!allowedExtArr.includes(ext)) {
+          req.fileValidationError = `Wrong extension type. Accepted file ext are : ${allowedExtArr.toString()}`;
+          cb(null, false);
+        } else {
+          const fileSize = parseInt(req.headers['content-length']);
+          if (fileSize > 1024 * 1024 * 5) {
+            req.fileValidationError = `File size is too large. Accepted file size is less than 5 MB`;
+            cb(null, false);
+          } else {
+            cb(null, true);
+          }
+        }
+      },
     }),
   )
   @UseGuards(JwtAuthGuard)
   @Post('upload/post/:id')
   async uploadPostPicture(
+    @Req() req: any,
     @UploadedFile()
     file: Express.Multer.File,
     @ReqContext() ctx: RequestContext,
     @Param('id') postId: string,
   ) {
+    if (req.fileValidationError) {
+      throw new BadRequestException(req.fileValidationError);
+    }
+    if (!file) {
+      throw new BadRequestException('File is required');
+    }
     return await this.postService.updateImgUrl(
-      file.filename,
+      `post/${file.filename}`,
       ctx.user.id,
       postId,
     );
-  }
-
-  @Get()
-  getPicture(@Res() res: Response, @Body() file: FilePictureInputDto) {
-    res.sendFile(path.join(__dirname, '../../../uploads/' + file.fileName));
-  }
-
-  @Get('user-profile/:fileName')
-  @UseGuards(JwtAuthGuard)
-  getUserProfilePicture(
-    @Res() res: Response,
-    @Param('fileName') fileName: string,
-  ) {
-    res.sendFile(
-      path.join(__dirname, '../../../uploads/user-profile/' + fileName),
-    );
-  }
-
-  @Get('user-background/:fileName')
-  @UseGuards(JwtAuthGuard)
-  getUserBackgroundPicture(
-    @Res() res: Response,
-    @Param('fileName') fileName: string,
-  ) {
-    res.sendFile(
-      path.join(__dirname, '../../../uploads/user-background/' + fileName),
-    );
-  }
-
-  @Get('post/:fileName')
-  @UseGuards(JwtAuthGuard)
-  getPostPicture(@Res() res: Response, @Param('fileName') fileName: string) {
-    res.sendFile(path.join(__dirname, '../../../uploads/post/' + fileName));
   }
 }
