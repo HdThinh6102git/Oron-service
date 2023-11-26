@@ -9,10 +9,12 @@ import { AuthModule } from '../auth';
 import { Province } from '#entity/user/address/province.entity';
 import { District } from '#entity/user/address/district.entity';
 import { Ward } from '#entity/user/address/ward.entity';
+import {Comment} from "#entity/comment.entity";
+import {Reaction} from "#entity/reaction.entity";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Post, Category, User, Province, District, Ward]),
+    TypeOrmModule.forFeature([Post, Category, User, Province, District, Ward, Comment, Reaction]),
     AuthModule,
   ],
   controllers: Object.values(controllers),

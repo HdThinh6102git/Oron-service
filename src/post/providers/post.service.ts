@@ -22,12 +22,18 @@ import { Category } from '#entity/post/category.entity';
 import { Province } from '#entity/user/address/province.entity';
 import { District } from '#entity/user/address/district.entity';
 import { Ward } from '#entity/user/address/ward.entity';
+import { Comment } from '#entity/comment.entity';
+import { Reaction } from '#entity/reaction.entity';
 
 @Injectable()
 export class PostService {
   constructor(
     @InjectRepository(Post)
     private postRepo: Repository<Post>,
+    @InjectRepository(Comment)
+    private commentRepo: Repository<Comment>,
+    @InjectRepository(Reaction)
+    private reactionRepo: Repository<Reaction>,
     @InjectRepository(User)
     private userRepo: Repository<User>,
     @InjectRepository(Category)
@@ -202,9 +208,21 @@ export class PostService {
     //save
     const post = await this.postRepo.save(postIdExist);
     //convert to output
+    const totalComments = await this.commentRepo.count({
+      where: {
+        post: { id: postId },
+      },
+    });
+    const totalReactions = await this.reactionRepo.count({
+      where: {
+        post: { id: postId },
+      },
+    });
     const postOutput = plainToClass(PostOutput, post, {
       excludeExtraneousValues: true,
     });
+    postOutput.totalComments = totalComments;
+    postOutput.totalReactions = totalReactions;
     return {
       error: false,
       data: postOutput,
@@ -256,6 +274,21 @@ export class PostService {
     const postsOutput = plainToInstance(PostOutput, posts, {
       excludeExtraneousValues: true,
     });
+    for (let i = 0; i < postsOutput.length; i++) {
+      const totalComments = await this.commentRepo.count({
+        where: {
+          post: { id: postsOutput[i].id },
+        },
+      });
+      const totalReactions = await this.reactionRepo.count({
+        where: {
+          post: { id: postsOutput[i].id },
+        },
+      });
+
+      postsOutput[i].totalComments = totalComments;
+      postsOutput[i].totalReactions = totalReactions;
+    }
     return {
       listData: postsOutput,
       total: count,
@@ -276,9 +309,21 @@ export class PostService {
         code: 4,
       });
     }
+    const totalComments = await this.commentRepo.count({
+      where: {
+        post: { id: postId },
+      },
+    });
+    const totalReactions = await this.reactionRepo.count({
+      where: {
+        post: { id: postId },
+      },
+    });
     const postOutput = plainToClass(PostOutput, post, {
       excludeExtraneousValues: true,
     });
+    postOutput.totalComments = totalComments;
+    postOutput.totalReactions = totalReactions;
     return {
       error: false,
       data: postOutput,

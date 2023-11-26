@@ -52,4 +52,12 @@ export class PostOutput {
   @ApiProperty()
   @Type(() => Date)
   public updatedAt: Date;
+
+  @Expose()
+  @ApiProperty()
+  totalComments: number;
+
+  @Expose()
+  @ApiProperty()
+  totalReactions: number;
 }
