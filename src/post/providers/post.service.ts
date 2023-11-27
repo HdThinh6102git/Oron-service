@@ -246,6 +246,9 @@ export class PostService {
     if (filter.userId) {
       where['user'] = { id: filter.userId };
     }
+    if (filter.categoryId) {
+      where['category'] = { id: filter.categoryId };
+    }
     if (filter.keyword) {
       wheres = [
         {

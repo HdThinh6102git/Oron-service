@@ -22,4 +22,7 @@ export class PostFilter extends PaginationParamsDto {
 
   @IsOptional()
   userId: string;
+
+  @IsOptional()
+  categoryId: string;
 }
