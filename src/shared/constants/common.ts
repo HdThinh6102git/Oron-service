@@ -24,6 +24,7 @@ export const MESSAGES = {
   USER_REACTION_EXIST: 'user_reaction_exist',
   TYPE_NOT_FOUND: 'type_not_found',
   REVIEW_NOT_FOUND: 'review_not_found',
+  CAN_NOT_REGISTER_YOUR_OWN_POST: 'can_not_register_your_own_post',
   POST_REGISTRATION_NOT_FOUND: 'post_registration_not_found',
   COMMENT_NOT_FOUND: 'comment_not_found',
   POST_NOT_FOUND: 'post_not_found',

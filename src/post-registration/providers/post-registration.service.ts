@@ -49,6 +49,19 @@ export class PostRegistrationService {
         code: 4,
       });
     }
+    const myPost = await this.postRepo.findOne({
+      where: {
+        id: input.postId,
+        user: { id: userId },
+      },
+    });
+    if (myPost) {
+      throw new NotFoundException({
+        error: true,
+        message: MESSAGES.CAN_NOT_REGISTER_YOUR_OWN_POST,
+        code: 4,
+      });
+    }
     const user = await this.userRepo.findOne({
       where: {
         id: userId,
