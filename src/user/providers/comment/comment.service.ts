@@ -7,7 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, IsNull, Not, Repository } from 'typeorm';
 import { Comment, COMMENT_STATUS } from '#entity/comment.entity';
-import { Post, POST_STATUS } from '#entity/post/post.entity';
+import { Post } from '#entity/post/post.entity';
 import { User } from '#entity/user/user.entity';
 import { BaseApiResponse, BasePaginationResponse } from '../../../shared/dtos';
 import {
@@ -97,10 +97,10 @@ export class CommentService {
     }
     if (typeof input.status === 'number') {
       if (input.status == 0) {
-        commentExist.status = POST_STATUS.IN_ACTIVE;
+        commentExist.status = COMMENT_STATUS.IN_ACTIVE;
       }
       if (input.status == 1) {
-        commentExist.status = POST_STATUS.ACTIVE;
+        commentExist.status = COMMENT_STATUS.ACTIVE;
       }
     }
     //save

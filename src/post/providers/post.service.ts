@@ -199,10 +199,11 @@ export class PostService {
     }
     if (typeof input.status === 'number') {
       if (input.status == 0) {
-        postIdExist.status = POST_STATUS.IN_ACTIVE;
-      }
-      if (input.status == 1) {
-        postIdExist.status = POST_STATUS.ACTIVE;
+        postIdExist.status = POST_STATUS.PRIVATE;
+      } else if (input.status == 1) {
+        postIdExist.status = POST_STATUS.PUBLIC;
+      } else if (input.status == 2) {
+        postIdExist.status = POST_STATUS.FRIEND;
       }
     }
     //save

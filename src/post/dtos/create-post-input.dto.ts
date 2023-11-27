@@ -1,5 +1,6 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { POST_STATUS } from '#entity/post/post.entity';
 
 export class CreatePostInput {
   @IsNotEmpty()
@@ -41,4 +42,9 @@ export class CreatePostInput {
   @IsString()
   @IsOptional()
   categoryId: string;
+
+  @ApiProperty()
+  @IsEnum(POST_STATUS)
+  @IsNotEmpty()
+  status: number;
 }

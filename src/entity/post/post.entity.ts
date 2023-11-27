@@ -15,8 +15,9 @@ import { Review } from '../review.entity';
 import { Reaction } from '../reaction.entity';
 import { PostRegistration } from '../post-registration.entity';
 export enum POST_STATUS {
-  IN_ACTIVE = 0,
-  ACTIVE = 1,
+  PRIVATE = 0,
+  PUBLIC = 1,
+  FRIEND = 2,
 }
 
 @Entity({ name: 'post', schema: process.env.DB_SCHEMA })
@@ -45,7 +46,7 @@ export class Post {
   @Column('numeric', {
     nullable: false,
     name: 'status',
-    default: POST_STATUS.ACTIVE,
+    default: POST_STATUS.PUBLIC,
   })
   status: number;
 

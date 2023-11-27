@@ -1,5 +1,6 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { POST_STATUS } from '#entity/post/post.entity';
 
 export class UpdatePostInput {
   @ApiProperty()
@@ -43,7 +44,7 @@ export class UpdatePostInput {
   categoryId: string;
 
   @ApiProperty()
-  @IsNumber()
+  @IsEnum(POST_STATUS)
   @IsOptional()
   status: number;
 }
