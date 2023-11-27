@@ -56,6 +56,14 @@ export class PostService {
       },
       relations: ['province', 'district', 'ward'],
     });
+    if (!user) {
+      throw new NotFoundException({
+        error: true,
+        data: null,
+        message: MESSAGES.NOT_FOUND_USER,
+        code: 4,
+      });
+    }
     const inputValue: any = {};
     if (user) {
       inputValue['user'] = user;
