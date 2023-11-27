@@ -15,7 +15,11 @@ export class PostRegistrationFilter extends PaginationParamsDto {
 
   @IsOptional()
   @IsUUID()
-  userId: string;
+  creatorId: string;
+
+  @IsOptional()
+  @IsUUID()
+  postOwnerId: string;
 
   @IsOptional()
   @IsUUID()

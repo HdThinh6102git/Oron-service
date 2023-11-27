@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, IsNull, Not, Repository } from 'typeorm';
+import { ILike, In, IsNull, Not, Repository } from 'typeorm';
 import {
   POST_REGISTRATION_STATUS,
   PostRegistration,
@@ -203,8 +203,20 @@ export class PostRegistrationService {
     if (filter.postId) {
       where['post'] = { id: filter.postId };
     }
-    if (filter.userId) {
-      where['user'] = { id: filter.userId };
+    if (filter.creatorId) {
+      where['user'] = { id: filter.creatorId };
+    }
+    if (filter.postOwnerId) {
+      const postIds = await this.postRepo
+        .createQueryBuilder('post')
+        .select('post.id')
+        .where('post.user_id = :userId', { userId: filter.postOwnerId })
+        .execute();
+      const postIdArray = [];
+      for (let i = 0; i < postIds.length; i++) {
+        postIdArray.push(postIds[i].post_id);
+      }
+      where['post'] = { id: In(postIdArray) };
     }
     if (filter.id) {
       where['id'] = filter.id;
