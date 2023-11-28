@@ -11,3 +11,4 @@ export * from './comment';
 export * from './reaction';
 export * from './review';
 export * from './update-user-input.dto';
+export * from './friend-filter.dto';

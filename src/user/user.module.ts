@@ -15,6 +15,7 @@ import { Review } from '#entity/review.entity';
 import { Reaction } from '#entity/reaction.entity';
 import { Post } from '#entity/post/post.entity';
 import { PostRegistration } from '#entity/post-registration.entity';
+import { UserConnection } from '#entity/user/user-connection.entity';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { PostRegistration } from '#entity/post-registration.entity';
       Reaction,
       Post,
       PostRegistration,
+      UserConnection,
     ]),
   ],
   controllers: Object.values(controllers),

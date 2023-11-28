@@ -19,6 +19,7 @@ import { Comment } from '../comment.entity';
 import { Review } from '../review.entity';
 import { Reaction } from '../reaction.entity';
 import { PostRegistration } from '../post-registration.entity';
+import { UserConnection } from './user-connection.entity';
 
 export enum USER_STATUS {
   IN_ACTIVE = 'IN_ACTIVE',
@@ -150,4 +151,16 @@ export class User extends BaseEntity {
     (postRegistration) => postRegistration.user,
   )
   postRegistrations: PostRegistration[];
+
+  @OneToMany(
+    () => UserConnection,
+    (userConnectionFollower) => userConnectionFollower.follower,
+  )
+  followerConnections: UserConnection[];
+
+  @OneToMany(
+    () => UserConnection,
+    (userConnectionFollowed) => userConnectionFollowed.followed,
+  )
+  followedConnections: UserConnection[];
 }

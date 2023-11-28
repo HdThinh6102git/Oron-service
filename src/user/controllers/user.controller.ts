@@ -1,7 +1,23 @@
-import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ReqContext, RequestContext } from '../../shared/request-context';
-import { BaseApiResponse } from '../../shared/dtos';
-import { ChangePasswordDto, UpdateUserInput, UserProfileOutput } from '../dtos';
+import { BaseApiResponse, BasePaginationResponse } from '../../shared/dtos';
+import {
+  ChangePasswordDto,
+  FriendFilter,
+  UpdateUserInput,
+  UserOutputDto,
+  UserProfileOutput,
+} from '../dtos';
 import { UserService } from '../providers';
 import { JwtAuthGuard } from '../../auth/guards';
 
@@ -36,5 +52,50 @@ export class UserController {
     @Body() body: UpdateUserInput,
   ): Promise<BaseApiResponse<UserProfileOutput>> {
     return await this.userService.updateProfile(body, ctx.user.id);
+  }
+
+  @Post(':userId/follow')
+  @UseGuards(JwtAuthGuard)
+  public async followUser(
+    @ReqContext() ctx: RequestContext,
+    @Param('userId') userId: string,
+  ): Promise<BaseApiResponse<null>> {
+    return await this.userService.followUser(ctx.user.id, userId);
+  }
+
+  @Delete(':userId/unfollow')
+  @UseGuards(JwtAuthGuard)
+  public async unfollowUser(
+    @ReqContext() ctx: RequestContext,
+    @Param('userId') userId: string,
+  ): Promise<BaseApiResponse<null>> {
+    return await this.userService.unfollowUser(ctx.user.id, userId);
+  }
+
+  @Get('/friends')
+  @UseGuards(JwtAuthGuard)
+  public async getFriends(
+    @Query() query: FriendFilter,
+    @ReqContext() ctx: RequestContext,
+  ): Promise<BasePaginationResponse<UserOutputDto>> {
+    return this.userService.getFriends(query, ctx.user.id);
+  }
+
+  @Get('/followers')
+  @UseGuards(JwtAuthGuard)
+  public async getFollowers(
+    @Query() query: FriendFilter,
+    @ReqContext() ctx: RequestContext,
+  ): Promise<BasePaginationResponse<UserOutputDto>> {
+    return this.userService.getFollowers(query, ctx.user.id);
+  }
+
+  @Get('/followings')
+  @UseGuards(JwtAuthGuard)
+  public async getFollowings(
+    @Query() query: FriendFilter,
+    @ReqContext() ctx: RequestContext,
+  ): Promise<BasePaginationResponse<UserOutputDto>> {
+    return this.userService.getFollowings(query, ctx.user.id);
   }
 }

@@ -11,6 +11,9 @@ export const REQUEST_ID_TOKEN_HEADER = 'x-request-id';
 export const FORWARDED_FOR_TOKEN_HEADER = 'x-forwarded-for';
 export const VERIFICATION_TIME = 5; //minutes
 export const MESSAGES = {
+  CAN_NOT_FOLLOW_YOUR_SELF: 'can_not_follow_your_self',
+  FOLLOWED_USER_NOT_FOUND: 'followed_user_not_found',
+  FOLLOWER_NOT_FOUND: 'follower_not_found',
   CAN_NOT_REVIEW_MULTIPLE_TIME: 'can_not_review_multiple_time',
   CAN_NOT_REVIEW_POST_HAVE_NOT_RECEIVED:
     'can_not_review_post_have_not_received',
@@ -42,6 +45,8 @@ export const MESSAGES = {
   DELETED_SUCCEED: 'deleted_succeed',
   UPLOADED_SUCCEED: 'uploaded_succeed',
   UPDATE_SUCCEED: 'update_succeed',
+  UPDATED_OR_DELETED_SUCCEED: 'updated_or_deleted_succeed',
+  CREATED_OR_UPDATED_SUCCEED: 'updated_or_created_succeed',
   EMAIL_NOT_FOUND: `email_not_found`,
   NOT_FOUND_USER: 'not_found_user',
   WRONG_EMAIL_FORMAT: 'wrong_email_format',
