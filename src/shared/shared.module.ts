@@ -15,6 +15,7 @@ import { District } from '#entity/user/address/district.entity';
 import { Ward } from '#entity/user/address/ward.entity';
 import { Comment } from '#entity/comment.entity';
 import { Reaction } from '#entity/reaction.entity';
+import { SavedPost } from '#entity/post/saved-post.entity';
 @Module({
   imports: [
     TypeOrmModule.forFeature([
@@ -28,6 +29,7 @@ import { Reaction } from '#entity/reaction.entity';
       Ward,
       Comment,
       Reaction,
+      SavedPost,
     ]),
     forwardRef(() => AuthModule),
     UserModule,

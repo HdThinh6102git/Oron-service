@@ -14,6 +14,7 @@ import { Comment } from '../comment.entity';
 import { Review } from '../review.entity';
 import { Reaction } from '../reaction.entity';
 import { PostRegistration } from '../post-registration.entity';
+import { SavedPost } from './saved-post.entity';
 export enum POST_STATUS {
   PRIVATE = 0,
   PUBLIC = 1,
@@ -116,4 +117,7 @@ export class Post {
     (postRegistration) => postRegistration.post,
   )
   postRegistrations: PostRegistration[];
+
+  @OneToMany(() => SavedPost, (savedPost) => savedPost.post)
+  savedPosts: SavedPost[];
 }

@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, IsNull, Not, Repository } from 'typeorm';
+import { ILike, In, IsNull, Not, Repository } from 'typeorm';
 import { Post, POST_STATUS } from '#entity/post/post.entity';
 import { BaseApiResponse, BasePaginationResponse } from '../../shared/dtos';
 import { MESSAGES } from '../../shared/constants';
@@ -14,6 +14,7 @@ import {
   CreatePostInput,
   PostFilter,
   PostOutput,
+  SavedPostOutput,
   UpdatePostInput,
 } from '../dtos';
 import { isEmpty } from '@nestjs/common/utils/shared.utils';
@@ -24,6 +25,8 @@ import { District } from '#entity/user/address/district.entity';
 import { Ward } from '#entity/user/address/ward.entity';
 import { Comment } from '#entity/comment.entity';
 import { Reaction } from '#entity/reaction.entity';
+import { SavedPost } from '#entity/post/saved-post.entity';
+import { SavedPostFilter } from '../dtos/saved-post-filter.dto';
 
 @Injectable()
 export class PostService {
@@ -44,6 +47,8 @@ export class PostService {
     private districtRepository: Repository<District>,
     @InjectRepository(Ward)
     private wardRepository: Repository<Ward>,
+    @InjectRepository(SavedPost)
+    private savedPostRepo: Repository<SavedPost>,
   ) {}
   public async createNewPost(
     input: CreatePostInput,
@@ -470,6 +475,149 @@ export class PostService {
       data: postOutput,
       message: MESSAGES.UPDATE_SUCCEED,
       code: 0,
+    };
+  }
+
+  public async savePost(
+    userId: string,
+    postId: string,
+  ): Promise<BaseApiResponse<SavedPostOutput>> {
+    const user = await this.userRepo.findOne({
+      where: {
+        id: userId,
+      },
+    });
+    if (!user) {
+      throw new NotFoundException({
+        error: true,
+        data: null,
+        message: MESSAGES.NOT_FOUND_USER,
+        code: 4,
+      });
+    }
+    const post = await this.postRepo.findOne({
+      where: {
+        id: postId,
+      },
+    });
+    if (!post) {
+      throw new NotFoundException({
+        error: true,
+        data: null,
+        message: MESSAGES.POST_NOT_FOUND,
+        code: 4,
+      });
+    }
+    const savedPostExist = await this.savedPostRepo.findOne({
+      where: {
+        user: { id: userId },
+        post: { id: postId },
+      },
+    });
+    if (savedPostExist) {
+      throw new HttpException(
+        {
+          error: true,
+          message: MESSAGES.USER_SAVED_THIS_POST,
+          code: 4,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const savedPost = await this.savedPostRepo.save({
+      post: post,
+      user: user,
+    });
+    //convert to output
+    const savedPostOutput = plainToClass(SavedPostOutput, savedPost, {
+      excludeExtraneousValues: true,
+    });
+    return {
+      error: false,
+      data: savedPostOutput,
+      message: MESSAGES.CREATED_SUCCEED,
+      code: 0,
+    };
+  }
+
+  public async unSavePost(
+    userId: string,
+    postId: string,
+  ): Promise<BaseApiResponse<null>> {
+    const savedPost = await this.savedPostRepo.findOne({
+      where: {
+        user: { id: userId },
+        post: { id: postId },
+      },
+    });
+    if (!savedPost) {
+      throw new NotFoundException({
+        error: true,
+        data: null,
+        message: MESSAGES.POST_NOT_SAVED,
+        code: 4,
+      });
+    }
+    await this.savedPostRepo.delete(savedPost.id);
+    return {
+      error: false,
+      data: null,
+      message: MESSAGES.DELETED_SUCCEED,
+      code: 0,
+    };
+  }
+
+  public async getSavedPostsByUserId(
+    userId: string,
+    filter: SavedPostFilter,
+  ): Promise<BasePaginationResponse<PostOutput>> {
+    const wherePost: any = {
+      id: Not(IsNull()),
+    };
+    const whereSavedPost: any = {};
+    const postFilterIdsArray = [];
+    if (filter.savedAt) {
+      whereSavedPost['createdAt'] = filter.savedAt;
+    }
+    if (filter.categoryId) {
+      wherePost['category'] = { id: filter.categoryId };
+    }
+    if (filter.keyword) {
+      wherePost['description'] = ILike(`%${filter.keyword}%`);
+    }
+    const savedPosts = await this.savedPostRepo.find({
+      where: {
+        ...whereSavedPost,
+        user: { id: userId },
+      },
+      relations: ['post'],
+      select: ['post'],
+    });
+    for (const savedPost of savedPosts) {
+      postFilterIdsArray.push(savedPost.post.id);
+    }
+    wherePost['id'] = In(postFilterIdsArray);
+    const posts = await this.postRepo.find({
+      where: wherePost,
+      take: filter.limit,
+      skip: filter.skip,
+      order: {
+        createdAt: 'DESC',
+      },
+      relations: ['user'],
+    });
+    const count = await this.postRepo.count({
+      where: wherePost,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+    const postsOutput = plainToInstance(PostOutput, posts, {
+      excludeExtraneousValues: true,
+    });
+    return {
+      listData: postsOutput,
+      total: count,
     };
   }
 }

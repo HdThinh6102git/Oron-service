@@ -11,6 +11,8 @@ export const REQUEST_ID_TOKEN_HEADER = 'x-request-id';
 export const FORWARDED_FOR_TOKEN_HEADER = 'x-forwarded-for';
 export const VERIFICATION_TIME = 5; //minutes
 export const MESSAGES = {
+  USER_SAVED_THIS_POST: 'user_saved_this_post',
+  POST_NOT_SAVED: 'post_not_saved',
   CAN_NOT_FOLLOW_YOUR_SELF: 'can_not_follow_your_self',
   FOLLOWED_USER_NOT_FOUND: 'followed_user_not_found',
   FOLLOWER_NOT_FOUND: 'follower_not_found',

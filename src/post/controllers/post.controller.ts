@@ -15,10 +15,12 @@ import {
   CreatePostInput,
   PostFilter,
   PostOutput,
+  SavedPostOutput,
   UpdatePostInput,
 } from '../dtos';
 import { JwtAuthGuard } from '../../auth/guards';
 import { ReqContext, RequestContext } from '../../shared/request-context';
+import { SavedPostFilter } from '../dtos/saved-post-filter.dto';
 
 @Controller('post')
 export class PostController {
@@ -76,5 +78,32 @@ export class PostController {
     @Param('id') postId: string,
   ): Promise<BaseApiResponse<PostOutput>> {
     return await this.postService.restorePost(postId);
+  }
+
+  @Post(':id/save')
+  @UseGuards(JwtAuthGuard)
+  public async savePost(
+    @ReqContext() ctx: RequestContext,
+    @Param('id') postId: string,
+  ): Promise<BaseApiResponse<SavedPostOutput>> {
+    return await this.postService.savePost(ctx.user.id, postId);
+  }
+
+  @Delete(':id/unsave')
+  @UseGuards(JwtAuthGuard)
+  public async unSavePost(
+    @ReqContext() ctx: RequestContext,
+    @Param('id') postId: string,
+  ): Promise<BaseApiResponse<null>> {
+    return await this.postService.unSavePost(ctx.user.id, postId);
+  }
+
+  @Get('saved/user')
+  @UseGuards(JwtAuthGuard)
+  public async getSavedPostsByUserId(
+    @ReqContext() ctx: RequestContext,
+    @Query() query: SavedPostFilter,
+  ): Promise<BasePaginationResponse<PostOutput>> {
+    return await this.postService.getSavedPostsByUserId(ctx.user.id, query);
   }
 }

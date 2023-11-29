@@ -20,6 +20,7 @@ import { Review } from '../review.entity';
 import { Reaction } from '../reaction.entity';
 import { PostRegistration } from '../post-registration.entity';
 import { UserConnection } from './user-connection.entity';
+import { SavedPost } from '../post/saved-post.entity';
 
 export enum USER_STATUS {
   IN_ACTIVE = 'IN_ACTIVE',
@@ -163,4 +164,7 @@ export class User extends BaseEntity {
     (userConnectionFollowed) => userConnectionFollowed.followed,
   )
   followedConnections: UserConnection[];
+
+  @OneToMany(() => SavedPost, (savedPost) => savedPost.user)
+  savedPosts: SavedPost[];
 }
