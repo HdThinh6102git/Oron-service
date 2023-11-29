@@ -1,10 +1,8 @@
 import { PaginationParamsDto } from '../../shared/dtos';
-import { IsDate, IsOptional } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsOptional } from 'class-validator';
+
 export class SavedPostFilter extends PaginationParamsDto {
   @IsOptional()
-  @Type(() => Date)
-  @IsDate()
   savedAt: Date;
 
   @IsOptional()

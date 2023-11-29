@@ -571,28 +571,34 @@ export class PostService {
     userId: string,
     filter: SavedPostFilter,
   ): Promise<BasePaginationResponse<PostOutput>> {
+    console.log(userId);
     const wherePost: any = {
       id: Not(IsNull()),
     };
-    const whereSavedPost: any = {};
     const postFilterIdsArray = [];
-    if (filter.savedAt) {
-      whereSavedPost['createdAt'] = filter.savedAt;
-    }
     if (filter.categoryId) {
       wherePost['category'] = { id: filter.categoryId };
     }
     if (filter.keyword) {
       wherePost['description'] = ILike(`%${filter.keyword}%`);
     }
-    const savedPosts = await this.savedPostRepo.find({
-      where: {
-        ...whereSavedPost,
-        user: { id: userId },
-      },
-      relations: ['post'],
-      select: ['post'],
-    });
+    let savedPosts: any = [];
+    if (filter.savedAt) {
+      savedPosts = await this.savedPostRepo
+        .createQueryBuilder('sp')
+        .leftJoinAndSelect('sp.post', 'post')
+        .where(`sp.user_id = :userId`, { userId: userId })
+        .andWhere(`TO_CHAR(sp.created_at::DATE, 'yyyy-mm-dd') = :savedAt`, {
+          savedAt: filter.savedAt,
+        })
+        .getMany();
+    } else {
+      savedPosts = await this.savedPostRepo
+        .createQueryBuilder('sp')
+        .leftJoinAndSelect('sp.post', 'post')
+        .where(`sp.user_id = :userId`, { userId: userId })
+        .getMany();
+    }
     for (const savedPost of savedPosts) {
       postFilterIdsArray.push(savedPost.post.id);
     }
