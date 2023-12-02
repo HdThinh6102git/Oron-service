@@ -14,6 +14,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { SharedModule } from './shared/shared.module';
 import { PostModule } from './post';
 import { PostRegistrationModule } from './post-registration';
+import { ReportModule } from './report/report.module';
 
 @Module({
   imports: [
@@ -66,6 +67,7 @@ import { PostRegistrationModule } from './post-registration';
     SharedModule,
     PostModule,
     PostRegistrationModule,
+    ReportModule,
 
     // Module Router
   ],

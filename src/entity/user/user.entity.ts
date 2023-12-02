@@ -21,6 +21,8 @@ import { Reaction } from '../reaction.entity';
 import { PostRegistration } from '../post-registration.entity';
 import { UserConnection } from './user-connection.entity';
 import { SavedPost } from '../post/saved-post.entity';
+import { Report } from '../report.entity';
+import { ReportResponse } from '../report-response.entity';
 
 export enum USER_STATUS {
   IN_ACTIVE = 'IN_ACTIVE',
@@ -167,4 +169,10 @@ export class User extends BaseEntity {
 
   @OneToMany(() => SavedPost, (savedPost) => savedPost.user)
   savedPosts: SavedPost[];
+
+  @OneToMany(() => Report, (report) => report.user)
+  reports: Report[];
+
+  @OneToMany(() => ReportResponse, (reportResponse) => reportResponse.user)
+  reportResponses: ReportResponse[];
 }

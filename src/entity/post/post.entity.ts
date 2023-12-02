@@ -15,6 +15,7 @@ import { Review } from '../review.entity';
 import { Reaction } from '../reaction.entity';
 import { PostRegistration } from '../post-registration.entity';
 import { SavedPost } from './saved-post.entity';
+import { Report } from '../report.entity';
 export enum POST_STATUS {
   PRIVATE = 0,
   PUBLIC = 1,
@@ -120,4 +121,7 @@ export class Post {
 
   @OneToMany(() => SavedPost, (savedPost) => savedPost.post)
   savedPosts: SavedPost[];
+
+  @OneToMany(() => Report, (report) => report.post)
+  reports: Report[];
 }

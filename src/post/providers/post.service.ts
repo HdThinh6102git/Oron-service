@@ -571,7 +571,6 @@ export class PostService {
     userId: string,
     filter: SavedPostFilter,
   ): Promise<BasePaginationResponse<PostOutput>> {
-    console.log(userId);
     const wherePost: any = {
       id: Not(IsNull()),
     };
