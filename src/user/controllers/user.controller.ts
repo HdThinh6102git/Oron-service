@@ -15,6 +15,7 @@ import {
   ChangePasswordDto,
   FriendFilter,
   UpdateUserInput,
+  UserFilter,
   UserOutputDto,
   UserProfileOutput,
 } from '../dtos';
@@ -98,4 +99,20 @@ export class UserController {
   ): Promise<BasePaginationResponse<UserOutputDto>> {
     return this.userService.getFollowings(query, ctx.user.id);
   }
+
+  @Get('/filter')
+  @UseGuards(JwtAuthGuard)
+  public async getUsers(
+    @Query() query: UserFilter,
+  ): Promise<BasePaginationResponse<UserOutputDto>> {
+    return this.userService.getUsers(query);
+  }
+
+  // @Get('/top')
+  // @UseGuards(JwtAuthGuard)
+  // public async getTopUsers(
+  //     @Query() query: TopUserFilter,
+  // ): Promise<BasePaginationResponse<UserOutputDto>> {
+  //   return this.userService.getTopUsers(query);
+  // }
 }

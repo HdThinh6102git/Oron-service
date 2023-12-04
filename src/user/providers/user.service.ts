@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '#entity/user/user.entity';
+import { User, USER_STATUS } from '#entity/user/user.entity';
 import { ILike, In, IsNull, Not, Repository } from 'typeorm';
 import { Role } from '#entity/user/role.entity';
 import { ConfigService } from '@nestjs/config';
@@ -18,6 +18,7 @@ import {
   FriendFilter,
   UpdateProfileInput,
   UpdateUserInput,
+  UserFilter,
   UserOutputDto,
   UserProfileOutput,
 } from '../dtos';
@@ -31,6 +32,7 @@ import {
   USER_CONNECTION_TYPE,
   UserConnection,
 } from '#entity/user/user-connection.entity';
+import { isEmpty } from '@nestjs/common/utils/shared.utils';
 @Injectable()
 export class UserService {
   constructor(
@@ -811,4 +813,53 @@ export class UserService {
       total: count,
     };
   }
+
+  public async getUsers(
+    filter: UserFilter,
+  ): Promise<BasePaginationResponse<UserOutputDto>> {
+    let wheres: any[] = [];
+    const where: any = {
+      id: Not(IsNull()),
+      deletedAt: IsNull(),
+      status: USER_STATUS.ACTIVE,
+    };
+    if (filter.keyword) {
+      wheres = [
+        {
+          ...where,
+          username: ILike(`%${filter.keyword}%`),
+        },
+        {
+          ...where,
+          name: ILike(`%${filter.keyword}%`),
+        },
+      ];
+    }
+    if (isEmpty(wheres)) {
+      wheres.push(where);
+    }
+    const users = await this.userRepository.find({
+      where: wheres,
+      take: filter.limit,
+      skip: filter.skip,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+    const count = await this.userRepository.count({
+      where: wheres,
+    });
+    const usersOutput = plainToInstance(UserOutputDto, users, {
+      excludeExtraneousValues: true,
+    });
+    return {
+      listData: usersOutput,
+      total: count,
+    };
+  }
+  // public async getTopUsers(
+  //     filter: TopUserFilter,
+  // ): Promise<BasePaginationResponse<UserOutputDto>> {
+  //
+  // }
 }
