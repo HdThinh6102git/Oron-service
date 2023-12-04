@@ -827,11 +827,11 @@ export class UserService {
       wheres = [
         {
           ...where,
-          username: ILike(`%${filter.keyword}%`),
+          username: ILike(`${filter.keyword}%`),
         },
         {
           ...where,
-          name: ILike(`%${filter.keyword}%`),
+          name: ILike(`${filter.keyword}%`),
         },
       ];
     }
