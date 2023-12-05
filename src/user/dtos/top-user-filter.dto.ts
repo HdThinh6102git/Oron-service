@@ -6,5 +6,5 @@ export class TopUserFilter extends PaginationParamsDto {
   @IsNotEmpty()
   @Transform(({ value }) => (value ? Number(value) : null))
   @IsNumber()
-  timePeriod: number;
+  weekNumber: number;
 }

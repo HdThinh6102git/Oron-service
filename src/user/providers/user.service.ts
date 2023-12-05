@@ -865,6 +865,8 @@ export class UserService {
   public async getTopUsers(
     filter: TopUserFilter,
   ): Promise<TopUserPaginationResponse<TopUserOutput>> {
+    const firstDateOfWeek = filter.weekNumber * 7 - 6;
+    const lastDateOfWeek = filter.weekNumber * 7;
     const queryBuilder = await this.userRepository
       .createQueryBuilder('u')
       .select('u.id', 'id')
@@ -875,7 +877,7 @@ export class UserService {
       .innerJoin(Post, 'p', 'u.id = p.user_id')
       .innerJoin(Review, 'r', 'p.id = r.post_id')
       .where(
-        `DATE_TRUNC('day', CURRENT_DATE) - DATE_TRUNC('day', p.created_at) <= INTERVAL '${filter.timePeriod} days'`,
+        `p.created_at >=  (SELECT DATE_TRUNC('year', CURRENT_DATE)::DATE + INTERVAL '${firstDateOfWeek} days')  AND p.created_at <=(SELECT (DATE_TRUNC('year', CURRENT_DATE))::DATE + INTERVAL '${lastDateOfWeek} days')`,
       )
       .groupBy('u.id')
       .addGroupBy('u.username')
