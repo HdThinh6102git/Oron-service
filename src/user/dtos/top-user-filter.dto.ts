@@ -1,7 +1,10 @@
 import { PaginationParamsDto } from '../../shared/dtos';
-import { IsOptional } from 'class-validator';
+import { IsNotEmpty, IsNumber } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class TopUserFilter extends PaginationParamsDto {
-  @IsOptional()
+  @IsNotEmpty()
+  @Transform(({ value }) => (value ? Number(value) : null))
+  @IsNumber()
   timePeriod: number;
 }

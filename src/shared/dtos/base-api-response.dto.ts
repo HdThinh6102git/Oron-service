@@ -31,3 +31,8 @@ export class ReactionPaginationResponse<T> extends BasePaginationResponse<T> {
   @Expose()
   listType: number[];
 }
+
+export class TopUserPaginationResponse<T> {
+  @Expose()
+  listData: T[];
+}

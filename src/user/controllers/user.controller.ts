@@ -10,10 +10,16 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ReqContext, RequestContext } from '../../shared/request-context';
-import { BaseApiResponse, BasePaginationResponse } from '../../shared/dtos';
+import {
+  BaseApiResponse,
+  BasePaginationResponse,
+  TopUserPaginationResponse,
+} from '../../shared/dtos';
 import {
   ChangePasswordDto,
   FriendFilter,
+  TopUserFilter,
+  TopUserOutput,
   UpdateUserInput,
   UserFilter,
   UserOutputDto,
@@ -108,11 +114,11 @@ export class UserController {
     return this.userService.getUsers(query);
   }
 
-  // @Get('/top')
-  // @UseGuards(JwtAuthGuard)
-  // public async getTopUsers(
-  //     @Query() query: TopUserFilter,
-  // ): Promise<BasePaginationResponse<UserOutputDto>> {
-  //   return this.userService.getTopUsers(query);
-  // }
+  @Get('/top')
+  @UseGuards(JwtAuthGuard)
+  public async getTopUsers(
+    @Query() query: TopUserFilter,
+  ): Promise<TopUserPaginationResponse<TopUserOutput>> {
+    return this.userService.getTopUsers(query);
+  }
 }

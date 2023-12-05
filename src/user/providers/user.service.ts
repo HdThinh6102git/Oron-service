@@ -16,6 +16,8 @@ import { MESSAGES, TYPE_PIC } from '../../shared/constants';
 
 import {
   FriendFilter,
+  TopUserFilter,
+  TopUserOutput,
   UpdateProfileInput,
   UpdateUserInput,
   UserFilter,
@@ -27,12 +29,18 @@ import { Province } from '#entity/user/address/province.entity';
 import { District } from '#entity/user/address/district.entity';
 import { Ward } from '#entity/user/address/ward.entity';
 import { ROLE } from '../../auth/constants';
-import { BaseApiResponse, BasePaginationResponse } from '../../shared/dtos';
+import {
+  BaseApiResponse,
+  BasePaginationResponse,
+  TopUserPaginationResponse,
+} from '../../shared/dtos';
 import {
   USER_CONNECTION_TYPE,
   UserConnection,
 } from '#entity/user/user-connection.entity';
 import { isEmpty } from '@nestjs/common/utils/shared.utils';
+import { Post } from '#entity/post/post.entity';
+import { Review } from '#entity/review.entity';
 @Injectable()
 export class UserService {
   constructor(
@@ -853,9 +861,34 @@ export class UserService {
       total: count,
     };
   }
-  // public async getTopUsers(
-  //     filter: TopUserFilter,
-  // ): Promise<BasePaginationResponse<UserOutputDto>> {
-  //
-  // }
+
+  public async getTopUsers(
+    filter: TopUserFilter,
+  ): Promise<TopUserPaginationResponse<TopUserOutput>> {
+    const queryBuilder = await this.userRepository
+      .createQueryBuilder('u')
+      .select('u.id', 'id')
+      .addSelect('u.username', 'username')
+      .addSelect('u.profile_pic', 'profilePic')
+      .addSelect('ROUND(AVG(r.number_star), 1)', 'avg_star')
+      .addSelect('COUNT(p.id)', 'post_count')
+      .innerJoin(Post, 'p', 'u.id = p.user_id')
+      .innerJoin(Review, 'r', 'p.id = r.post_id')
+      .where(
+        `DATE_TRUNC('day', CURRENT_DATE) - DATE_TRUNC('day', p.created_at) <= INTERVAL '${filter.timePeriod} days'`,
+      )
+      .groupBy('u.id')
+      .addGroupBy('u.username')
+      .addGroupBy('u.profile_pic')
+      .orderBy('avg_star', 'DESC')
+      .addOrderBy('post_count', 'DESC')
+      .limit(filter.limit);
+    const topUsers = await queryBuilder.getRawMany();
+    const topUsersOutput = plainToInstance(TopUserOutput, topUsers, {
+      excludeExtraneousValues: true,
+    });
+    return {
+      listData: topUsersOutput,
+    };
+  }
 }
