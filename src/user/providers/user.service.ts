@@ -829,10 +829,6 @@ export class UserService {
           ...where,
           username: ILike(`${filter.keyword}%`),
         },
-        {
-          ...where,
-          name: ILike(`${filter.keyword}%`),
-        },
       ];
     }
     if (isEmpty(wheres)) {
