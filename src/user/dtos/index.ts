@@ -15,3 +15,5 @@ export * from './friend-filter.dto';
 export * from './top-user-filter.dto';
 export * from './user-filter.dto';
 export * from './top-user-output.dto';
+export * from './create-admin-input.dto';
+export * from './admin-output.dto';

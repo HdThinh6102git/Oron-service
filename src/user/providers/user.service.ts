@@ -15,6 +15,8 @@ import * as bcrypt from 'bcrypt';
 import { MESSAGES, TYPE_PIC } from '../../shared/constants';
 
 import {
+  AdminOutput,
+  CreateAdminInput,
   FriendFilter,
   TopUserFilter,
   TopUserOutput,
@@ -232,6 +234,7 @@ export class UserService {
   public async findUserByEmailOrPhone(username: string): Promise<User> {
     const user: any = await this.userRepository.findOne({
       where: [{ phoneNumber: username }, { email: ILike(username) }],
+      relations: ['role'],
     });
     return user;
   }
@@ -891,6 +894,59 @@ export class UserService {
     });
     return {
       listData: topUsersOutput,
+    };
+  }
+
+  public async createNewAdmin(
+    input: CreateAdminInput,
+  ): Promise<BaseApiResponse<AdminOutput>> {
+    const adminWithUsernameExist = await this.userRepository.findOne({
+      where: {
+        username: input.username,
+        role: { name: ROLE.ADMIN },
+      },
+    });
+    if (adminWithUsernameExist)
+      throw new HttpException(
+        {
+          error: true,
+          data: null,
+          message: MESSAGES.USER_NAME_EXISTS,
+          code: 1,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    const hash = bcrypt.hashSync(
+      input.password,
+      this.config.get('saltRounds') || 7,
+    );
+    const adminRole = await this.roleRepository.findOneBy({
+      name: ROLE.ADMIN,
+    });
+    if (!adminRole)
+      throw new HttpException(
+        {
+          error: true,
+          data: null,
+          message: MESSAGES.ROLE_NOT_FOUND,
+          code: 4,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    const admin = await this.userRepository.save({
+      ...input,
+      password: hash,
+      role: adminRole,
+      isVerifyEmail: true,
+    });
+    const adminOutput = plainToClass(AdminOutput, admin, {
+      excludeExtraneousValues: true,
+    });
+    return {
+      error: false,
+      data: adminOutput,
+      message: MESSAGES.CREATED_SUCCEED,
+      code: 0,
     };
   }
 }

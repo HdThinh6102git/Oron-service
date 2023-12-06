@@ -39,19 +39,19 @@ export class User extends BaseEntity {
   @Column('varchar', { nullable: false, name: 'password' })
   password: string;
 
-  @Column('varchar', { nullable: false, name: 'name' })
+  @Column('varchar', { nullable: true, name: 'name' })
   name: string;
 
-  @Column('text', { nullable: false, name: 'full_address' })
+  @Column('text', { nullable: true, name: 'full_address' })
   fullAddress: string;
 
-  @Column('text', { nullable: false, name: 'specific_address' })
+  @Column('text', { nullable: true, name: 'specific_address' })
   specificAddress: string;
 
-  @Column('varchar', { nullable: false, name: 'phone_number' })
+  @Column('varchar', { nullable: true, name: 'phone_number' })
   phoneNumber: string;
 
-  @Column('varchar', { nullable: false, name: 'email' })
+  @Column('varchar', { nullable: true, name: 'email' })
   email: string;
 
   @Column('varchar', { nullable: true, name: 'profile_pic' })
