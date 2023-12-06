@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
   CategoryFilter,
@@ -16,11 +17,13 @@ import {
 } from '../dtos';
 import { BaseApiResponse, BasePaginationResponse } from '../../shared/dtos';
 import { CategoryService } from '../providers';
+import { JwtAdminAuthGuard } from '../../auth/guards';
 
 @Controller('category')
 export class CategoryController {
   constructor(private categoryService: CategoryService) {}
   @Post()
+  @UseGuards(JwtAdminAuthGuard)
   public async createNewCategory(
     @Body() body: CreateCategoryInput,
   ): Promise<BaseApiResponse<CategoryOutput>> {
@@ -28,6 +31,7 @@ export class CategoryController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAdminAuthGuard)
   public async updateCategory(
     @Param('id') categoryId: string,
     @Body() body: UpdateCategoryInput,
@@ -48,7 +52,9 @@ export class CategoryController {
   ): Promise<BaseApiResponse<CategoryOutput>> {
     return await this.categoryService.getCategoryById(categoryId);
   }
+
   @Delete(':id')
+  @UseGuards(JwtAdminAuthGuard)
   public async deleteCategory(
     @Param('id') categoryId: string,
   ): Promise<BaseApiResponse<null>> {
@@ -56,6 +62,7 @@ export class CategoryController {
   }
 
   @Delete('permanently/:id')
+  @UseGuards(JwtAdminAuthGuard)
   public async deleteCategoryPermanently(
     @Param('id') categoryId: string,
   ): Promise<BaseApiResponse<null>> {
@@ -63,6 +70,7 @@ export class CategoryController {
   }
 
   @Patch('restoration/:id')
+  @UseGuards(JwtAdminAuthGuard)
   public async retoreCategory(
     @Param('id') categoryId: string,
   ): Promise<BaseApiResponse<CategoryOutput>> {

@@ -35,6 +35,7 @@ export class PostController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   public async updatePost(
     @Param('id') postId: string,
     @Body() body: UpdatePostInput,

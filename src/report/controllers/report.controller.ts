@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ReportService } from '../providers';
-import { JwtAuthGuard } from '../../auth/guards';
+import { JwtAdminAuthGuard, JwtAuthGuard } from '../../auth/guards';
 import { ReqContext, RequestContext } from '../../shared/request-context';
 import { BaseApiResponse, BasePaginationResponse } from '../../shared/dtos';
 import { CreateReportInput, ReportFilter, ReportOutput } from '../dtos';
@@ -28,7 +28,7 @@ export class ReportController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAdminAuthGuard)
   public async deleteReport(
     @Param('id') reportId: string,
   ): Promise<BaseApiResponse<null>> {
@@ -36,6 +36,7 @@ export class ReportController {
   }
 
   @Get('/filter')
+  @UseGuards(JwtAdminAuthGuard)
   public async getReports(
     @Query() query: ReportFilter,
   ): Promise<BasePaginationResponse<ReportOutput>> {
@@ -43,6 +44,7 @@ export class ReportController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAdminAuthGuard)
   public async getReportById(
     @Param('id') reportId: string,
   ): Promise<BaseApiResponse<ReportOutput>> {

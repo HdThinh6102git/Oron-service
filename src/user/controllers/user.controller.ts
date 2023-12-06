@@ -26,13 +26,13 @@ import {
   UserProfileOutput,
 } from '../dtos';
 import { UserService } from '../providers';
-import { JwtAuthGuard } from '../../auth/guards';
+import { JwtAuthGuard, JwtCommonAuthGuard } from '../../auth/guards';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
   @Get('profile')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtCommonAuthGuard)
   async getMyProfile(
     @ReqContext() ctx: RequestContext,
   ): Promise<BaseApiResponse<UserProfileOutput>> {
@@ -40,7 +40,7 @@ export class UserController {
   }
 
   @Patch('change-password')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtCommonAuthGuard)
   public async changePassword(
     @ReqContext() ctx: RequestContext,
     @Body() input: ChangePasswordDto,

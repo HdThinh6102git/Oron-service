@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ReportResponseService } from '../providers';
-import { JwtAuthGuard } from '../../auth/guards';
+import { JwtAdminAuthGuard } from '../../auth/guards';
 import { ReqContext, RequestContext } from '../../shared/request-context';
 import {
   BaseApiResponse,
@@ -28,7 +28,7 @@ export class ReportResponseController {
   constructor(private reportResponseService: ReportResponseService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAdminAuthGuard)
   public async createReportResponse(
     @ReqContext() ctx: RequestContext,
     @Body() body: CreateReportResponseInput,
@@ -40,7 +40,7 @@ export class ReportResponseController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAdminAuthGuard)
   public async deleteReportResponse(
     @Param('id') reportResponseId: string,
   ): Promise<BaseApiResponse<null>> {
@@ -48,7 +48,7 @@ export class ReportResponseController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAdminAuthGuard)
   public async updateReportResponse(
     @Param('id') reportResponseId: string,
     @Body() body: UpdateReportResponseInput,
@@ -60,6 +60,7 @@ export class ReportResponseController {
   }
 
   @Get('/report/:reportId')
+  @UseGuards(JwtAdminAuthGuard)
   public async getReportResponsesByReportId(
     @Param('reportId') reportId: string,
     @Query() query: PaginationParamsDto,
