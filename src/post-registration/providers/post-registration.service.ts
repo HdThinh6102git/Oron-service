@@ -18,7 +18,7 @@ import {
   UpdatePostRegistrationInput,
 } from '../dtos';
 import { MESSAGES } from '../../shared/constants';
-import { Post } from '#entity/post/post.entity';
+import { FINAL_POST_REGISTRATION_STATUS, Post } from '#entity/post/post.entity';
 import { User } from '#entity/user/user.entity';
 import { plainToClass, plainToInstance } from 'class-transformer';
 
@@ -139,11 +139,21 @@ export class PostRegistrationService {
         postRegistrationExist.status = POST_REGISTRATION_STATUS.REFUSED;
       } else if (input.status == 3) {
         postRegistrationExist.status = POST_REGISTRATION_STATUS.WAITING_RECEIPT;
+        await this.postRepo.update(
+          { id: postRegistrationExist.post.id },
+          {
+            finalRegistrationStatus:
+              FINAL_POST_REGISTRATION_STATUS.WAITING_RECEIPT,
+          },
+        );
       } else if (input.status == 4) {
         postRegistrationExist.status = POST_REGISTRATION_STATUS.RECEIVED;
         await this.postRepo.update(
           { id: postRegistrationExist.post.id },
-          { receiverId: postRegistrationExist.user.id },
+          {
+            receiverId: postRegistrationExist.user.id,
+            finalRegistrationStatus: FINAL_POST_REGISTRATION_STATUS.RECEIVED,
+          },
         );
       }
     }

@@ -12,6 +12,7 @@ import { Ward } from '#entity/user/address/ward.entity';
 import { Comment } from '#entity/comment.entity';
 import { Reaction } from '#entity/reaction.entity';
 import { SavedPost } from '#entity/post/saved-post.entity';
+import { PostRegistration } from '#entity/post-registration.entity';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { SavedPost } from '#entity/post/saved-post.entity';
       Comment,
       Reaction,
       SavedPost,
+      PostRegistration,
     ]),
     AuthModule,
   ],

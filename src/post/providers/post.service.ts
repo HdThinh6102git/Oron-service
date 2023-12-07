@@ -6,7 +6,11 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, In, IsNull, Not, Repository } from 'typeorm';
-import { Post, POST_STATUS } from '#entity/post/post.entity';
+import {
+  FINAL_POST_REGISTRATION_STATUS,
+  Post,
+  POST_STATUS,
+} from '#entity/post/post.entity';
 import { BaseApiResponse, BasePaginationResponse } from '../../shared/dtos';
 import { MESSAGES } from '../../shared/constants';
 import { plainToClass, plainToInstance } from 'class-transformer';
@@ -28,6 +32,10 @@ import { Reaction } from '#entity/reaction.entity';
 import { SavedPost } from '#entity/post/saved-post.entity';
 import { SavedPostFilter } from '../dtos/saved-post-filter.dto';
 import { ReactionOutput } from '../../user/dtos';
+import {
+  POST_REGISTRATION_STATUS,
+  PostRegistration,
+} from '#entity/post-registration.entity';
 
 @Injectable()
 export class PostService {
@@ -50,6 +58,8 @@ export class PostService {
     private wardRepository: Repository<Ward>,
     @InjectRepository(SavedPost)
     private savedPostRepo: Repository<SavedPost>,
+    @InjectRepository(PostRegistration)
+    private postRegistrationRepo: Repository<PostRegistration>,
   ) {}
   public async createNewPost(
     input: CreatePostInput,
@@ -257,6 +267,25 @@ export class PostService {
     };
     if (typeof filter.status === 'number') {
       where['status'] = filter.status;
+    }
+    if (typeof filter.registration_status === 'number') {
+      if (
+        filter.registration_status ==
+        POST_REGISTRATION_STATUS.WAITING_CONFIRMATION
+      ) {
+        const postRegistrations = await this.postRegistrationRepo.find({
+          where: {
+            status: POST_REGISTRATION_STATUS.WAITING_CONFIRMATION,
+          },
+          relations: ['post'],
+        });
+        const postIds = postRegistrations.map(
+          (postRegistration) => postRegistration.post.id,
+        );
+        where['id'] = In(postIds);
+        where['finalRegistrationStatus'] =
+          FINAL_POST_REGISTRATION_STATUS.AVAILABLE;
+      }
     }
     if (filter.userId) {
       where['user'] = { id: filter.userId };

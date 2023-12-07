@@ -21,6 +21,11 @@ export enum POST_STATUS {
   PUBLIC = 1,
   FRIEND = 2,
 }
+export enum FINAL_POST_REGISTRATION_STATUS {
+  AVAILABLE = 1,
+  WAITING_RECEIPT = 3,
+  RECEIVED = 4,
+}
 
 @Entity({ name: 'post', schema: process.env.DB_SCHEMA })
 export class Post {
@@ -51,6 +56,13 @@ export class Post {
     default: POST_STATUS.PUBLIC,
   })
   status: number;
+
+  @Column('numeric', {
+    nullable: false,
+    name: 'final_registration_status',
+    default: FINAL_POST_REGISTRATION_STATUS.AVAILABLE,
+  })
+  finalRegistrationStatus: number;
 
   @Column('varchar', {
     nullable: true,
