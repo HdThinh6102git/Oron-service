@@ -1,6 +1,6 @@
 import { Expose, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserOutputDto } from '../../user/dtos';
+import { ReactionOutput, UserOutputDto } from '../../user/dtos';
 import { CategoryOutput } from './category';
 
 export class PostOutput {
@@ -60,4 +60,13 @@ export class PostOutput {
   @Expose()
   @ApiProperty()
   totalReactions: number;
+
+  @Expose()
+  @ApiProperty()
+  isUserReceived: boolean;
+
+  @Expose()
+  @ApiProperty()
+  @Type(() => ReactionOutput)
+  currentUserReaction: ReactionOutput;
 }

@@ -76,6 +76,12 @@ export class Post {
   @Column('text', { nullable: true, name: 'specific_address' })
   specificAddress: string;
 
+  @Column('varchar', {
+    nullable: true,
+    name: 'receiver_id',
+  })
+  receiverId: string;
+
   @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',

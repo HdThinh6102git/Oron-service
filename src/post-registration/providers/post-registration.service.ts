@@ -141,6 +141,10 @@ export class PostRegistrationService {
         postRegistrationExist.status = POST_REGISTRATION_STATUS.WAITING_RECEIPT;
       } else if (input.status == 4) {
         postRegistrationExist.status = POST_REGISTRATION_STATUS.RECEIVED;
+        await this.postRepo.update(
+          { id: postRegistrationExist.post.id },
+          { receiverId: postRegistrationExist.user.id },
+        );
       }
     }
     //save
