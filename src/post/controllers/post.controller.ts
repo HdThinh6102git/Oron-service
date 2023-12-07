@@ -18,7 +18,7 @@ import {
   SavedPostOutput,
   UpdatePostInput,
 } from '../dtos';
-import { JwtAuthGuard, JwtCommonAuthGuard } from '../../auth/guards';
+import { JwtAuthGuard,} from '../../auth/guards';
 import { ReqContext, RequestContext } from '../../shared/request-context';
 import { SavedPostFilter } from '../dtos/saved-post-filter.dto';
 
@@ -44,21 +44,17 @@ export class PostController {
   }
 
   @Get('/filter')
-  @UseGuards(JwtCommonAuthGuard)
   public async getPosts(
     @Query() query: PostFilter,
-    @ReqContext() ctx: RequestContext,
   ): Promise<BasePaginationResponse<PostOutput>> {
-    return this.postService.getPosts(query, ctx.user.id);
+    return this.postService.getPosts(query);
   }
 
   @Get(':id')
-  @UseGuards(JwtCommonAuthGuard)
   public async getPostById(
-    @ReqContext() ctx: RequestContext,
     @Param('id') postId: string,
   ): Promise<BaseApiResponse<PostOutput>> {
-    return await this.postService.getPostById(postId, ctx.user.id);
+    return await this.postService.getPostById(postId);
   }
 
   @Delete('permanently/:id')

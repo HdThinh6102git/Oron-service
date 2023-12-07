@@ -138,6 +138,10 @@ export class PostRegistrationService {
       } else if (input.status == 2) {
         postRegistrationExist.status = POST_REGISTRATION_STATUS.REFUSED;
       } else if (input.status == 3) {
+        await this.postRegistrationRepo.update(
+          { post: { id: postRegistrationExist.post.id } },
+          { status: POST_REGISTRATION_STATUS.REFUSED },
+        );
         postRegistrationExist.status = POST_REGISTRATION_STATUS.WAITING_RECEIPT;
         await this.postRepo.update(
           { id: postRegistrationExist.post.id },
