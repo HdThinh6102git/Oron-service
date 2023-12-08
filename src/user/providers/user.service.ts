@@ -833,6 +833,7 @@ export class UserService {
       id: Not(IsNull()),
       deletedAt: IsNull(),
       status: USER_STATUS.ACTIVE,
+      role: { id: 1 },
     };
     if (filter.keyword) {
       wheres = [
@@ -946,6 +947,30 @@ export class UserService {
       error: false,
       data: adminOutput,
       message: MESSAGES.CREATED_SUCCEED,
+      code: 0,
+    };
+  }
+
+  public async getUserById(
+    userId: string,
+  ): Promise<BaseApiResponse<UserOutputDto>> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId, deletedAt: IsNull() },
+    });
+    if (!user) {
+      throw new NotFoundException({
+        error: true,
+        message: MESSAGES.NOT_FOUND_USER,
+        code: 4,
+      });
+    }
+    const userOutput = plainToClass(UserOutputDto, user, {
+      excludeExtraneousValues: true,
+    });
+    return {
+      error: false,
+      data: userOutput,
+      message: MESSAGES.GET_SUCCEED,
       code: 0,
     };
   }

@@ -27,7 +27,6 @@ import {
 } from '../dtos';
 import { UserService } from '../providers';
 import { JwtAuthGuard, JwtCommonAuthGuard } from '../../auth/guards';
-
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -120,5 +119,13 @@ export class UserController {
     @Query() query: TopUserFilter,
   ): Promise<TopUserPaginationResponse<TopUserOutput>> {
     return this.userService.getTopUsers(query);
+  }
+
+  @Get('user-profile/:id')
+  @UseGuards(JwtCommonAuthGuard)
+  public async getUserById(
+    @Param('id') userId: string,
+  ): Promise<BaseApiResponse<UserOutputDto>> {
+    return await this.userService.getUserById(userId);
   }
 }
