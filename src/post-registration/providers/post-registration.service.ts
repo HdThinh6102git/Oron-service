@@ -233,6 +233,7 @@ export class PostRegistrationService {
     }
     if (filter.postId) {
       where['post'] = { id: filter.postId };
+      where['status'] = Not(POST_REGISTRATION_STATUS.REFUSED);
     }
     if (filter.creatorId) {
       where['user'] = { id: filter.creatorId };
