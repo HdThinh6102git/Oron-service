@@ -35,6 +35,7 @@ import {
   POST_REGISTRATION_STATUS,
   PostRegistration,
 } from '#entity/post-registration.entity';
+import { ReactionOutput } from '../../user/dtos';
 
 @Injectable()
 export class PostService {
@@ -257,6 +258,7 @@ export class PostService {
 
   public async getPosts(
     filter: PostFilter,
+    userId: string,
   ): Promise<BasePaginationResponse<PostOutput>> {
     let wheres: any[] = [];
     const where: any = {
@@ -331,7 +333,25 @@ export class PostService {
           post: { id: postsOutput[i].id },
         },
       });
-
+      const currentUserReaction = await this.reactionRepo.findOne({
+        where: {
+          post: { id: postsOutput[i].id },
+          user: { id: userId },
+        },
+      });
+      const currentUserReactionOutput = plainToInstance(
+        ReactionOutput,
+        currentUserReaction,
+        {
+          excludeExtraneousValues: true,
+        },
+      );
+      if (posts[i].receiverId === userId) {
+        postsOutput[i].isUserReceived = true;
+      } else {
+        postsOutput[i].isUserReceived = false;
+      }
+      postsOutput[i].currentUserReaction = currentUserReactionOutput;
       postsOutput[i].totalComments = totalComments;
       postsOutput[i].totalReactions = totalReactions;
     }
@@ -343,6 +363,7 @@ export class PostService {
 
   public async getPostById(
     postId: string,
+    userId: string,
   ): Promise<BaseApiResponse<PostOutput>> {
     const post = await this.postRepo.findOne({
       where: { id: postId, deletedAt: IsNull() },
@@ -355,6 +376,7 @@ export class PostService {
         code: 4,
       });
     }
+
     const totalComments = await this.commentRepo.count({
       where: {
         post: { id: postId },
@@ -368,6 +390,25 @@ export class PostService {
     const postOutput = plainToClass(PostOutput, post, {
       excludeExtraneousValues: true,
     });
+    const currentUserReaction = await this.reactionRepo.findOne({
+      where: {
+        post: { id: postOutput.id },
+        user: { id: userId },
+      },
+    });
+    const currentUserReactionOutput = plainToInstance(
+      ReactionOutput,
+      currentUserReaction,
+      {
+        excludeExtraneousValues: true,
+      },
+    );
+    if (post.receiverId === userId) {
+      postOutput.isUserReceived = true;
+    } else {
+      postOutput.isUserReceived = false;
+    }
+    postOutput.currentUserReaction = currentUserReactionOutput;
     postOutput.totalComments = totalComments;
     postOutput.totalReactions = totalReactions;
     return {
