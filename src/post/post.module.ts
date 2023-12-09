@@ -13,6 +13,7 @@ import { Comment } from '#entity/comment.entity';
 import { Reaction } from '#entity/reaction.entity';
 import { SavedPost } from '#entity/post/saved-post.entity';
 import { PostRegistration } from '#entity/post-registration.entity';
+import { Review } from '#entity/review.entity';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { PostRegistration } from '#entity/post-registration.entity';
       Reaction,
       SavedPost,
       PostRegistration,
+      Review,
     ]),
     AuthModule,
   ],

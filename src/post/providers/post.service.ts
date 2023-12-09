@@ -35,7 +35,8 @@ import {
   POST_REGISTRATION_STATUS,
   PostRegistration,
 } from '#entity/post-registration.entity';
-import { ReactionOutput } from '../../user/dtos';
+import { ReactionOutput, UserOutputDto } from '../../user/dtos';
+import { Review } from '#entity/review.entity';
 
 @Injectable()
 export class PostService {
@@ -60,6 +61,8 @@ export class PostService {
     private savedPostRepo: Repository<SavedPost>,
     @InjectRepository(PostRegistration)
     private postRegistrationRepo: Repository<PostRegistration>,
+    @InjectRepository(Review)
+    private reviewRepo: Repository<Review>,
   ) {}
   public async createNewPost(
     input: CreatePostInput,
@@ -339,6 +342,22 @@ export class PostService {
           user: { id: userId },
         },
       });
+      const postReview = await this.reviewRepo.findOne({
+        where: {
+          post: { id: postsOutput[i].id },
+        },
+        relations: ['user'],
+      });
+      if (postReview) {
+        const reviewer = plainToInstance(UserOutputDto, postReview.user, {
+          excludeExtraneousValues: true,
+        });
+        postsOutput[i].reviewStar = postReview.numberStar;
+        postsOutput[i].reviewer = reviewer;
+      } else {
+        postsOutput[i].reviewStar = 0;
+        postsOutput[i].reviewer = null;
+      }
       const currentUserReactionOutput = plainToInstance(
         ReactionOutput,
         currentUserReaction,
@@ -387,9 +406,25 @@ export class PostService {
         post: { id: postId },
       },
     });
+    const postReview = await this.reviewRepo.findOne({
+      where: {
+        post: { id: post.id },
+      },
+      relations: ['user'],
+    });
     const postOutput = plainToClass(PostOutput, post, {
       excludeExtraneousValues: true,
     });
+    if (postReview) {
+      const reviewer = plainToInstance(UserOutputDto, postReview.user, {
+        excludeExtraneousValues: true,
+      });
+      postOutput.reviewStar = postReview.numberStar;
+      postOutput.reviewer = reviewer;
+    } else {
+      postOutput.reviewStar = 0;
+      postOutput.reviewer = null;
+    }
     const currentUserReaction = await this.reactionRepo.findOne({
       where: {
         post: { id: postOutput.id },

@@ -67,6 +67,15 @@ export class PostOutput {
 
   @Expose()
   @ApiProperty()
+  @Type(() => UserOutputDto)
+  reviewer: UserOutputDto | null;
+
+  @Expose()
+  @ApiProperty()
+  reviewStar: number;
+
+  @Expose()
+  @ApiProperty()
   @Type(() => ReactionOutput)
   currentUserReaction: ReactionOutput;
 }
