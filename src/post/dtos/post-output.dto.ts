@@ -31,6 +31,18 @@ export class PostOutput {
 
   @Expose()
   @ApiProperty()
+  public provinceId: string;
+
+  @Expose()
+  @ApiProperty()
+  public districtId: string;
+
+  @Expose()
+  @ApiProperty()
+  public wardId: string;
+
+  @Expose()
+  @ApiProperty()
   public specificAddress: string;
 
   @Expose()
