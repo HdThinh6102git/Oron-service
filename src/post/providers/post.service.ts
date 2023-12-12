@@ -37,6 +37,7 @@ import {
 } from '#entity/post-registration.entity';
 import { ReactionOutput, UserOutputDto } from '../../user/dtos';
 import { Review } from '#entity/review.entity';
+import { UserConnection } from '#entity/user/user-connection.entity';
 
 @Injectable()
 export class PostService {
@@ -63,6 +64,8 @@ export class PostService {
     private postRegistrationRepo: Repository<PostRegistration>,
     @InjectRepository(Review)
     private reviewRepo: Repository<Review>,
+    @InjectRepository(UserConnection)
+    private userConnectionRepo: Repository<UserConnection>,
   ) {}
   public async createNewPost(
     input: CreatePostInput,
@@ -269,7 +272,9 @@ export class PostService {
       deletedAt: IsNull(),
     };
     if (typeof filter.status === 'number') {
-      where['status'] = filter.status;
+      if (!filter.friends) {
+        where['status'] = filter.status;
+      }
     }
     if (typeof filter.registration_status === 'number') {
       if (
@@ -291,7 +296,54 @@ export class PostService {
       }
     }
     if (filter.userId) {
-      where['user'] = { id: filter.userId };
+      if (filter.friends) {
+        const firstFriendIdsArray = await this.userConnectionRepo
+          .createQueryBuilder('userConnection')
+          .select('userConnection.followed_id')
+          .where('userConnection.follower_id = :userId', {
+            userId: filter.userId,
+          })
+          .andWhere('userConnection.type = 1')
+          .getRawMany();
+        const firstFriendIdValuesArray = firstFriendIdsArray.map(
+          (item) => item.followed_id,
+        );
+        const secondFriendIdsArray = await this.userConnectionRepo
+          .createQueryBuilder('userConnection')
+          .select('userConnection.follower_id')
+          .where('userConnection.followed_id = :userId', {
+            userId: filter.userId,
+          })
+          .andWhere('userConnection.type = 1')
+          .getRawMany();
+        const secondFriendIdValuesArray = secondFriendIdsArray.map(
+          (item) => item.follower_id,
+        );
+        const allFriendIdsArray = [
+          ...firstFriendIdValuesArray,
+          ...secondFriendIdValuesArray,
+        ];
+        const followingNotFriendIdsArray = await this.userConnectionRepo
+          .createQueryBuilder('userConnection')
+          .select('userConnection.followed_id')
+          .where('userConnection.follower_id = :userId', {
+            userId: filter.userId,
+          })
+          .andWhere('userConnection.type = 0')
+          .getRawMany();
+        const followingNotFriendIdValuesArray = followingNotFriendIdsArray.map(
+          (item) => item.followed_id,
+        );
+        const allFollowingIdsArray = [
+          ...allFriendIdsArray,
+          ...followingNotFriendIdValuesArray,
+        ];
+        where['user'] = { id: In(allFollowingIdsArray) };
+        const statusPostArr = [POST_STATUS.FRIEND, POST_STATUS.PUBLIC];
+        where['status'] = In(statusPostArr);
+      } else {
+        where['user'] = { id: filter.userId };
+      }
     }
     if (filter.categoryId) {
       where['category'] = { id: filter.categoryId };

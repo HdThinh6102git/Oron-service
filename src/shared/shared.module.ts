@@ -18,6 +18,7 @@ import { Reaction } from '#entity/reaction.entity';
 import { SavedPost } from '#entity/post/saved-post.entity';
 import { PostRegistration } from '#entity/post-registration.entity';
 import { Review } from '#entity/review.entity';
+import { UserConnection } from '#entity/user/user-connection.entity';
 @Module({
   imports: [
     TypeOrmModule.forFeature([
@@ -34,6 +35,7 @@ import { Review } from '#entity/review.entity';
       SavedPost,
       PostRegistration,
       Review,
+      UserConnection,
     ]),
     forwardRef(() => AuthModule),
     UserModule,

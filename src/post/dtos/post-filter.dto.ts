@@ -31,4 +31,7 @@ export class PostFilter extends PaginationParamsDto {
 
   @IsOptional()
   categoryId: string;
+
+  @IsOptional()
+  friends: boolean;
 }
