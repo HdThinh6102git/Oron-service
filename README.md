@@ -88,53 +88,41 @@ Run [http://localhost:3500](http://localhost:3500)
 |   +-- index.ts
 ```
 
-## Implements
+# [ORONAPI] CRUD Restful API for Social Media App Built With NestJS - PostgreSQL - TypeORM
 
-- See [bootstrap](src/app.ts), [app.module](src/app.module.ts)
-    - Database, Module Router, Static Files, Validation, Pino Logger
-- [Global Exception Filter](src/common/filters/exceptions.filter.ts)
-- [Global Logging Context Middleware](src/common/middleware/logger-context.middleware.ts)
-- [Custom Logger](src/config/logger.config.ts) with nestjs-pino
-- [Custom Decorators](src/debug) Example at Nest level
-- [Configuration](src/config)
-- [Authentication](src/auth) - JWT and Session login with Passport
-- [Role-based Guard](src/common/guards/roles.guard.ts)
-- Controller Routes
-    - [Auth Login](src/base/controllers/auth.controller.ts)
-    - [Sample](src/sample/controllers/sample.controller.ts) Parameter and [DTO](src/sample/dto/sample.dto.ts)
-    - [CRUD API](src/sample/controllers/crud.controller.ts) Sample
-- [Database Query](src/sample/providers/database.service.ts) Example
-- [Unit Test](src/sample/providers/crud.service.spec.ts)
-- [E2E Test](test/e2e)
-- [Shared Modules](src/shared) Example
-- [GraphQL Structure](src/gql) Example
+## Introduction
 
-## Documentation
+Here is my source code for building Restful API of a social media app for users who want to share their redundant food or something, and then others can register to receive those things. 
+<p align="center">
+  <img src="demo/runapp.gif" width="500">
+  <img src="demo/video2.gif" width="500">
+  <img src="demo/loginregister.gif" width="500">
+  <img src="demo/registeraccount.gif" width="500"><br/>
+  <img src="demo/homepage.gif" width="500">
+  <img src="demo/getpost.gif" width="500">
+  <img src="demo/profilepage.gif" width="500">
+  <img src="demo/getpost.gif" width="500"><br/>
+  <i>Sample results</i>
+</p>
 
-```sh
-# APP, Compodoc
-npm run doc #> http://localhost:8080
-# API, Swagger - src/swagger.ts
-npm run doc:api #> http://localhost:8000/api
-```
+## Motivation
 
-### File Naming for Class
+ In Vietnam's daily life, I realized that there are many households with excess food that is not used up. Meanwhile, some people need that amount of food for their living, to make pet food for example. Moreover, it is the demand to give and take old things together. From that actual need, I decided to build a social media app dedicated to sharing utensils (food, items, ..) to make this sharing more efficient and convenient and called the application as ORON (Our Redundances Other Necessaries).
 
-```ts
-export class PascalCaseSuffix {} //= pascal-case.suffix.ts
-// Except for suffix, PascalCase to hyphen-case
-class FooBarNaming {} //= foo-bar.naming.ts
-class FooController {} //= foo.controller.ts
-class BarQueryDto {} //= bar-query.dto.ts
-```
+## Usecase diagram 
 
-### Links
+<p align="center">
+  <i>Usecase diagram</i><br/>
+  <img src="demo/oronusecase.png" width="500"><br/>
+  <i>Link system analysis: https://docs.google.com/document/d/1diRNb74MNPIIrjgBVuJY4wnQwGYAeJEsLfGv4ZpVfOQ/edit</i><br/>
+</p>
 
-- [Better Nodejs Project](https://github.com/CatsMiaow/better-nodejs-project)
-- [Nest Sample](https://github.com/nestjs/nest/tree/master/sample)
-- [Awesome Nest](https://github.com/juliandavidmr/awesome-nestjs)
-- [NestJS](https://docs.nestjs.com)
-- [TypeORM](https://typeorm.io)
+## Main functions: 
+* **CRUD User**
+* **Authentication/Authorization (Spring Security/ JWT Auth)**
+* **CRUD Post**
+* **CRUD PostRegister**
+* **CRUD Comment**
 
 ### git commit rule
 > type(scope?): subject
