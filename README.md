@@ -89,32 +89,13 @@ Run [http://localhost:3500](http://localhost:3500)
 ```
 
 # [ORONAPI] CRUD Restful API for Social Media App Built With NestJS - PostgreSQL - TypeORM
-
 ## Introduction
-
 Here is my source code for building Restful API of a social media app for users who want to share their redundant food or something, and then others can register to receive those things. 
-<p align="center">
-  <img src="demo/runapp.gif" width="500">
-  <img src="demo/video2.gif" width="500">
-  <img src="demo/loginregister.gif" width="500">
-  <img src="demo/registeraccount.gif" width="500"><br/>
-  <img src="demo/homepage.gif" width="500">
-  <img src="demo/getpost.gif" width="500">
-  <img src="demo/profilepage.gif" width="500">
-  <img src="demo/getpost.gif" width="500"><br/>
-  <i>Sample results</i>
-</p>
-
 ## Motivation
-
  In Vietnam's daily life, I realized that there are many households with excess food that is not used up. Meanwhile, some people need that amount of food for their living, to make pet food for example. Moreover, it is the demand to give and take old things together. From that actual need, I decided to build a social media app dedicated to sharing utensils (food, items, ..) to make this sharing more efficient and convenient and called the application as ORON (Our Redundances Other Necessaries).
-
-## Usecase diagram 
-
+## Class Diagram
 <p align="center">
-  <i>Usecase diagram</i><br/>
-  <img src="demo/oronusecase.png" width="500"><br/>
-  <i>Link system analysis: https://docs.google.com/document/d/1diRNb74MNPIIrjgBVuJY4wnQwGYAeJEsLfGv4ZpVfOQ/edit</i><br/>
+  <i>Link class diagram: https://drive.google.com/file/d/1OqqU6cUDUg2Oe8Fo04Y2_PoL0qibSTc5/view?usp=sharing</i><br/>
 </p>
 
 ## Main functions: 
