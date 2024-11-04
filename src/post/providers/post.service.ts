@@ -163,6 +163,7 @@ export class PostService {
   }
 
   public async updatePost(
+    modifyBy: string,
     input: UpdatePostInput,
     postId: string,
   ): Promise<BaseApiResponse<PostOutput>> {
@@ -228,14 +229,9 @@ export class PostService {
       }
     }
     if (typeof input.status === 'number') {
-      if (input.status == 0) {
-        postIdExist.status = POST_STATUS.PRIVATE;
-      } else if (input.status == 1) {
-        postIdExist.status = POST_STATUS.PUBLIC;
-      } else if (input.status == 2) {
-        postIdExist.status = POST_STATUS.FRIEND;
-      }
+        postIdExist.status = input.status
     }
+    postIdExist.modifyBy = modifyBy;
     //save
     const post = await this.postRepo.save(postIdExist);
     //convert to output
