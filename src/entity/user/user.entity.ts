@@ -25,8 +25,8 @@ import { Report } from '../report.entity';
 import { ReportResponse } from '../report-response.entity';
 
 export enum USER_STATUS {
-  IN_ACTIVE = 'IN_ACTIVE',
-  ACTIVE = 'ACTIVE',
+  IN_ACTIVE = '0',
+  ACTIVE = '1',
 }
 @Entity({ name: 'user', schema: process.env.DB_SCHEMA })
 export class User extends BaseEntity {
@@ -101,6 +101,12 @@ export class User extends BaseEntity {
 
   @Column('varchar', { nullable: true, name: 'phone_verify_code' })
   phoneVerifyCode: string;
+
+  @Column('varchar', { length: 36, nullable: true, name: 'create_by' })
+  createBy: string;
+
+  @Column('varchar', { length: 36, nullable: true, name: 'modify_by' })
+  modifyBy: string;
 
   @CreateDateColumn({
     nullable: false,

@@ -16,9 +16,10 @@
 5. In pgAdmin, create a new database with the specified database name, password, user, and port (matching the configuration in the ".env" file).
 6. Run "npm run start:dev" in the terminal.
 7. Run the command "npm run migrate:up" to apply migrations to the database. Then, check if the tables have been created in the database.
-8. Use the API to import address data by calling the "import address" endpoint.
-9. Use DBeaver or pgAdmin to add data to the "Role" table with the name "USER".
-10. Run tests on the APIs.
+8. Run the command "npm run seed:roles" to add role data 
+9. Use the API to import address data by calling the "import address" endpoint.
+10. Use DBeaver or pgAdmin to add data to the "Role" table with the name "USER".
+11. Run tests on the APIs.
 
 # Service
 

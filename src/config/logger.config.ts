@@ -21,10 +21,10 @@ export const loggerOptions: Params = {
         : {
             level: 'debug',
             // https://github.com/pinojs/pino-pretty
-            transport: {
-              target: 'pino-pretty',
-              options: { sync: true, singleLine: true },
-            },
+            // transport: {
+            //   target: 'pino-pretty',
+            //   options: { sync: true, singleLine: true },
+            // },
           }),
       autoLogging: {
         ignore: (req: IncomingMessage) =>

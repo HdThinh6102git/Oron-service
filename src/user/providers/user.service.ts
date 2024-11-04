@@ -22,6 +22,7 @@ import {
   TopUserOutput,
   UpdateProfileInput,
   UpdateUserInput,
+  UpdateUserStatusInput,
   UserFilter,
   UserOutputDto,
   UserProfileOutput,
@@ -226,6 +227,41 @@ export class UserService {
     return {
       error: false,
       data: result,
+      message: MESSAGES.UPDATE_SUCCEED,
+      code: 0,
+    };
+  }
+
+  public async updateUserStatus(
+    modifyBy: string,
+    data: UpdateUserStatusInput
+  ): Promise<BaseApiResponse<null>> {
+    const user = await this.userRepository.findOne({
+      where: {
+        id: data.userId,
+      },
+    });
+    if (!user)
+      throw new HttpException(
+        {
+          error: true,
+          message: MESSAGES.NOT_FOUND_USER,
+          code: 4,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+
+    const newData = {
+      ...user,
+      ...data,
+      modifyBy: modifyBy,
+    };
+
+    await this.userRepository.save(newData);
+
+    return {
+      error: false,
+      data: null,
       message: MESSAGES.UPDATE_SUCCEED,
       code: 0,
     };

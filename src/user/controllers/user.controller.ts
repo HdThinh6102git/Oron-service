@@ -21,12 +21,13 @@ import {
   TopUserFilter,
   TopUserOutput,
   UpdateUserInput,
+  UpdateUserStatusInput,
   UserFilter,
   UserOutputDto,
   UserProfileOutput,
 } from '../dtos';
 import { UserService } from '../providers';
-import { JwtAuthGuard, JwtCommonAuthGuard } from '../../auth/guards';
+import { JwtAuthGuard, JwtCommonAuthGuard, JwtAdminAuthGuard } from '../../auth/guards';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -48,6 +49,18 @@ export class UserController {
       ctx.user.id,
       input.oldPassword,
       input.newPassword,
+    );
+  }
+
+  @Patch('deactivation')
+  @UseGuards(JwtAdminAuthGuard)
+  public async deActivatingUser(
+    @ReqContext() ctx: RequestContext,
+    @Body() input: UpdateUserStatusInput,
+  ): Promise<BaseApiResponse<null>> {
+    return this.userService.updateUserStatus(
+      ctx.user.id,
+      input
     );
   }
 
@@ -106,7 +119,7 @@ export class UserController {
   }
 
   @Get('/filter')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAdminAuthGuard)
   public async getUsers(
     @Query() query: UserFilter,
   ): Promise<BasePaginationResponse<UserOutputDto>> {
