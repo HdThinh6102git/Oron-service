@@ -35,12 +35,13 @@ export class PostController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtCommonAuthGuard)
   public async updatePost(
+    @ReqContext() ctx: RequestContext,
     @Param('id') postId: string,
     @Body() body: UpdatePostInput,
   ): Promise<BaseApiResponse<PostOutput>> {
-    return await this.postService.updatePost(body, postId);
+    return await this.postService.updatePost(ctx.user.id, body, postId);
   }
 
   @Get('/filter')

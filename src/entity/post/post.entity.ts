@@ -20,6 +20,7 @@ export enum POST_STATUS {
   PRIVATE = 0,
   PUBLIC = 1,
   FRIEND = 2,
+  DEACTIVATE_BY_ADMIN = 3
 }
 export enum FINAL_POST_REGISTRATION_STATUS {
   AVAILABLE = 1,
@@ -93,6 +94,12 @@ export class Post {
     name: 'receiver_id',
   })
   receiverId: string;
+
+  @Column('varchar', { length: 36, nullable: true, name: 'create_by' })
+  createBy: string;
+
+  @Column('varchar', { length: 36, nullable: true, name: 'modify_by' })
+  modifyBy: string;
 
   @CreateDateColumn({
     nullable: false,
