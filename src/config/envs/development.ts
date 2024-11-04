@@ -11,6 +11,9 @@ export const config = {
     schema: process.env.DB_SCHEMA || 'auth',
     extra: {
       connectionLimit: 1000,
+      // ssl: {
+      //   rejectUnauthorized: false, // Bypass SSL validation (use only for testing purposes)
+      // },
     },
     autoLoadEntities: true,
   },

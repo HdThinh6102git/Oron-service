@@ -1,0 +1,31 @@
+# set up service
+services: 
+  #service name
+  nestjs-api: 
+    #specify the build instructions
+    #specify the directory that want to build 
+    build: 
+      context: .
+      #specify the docker file name that want to run 
+      dockerfile: dockerfile
+    ports: 
+      #host port to container
+      - '3500:3500'
+    environment: 
+    # - name = value (env for project)
+      - APP_NAME=
+      - APP_URL=
+      - PORT=3500
+      - NODE_ENV=development
+      - DB_TYPE=postgres
+      - DB_HOST=localhost
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASS=123
+      - DB_NAME=oron
+      - DB_SCHEMA=public
+      
+    volumes: 
+      #Auto reload or live load when change file code - auto reload 
+      #Point source folder in local host to container source 
+      - ./src:/usr/src/app/src

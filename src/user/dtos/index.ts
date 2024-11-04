@@ -17,3 +17,4 @@ export * from './user-filter.dto';
 export * from './top-user-output.dto';
 export * from './create-admin-input.dto';
 export * from './admin-output.dto';
+export * from './update-user-status-input.dto';

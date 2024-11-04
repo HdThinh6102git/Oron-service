@@ -34,6 +34,10 @@
     "skipLibCheck": true,
     "strictPropertyInitialization": false
   },
+  "watchOptions":{
+    // Use a dynamic polling instead of system's native events for file changes. 
+    "watchFile": "dynamicPriorityPolling"
+  },
   "include": ["typings/global.d.ts", "src/**/*", "test/**/*", "bin/**/*"],
   "exclude": ["node_modules"]
 }
