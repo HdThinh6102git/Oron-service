@@ -1,8 +1,8 @@
 import { Controller } from "@nestjs/common";
-import { AdPerformanceService } from "../providers";
+// import { AdPerformanceService } from "../providers";
 
 @Controller('ad-performance')
 export class AdPerformanceController {
-  constructor(private adPerformanceService: AdPerformanceService) {}
+  // constructor(private adPerformanceService: AdPerformanceService) {}
   
 }

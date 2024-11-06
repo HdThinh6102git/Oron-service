@@ -15,6 +15,7 @@ import { SharedModule } from './shared/shared.module';
 import { PostModule } from './post';
 import { PostRegistrationModule } from './post-registration';
 import { ReportModule } from './report/report.module';
+import { AdvertisementBannerModule } from './advertisment-banner';
 
 @Module({
   imports: [
@@ -68,6 +69,7 @@ import { ReportModule } from './report/report.module';
     PostModule,
     PostRegistrationModule,
     ReportModule,
+    AdvertisementBannerModule,
 
     // Module Router
   ],

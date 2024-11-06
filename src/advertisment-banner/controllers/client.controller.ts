@@ -1,7 +1,7 @@
 import { Controller } from "@nestjs/common";
-import { ClientService } from "../providers";
+// import { ClientService } from "../providers";
 
 @Controller('client')
 export class ClientController {
-  constructor(private clientService: ClientService) {}
+  // constructor(private clientService: ClientService) {}
 }
