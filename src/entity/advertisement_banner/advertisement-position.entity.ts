@@ -6,9 +6,17 @@ import {
     UpdateDateColumn,
   } from 'typeorm';
   
+
+  export enum POSITION_STATUS_CD {
+    AVAILABLE = 1,
+    RESERVED = 2,
+    RENTED = 3,
+    INACTIVE = 4
+  }
+
   @Entity({ name: 'ADVERTISMENT_POSITION' })
   export class AdvertismentPosition {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryGeneratedColumn('uuid', { name: 'ID' })
     id: string;
   
     @Column('varchar', {

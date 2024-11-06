@@ -1,8 +1,8 @@
 import { Controller } from "@nestjs/common";
-import { AdvertisementBannerService } from "../providers";
+// import { AdvertisementBannerService } from "../providers";
 
 
 @Controller('advertisement-banner')
 export class AdvertisementBannerController {
-  constructor(private advertisementBannerService: AdvertisementBannerService) {}
+  // constructor(private advertisementBannerService: AdvertisementBannerService) {}
 }
