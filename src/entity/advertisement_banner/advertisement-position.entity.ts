@@ -70,7 +70,6 @@ import {
       type: 'timestamp',
       nullable: true,
       name: 'CREATE_DATE',
-      default: () => 'CURRENT_TIMESTAMP',
     })
     createDate: Date;
   
