@@ -10,8 +10,10 @@ export class UpdateAdvertisementPositionInput {
     @IsOptional()
     pricePerDay: number;
 
+    @IsOptional()
     statusCd: string;
 
+    @IsOptional()
     maxDuration: number;
     
     modifyBy: string;

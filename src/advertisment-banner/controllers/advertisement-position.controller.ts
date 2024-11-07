@@ -15,7 +15,6 @@ export class AdvertisementPositionController {
     @ReqContext() ctx: RequestContext,
     @Body() body: CreateAdvertisementPositionInput,
   ): Promise<BaseApiResponse<AdvertisementPositionOutput>> {
-    console.log(body)
     return await this.advertisementPositionService.createNewPosition(ctx.user.id, body);
   }
 
@@ -26,7 +25,6 @@ export class AdvertisementPositionController {
     @Param('id') positionId: string,
     @Body() body: UpdateAdvertisementPositionInput,
   ): Promise<BaseApiResponse<AdvertisementPositionOutput>> {
-    console.log(body.positionName)
     return await this.advertisementPositionService.updatePosition(ctx.user.id,body, positionId);
   }
 }

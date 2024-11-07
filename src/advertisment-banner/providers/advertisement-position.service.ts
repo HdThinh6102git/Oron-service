@@ -65,10 +65,8 @@ export class AdvertisementPositionService {
         code: 4,
       });
     }
-    console.log("vaoooo11111")
     //Check if position name exist 
     if (input.positionName) {
-      console.log("vaoooo")
       const positionNameExist = await this.
       advertisementPositionRepo.findOne({
         where: {
