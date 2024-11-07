@@ -68,7 +68,8 @@ export const MESSAGES = {
   UNCONFIRMED_ACCOUNT: 'unconfirmed_account',
   ACTION_NOT_PERFORMED: 'action_not_performed',
   ROLE_NOT_FOUND: 'role_not_found',
-  POSITION_NAME_EXIST: 'The position name was exist'
+  POSITION_NAME_EXIST: 'The position name existed',
+  POSITION_NOT_EXIST: 'The position does not exist'
 };
 export const MAIL_TEMPLATE = {
   VERIFY_EMAIL_TEMPLATE: 'verify-email',

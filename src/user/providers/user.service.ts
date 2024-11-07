@@ -869,7 +869,7 @@ export class UserService {
       id: Not(IsNull()),
       deletedAt: IsNull(),
       status: USER_STATUS.ACTIVE,
-      role: { id: 1 },
+      role: { name: ROLE.USER },
     };
     if (filter.keyword) {
       wheres = [
@@ -890,6 +890,7 @@ export class UserService {
         createdAt: 'DESC',
       },
     });
+    console.log(users)
     const count = await this.userRepository.count({
       where: wheres,
     });
