@@ -119,12 +119,20 @@ export class UserController {
   }
 
   @Get('/filter')
-  @UseGuards(JwtAdminAuthGuard)
+  @UseGuards(JwtCommonAuthGuard)
   public async getUsers(
     @Query() query: UserFilter,
   ): Promise<BasePaginationResponse<UserOutputDto>> {
     return this.userService.getUsers(query);
   }
+
+  // @Get('/search')
+  // @UseGuards(JwtAuthGuard)
+  // public async getUsersSearch(
+  //   @Query() query: UserFilter,
+  // ): Promise<BasePaginationResponse<UserSearchOutputDto>> {
+  //   return this.userService.getUsersSearch(query);
+  // }
 
   @Get('/top')
   @UseGuards(JwtAuthGuard)

@@ -1,8 +1,8 @@
-import { Body, Controller, Param, Patch, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from "@nestjs/common";
 import { AdvertisementPositionService } from "../providers";
-import { JwtAdminAuthGuard } from "src/auth/guards";
-import { BaseApiResponse } from "src/shared/dtos";
-import { AdvertisementPositionOutput, CreateAdvertisementPositionInput, UpdateAdvertisementPositionInput } from "../dtos";
+import { JwtAdminAuthGuard, JwtCommonAuthGuard } from "src/auth/guards";
+import { BaseApiResponse, BasePaginationResponse } from "src/shared/dtos";
+import { AdvertisementPositionOutput, CreateAdvertisementPositionInput, PositionFilter, UpdateAdvertisementPositionInput } from "../dtos";
 import { ReqContext, RequestContext } from "src/shared/request-context";
 
 @Controller('advertisement-position')
@@ -26,5 +26,21 @@ export class AdvertisementPositionController {
     @Body() body: UpdateAdvertisementPositionInput,
   ): Promise<BaseApiResponse<AdvertisementPositionOutput>> {
     return await this.advertisementPositionService.updatePosition(ctx.user.id,body, positionId);
+  }
+
+  @Get(':id')
+  @UseGuards(JwtCommonAuthGuard)
+  public async getPositionById(
+    @Param('id') positionId: string,
+  ): Promise<BaseApiResponse<AdvertisementPositionOutput>> {
+    return await this.advertisementPositionService.getPositionById(positionId);
+  }
+
+  @Get('/filter')
+  @UseGuards(JwtCommonAuthGuard)
+  public async getPositions(
+    @Query() query: PositionFilter,
+  ): Promise<BasePaginationResponse<AdvertisementPositionOutput>> {
+    return this.advertisementPositionService.getPositions(query);
   }
 }

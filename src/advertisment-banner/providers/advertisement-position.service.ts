@@ -2,11 +2,12 @@
 import { AdvertismentPosition } from "#entity/advertisement_banner/advertisement-position.entity";
 import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { In, Not, Repository } from "typeorm";
-import { AdvertisementPositionOutput, CreateAdvertisementPositionInput, UpdateAdvertisementPositionInput } from "../dtos";
-import { BaseApiResponse } from "src/shared/dtos";
+import { ILike, In, Not, Repository } from "typeorm";
+import { AdvertisementPositionOutput, CreateAdvertisementPositionInput, PositionFilter, UpdateAdvertisementPositionInput } from "../dtos";
+import { BaseApiResponse, BasePaginationResponse } from "src/shared/dtos";
 import { MESSAGES } from "src/shared/constants";
-import { plainToInstance } from "class-transformer";
+import { plainToClass, plainToInstance } from "class-transformer";
+import { isEmpty } from "@nestjs/common/utils/shared.utils";
 
 @Injectable()
 export class AdvertisementPositionService {
@@ -116,4 +117,67 @@ export class AdvertisementPositionService {
 
   }
 
+  public async getPositionById(
+    positionId: string,
+  ): Promise<BaseApiResponse<AdvertisementPositionOutput>> {
+    const position = await this.advertisementPositionRepo.findOne({
+      where: { id: positionId, sysFlag: '1' },
+    });
+    if (!position) {
+      throw new NotFoundException({
+        error: true,
+        message: MESSAGES.POSITION_NOT_EXIST,
+        code: 4,
+      });
+    }
+    const positionOutput = plainToClass(AdvertisementPositionOutput, position, {
+      excludeExtraneousValues: true,
+    });
+    return {
+      error: false,
+      data: positionOutput,
+      message: MESSAGES.GET_SUCCEED,
+      code: 0,
+    };
+  }
+
+  public async getPositions(
+    filter: PositionFilter,
+  ): Promise<BasePaginationResponse<AdvertisementPositionOutput>> {
+    let wheres: any[] = [];
+    const where: any = {
+      sysFlag: '1',
+    };
+    if (filter.positionName) {
+      where['positionName'] = ILike(`%${filter.positionName}%`)
+    }
+    if (filter.statusCd) {
+      where['statusCd'] = filter.statusCd;
+    }  
+    if (isEmpty(wheres)) {
+      wheres.push(where);
+    }
+    
+    const positions = await this.advertisementPositionRepo.find({
+      where: wheres,
+      take: filter.limit,
+      skip: filter.skip,
+      order: {
+        createDate: 'DESC',
+      },
+    });
+    // const count = await this.advertisementPositionRepo.count({
+    //   where: wheres,
+    //   order: {
+    //     createDate: 'DESC',
+    //   },
+    // });
+    const positionsOutput = plainToInstance(AdvertisementPositionOutput, positions, {
+      excludeExtraneousValues: true,
+    });
+    return {
+      listData: positionsOutput,
+      total: 1,
+    };
+  }
 }
