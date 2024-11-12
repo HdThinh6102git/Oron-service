@@ -16,6 +16,7 @@ import { PostModule } from './post';
 import { PostRegistrationModule } from './post-registration';
 import { ReportModule } from './report/report.module';
 import { AdvertisementBannerModule } from './advertisment-banner';
+import { NotificationModule } from './notification';
 
 @Module({
   imports: [
@@ -70,6 +71,7 @@ import { AdvertisementBannerModule } from './advertisment-banner';
     PostRegistrationModule,
     ReportModule,
     AdvertisementBannerModule,
+    NotificationModule
 
     // Module Router
   ],
