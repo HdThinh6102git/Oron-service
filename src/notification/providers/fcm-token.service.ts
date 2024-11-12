@@ -3,9 +3,9 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { plainToInstance } from "class-transformer";
 import { MESSAGES } from "src/shared/constants";
-import { BaseApiResponse } from "src/shared/dtos";
+import { BaseApiResponse, BaseApiResponseWithoutData } from "src/shared/dtos";
 import { Repository } from "typeorm";
-import { CreateFcmTokenInput, FcmTokenOutput } from "../dtos";
+import { CreateFcmTokenInput, FcmTokenOutput, UpdateFcmTokenInput } from "../dtos";
 
 
 @Injectable()
@@ -33,6 +33,28 @@ export class FcmTokenService {
         data: fcmTokenOutput,
         message: MESSAGES.CREATED_SUCCEED,
         code: 0,
+      };
+    }
+
+    public async updateFcmToken(
+      userId: string,
+      input: UpdateFcmTokenInput,
+    ): Promise<BaseApiResponseWithoutData>{
+      const result = await this.fcmTokenRepo.update(
+        { userRid: userId, deviceToken: input.deviceToken },
+        { latestActiveDate: new Date() }
+      );
+      if (result.affected === 0) {
+        return {
+          error: false,           
+          message: MESSAGES.NO_RECORD_FOUND, 
+          code: 0  
+        };
+      }
+      return {
+        error: false,           
+        message: MESSAGES.UPDATE_SUCCEED, 
+        code: 0                 
       };
     }
 }

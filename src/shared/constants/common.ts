@@ -49,6 +49,7 @@ export const MESSAGES = {
   DELETED_SUCCEED: 'deleted_succeed',
   UPLOADED_SUCCEED: 'uploaded_succeed',
   UPDATE_SUCCEED: 'update_succeed',
+  NO_RECORD_FOUND: 'No record found',
   UPDATED_OR_DELETED_SUCCEED: 'updated_or_deleted_succeed',
   CREATED_OR_UPDATED_SUCCEED: 'updated_or_created_succeed',
   EMAIL_NOT_FOUND: `email_not_found`,

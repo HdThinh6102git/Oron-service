@@ -19,6 +19,20 @@ export class BaseApiResponse<T> {
   code: number;
 }
 
+export class BaseApiResponseWithoutData {
+  @Expose()
+  @ApiProperty()
+  error: boolean;
+
+  @Expose()
+  @ApiProperty()
+  message: string;
+
+  @Expose()
+  @ApiProperty()
+  code: number;
+}
+
 export class BasePaginationResponse<T> {
   @Expose()
   listData: T[];
