@@ -12,4 +12,5 @@ export class UpdateProfileInput {
   @IsOptional()
   @IsNumber()
   verificationTime?: number;
+  
 }

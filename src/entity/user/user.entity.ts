@@ -8,7 +8,6 @@ import {
   OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
-  DeleteDateColumn,
 } from 'typeorm';
 import { Role } from './role.entity';
 import { Province } from './address/province.entity';
@@ -102,11 +101,37 @@ export class User extends BaseEntity {
   @Column('varchar', { nullable: true, name: 'phone_verify_code' })
   phoneVerifyCode: string;
 
+  @Column({
+    type: 'date',
+    nullable: true,
+    name: 'BIRTH_DATE',
+  })
+  birthDate: Date;
+
+  @Column('char',{
+    nullable: true,
+    name: 'GENDER_CD',
+  })
+  genderCD: string;
+
+  @Column('text', {
+    nullable: true,
+    name: 'RELATED_URL',
+  })
+  relatedUrl: string;
+
   @Column('varchar', { length: 36, nullable: true, name: 'create_by' })
   createBy: string;
 
   @Column('varchar', { length: 36, nullable: true, name: 'modify_by' })
   modifyBy: string;
+
+  @Column('char', {
+    length: 1,
+    default: '1',
+    name: 'SYS_FLAG',
+  })
+  sysFlag: string;
 
   @CreateDateColumn({
     nullable: false,
@@ -120,12 +145,6 @@ export class User extends BaseEntity {
     name: 'updated_at',
   })
   updatedAt: Date;
-
-  @DeleteDateColumn({
-    nullable: true,
-    name: 'deleted_at',
-  })
-  deletedAt: Date;
 
   @ManyToOne(() => Role, (role) => role.users)
   @JoinColumn({ name: 'role_id', referencedColumnName: 'id' })

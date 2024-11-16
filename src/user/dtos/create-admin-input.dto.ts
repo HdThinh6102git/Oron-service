@@ -20,4 +20,6 @@ export class CreateAdminInput {
   @IsString()
   @IsNotEmpty()
   email: string;
+
+  sysFlag: string;
 }

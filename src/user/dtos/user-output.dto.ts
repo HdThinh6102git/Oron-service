@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose, Type } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import { RoleOutput } from '../../auth/dtos/role-output.dto';
 
 export class UserOutputDto {
@@ -65,4 +65,14 @@ export class UserOutputDto {
   @ApiProperty()
   @Type(() => RoleOutput)
   role: RoleOutput;
+
+  @Expose()
+  @Transform(({ value }) => value?.toISOString().split('T')[0], { toPlainOnly: true })
+  public birthDate: string; // Đổi kiểu thành string để phản ánh định dạng
+
+  @Expose()
+  public genderCD: string;
+
+  @Expose()
+  public relatedUrl: string;
 }

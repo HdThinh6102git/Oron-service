@@ -118,6 +118,7 @@ export class UserService {
     const userWithPhoneExist = await this.userRepository.findOne({
       where: {
         phoneNumber: data.phoneNumber,
+        sysFlag: '1'
       },
     });
     if (userWithPhoneExist)
@@ -134,6 +135,7 @@ export class UserService {
     const userWithEmailExist = await this.userRepository.findOne({
       where: {
         email: data.email,
+        sysFlag: '1'
       },
     });
     if (userWithEmailExist)
@@ -150,6 +152,7 @@ export class UserService {
     const userWithUsernameExist = await this.userRepository.findOne({
       where: {
         username: data.username,
+        sysFlag: '1'
       },
     });
     if (userWithUsernameExist)
@@ -192,6 +195,7 @@ export class UserService {
       password: hash,
       role: userRole,
       fullAddress: fullAddress,
+      sysFlag: '1'
     });
   }
 
@@ -202,6 +206,7 @@ export class UserService {
     const user = await this.userRepository.findOne({
       where: {
         id: id,
+        sysFlag: '1'
       },
     });
     if (!user)
@@ -213,7 +218,6 @@ export class UserService {
         },
         HttpStatus.BAD_REQUEST,
       );
-
     const newData = {
       ...user,
       ...data,
@@ -239,6 +243,7 @@ export class UserService {
     const user = await this.userRepository.findOne({
       where: {
         id: data.userId,
+        sysFlag: '1'
       },
     });
     if (!user)
@@ -269,7 +274,7 @@ export class UserService {
 
   public async findUserByEmailOrPhone(username: string): Promise<User> {
     const user: any = await this.userRepository.findOne({
-      where: [{ phoneNumber: username }, { email: ILike(username) }],
+      where: [{ phoneNumber: username }, { email: ILike(username) }, {sysFlag: '1'}],
       relations: ['role'],
     });
     return user;
@@ -313,7 +318,10 @@ export class UserService {
     userId: string,
   ): Promise<BaseApiResponse<UserProfileOutput>> {
     const user = await this.userRepository.findOne({
-      where: { id: userId },
+      where: { 
+        id: userId,
+        sysFlag: '1' 
+      },
       relations: {
         role: true,
       },
@@ -337,7 +345,10 @@ export class UserService {
   ): Promise<BaseApiResponse<null>> {
     //find user by id
     const existUser = await this.userRepository.findOne({
-      where: { id: userId },
+      where: { 
+        id: userId,
+        sysFlag: '1'
+       },
     });
     if (!existUser)
       throw new HttpException(
@@ -384,6 +395,7 @@ export class UserService {
     const userExist = await this.userRepository.findOne({
       where: {
         id: userId,
+        sysFlag: '1'
       },
       relations: ['role'],
     });
@@ -404,6 +416,7 @@ export class UserService {
       const userWithPhoneExist = await this.userRepository.findOne({
         where: {
           phoneNumber: input.phoneNumber,
+          sysFlag: '1'
         },
       });
       if (userWithPhoneExist)
@@ -439,6 +452,15 @@ export class UserService {
         userExist.fullAddress = `${ward.level} ${ward.name}, ${district.level} ${district.name}, ${province.level} ${province.name}`;
       }
     }
+    if(input.birthDate){
+      userExist.birthDate = input.birthDate;
+    }
+    if(input.genderCD){
+      userExist.genderCD = input.genderCD;
+    }
+    if(input.relatedUrl){
+      userExist.relatedUrl = input.relatedUrl;
+    }
     const updatedUser = await this.userRepository.save(userExist);
     const userOutput = plainToClass(UserProfileOutput, updatedUser, {
       excludeExtraneousValues: true,
@@ -459,6 +481,7 @@ export class UserService {
     const userExist = await this.userRepository.findOne({
       where: {
         id: userId,
+        sysFlag: '1'
       },
       relations: ['role'],
     });
@@ -503,6 +526,7 @@ export class UserService {
     const follower = await this.userRepository.findOne({
       where: {
         id: followerUserId,
+        sysFlag: '1'
       },
     });
     if (!follower)
@@ -559,6 +583,7 @@ export class UserService {
     const follower = await this.userRepository.findOne({
       where: {
         id: followerUserId,
+        sysFlag: '1'
       },
     });
     if (!follower)
@@ -645,7 +670,7 @@ export class UserService {
   ): Promise<BasePaginationResponse<UserOutputDto>> {
     const where: any = {
       id: Not(IsNull()),
-      deletedAt: IsNull(),
+      sysFlag: '1',
     };
     if (filter.name) {
       where['name'] = ILike(`%${filter.name}%`);
@@ -709,7 +734,7 @@ export class UserService {
   ): Promise<BasePaginationResponse<UserOutputDto>> {
     const where: any = {
       id: Not(IsNull()),
-      deletedAt: IsNull(),
+      sysFlag: '1',
     };
     if (filter.name) {
       where['name'] = ILike(`%${filter.name}%`);
@@ -789,7 +814,7 @@ export class UserService {
   ): Promise<BasePaginationResponse<UserOutputDto>> {
     const where: any = {
       id: Not(IsNull()),
-      deletedAt: IsNull(),
+      sysFlag: '1',
     };
     if (filter.name) {
       where['name'] = ILike(`%${filter.name}%`);
@@ -867,7 +892,7 @@ export class UserService {
     let wheres: any[] = [];
     const where: any = {
       id: Not(IsNull()),
-      deletedAt: IsNull(),
+      sysFlag: '1',
       status: USER_STATUS.ACTIVE,
       role: { name: ROLE.USER },
     };
@@ -942,6 +967,7 @@ export class UserService {
       where: {
         username: input.username,
         role: { name: ROLE.ADMIN },
+        sysFlag: '1'
       },
     });
     if (adminWithUsernameExist)
@@ -992,7 +1018,10 @@ export class UserService {
     userId: string,
   ): Promise<BaseApiResponse<UserOutputDto>> {
     const user = await this.userRepository.findOne({
-      where: { id: userId, deletedAt: IsNull() },
+      where: { 
+        id: userId, 
+        sysFlag: '1'
+      },
     });
     if (!user) {
       throw new NotFoundException({
