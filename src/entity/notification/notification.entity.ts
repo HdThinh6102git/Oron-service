@@ -8,6 +8,20 @@ export class Notification {
     @Column('varchar', {
         length: 36,
         nullable: false,
+        name: 'USER_RID',
+    })
+    userRid: string;
+
+    @Column('varchar', {
+        length: 255,
+        nullable: false,
+        name: 'TITLE',
+    })
+    title: string;
+
+    @Column('varchar', {
+        length: 36,
+        nullable: false,
         name: 'ITEM_RID',
     })
     itemRid: string;

@@ -70,7 +70,8 @@ export const MESSAGES = {
   ACTION_NOT_PERFORMED: 'action_not_performed',
   ROLE_NOT_FOUND: 'role_not_found',
   POSITION_NAME_EXIST: 'The position name existed',
-  POSITION_NOT_EXIST: 'The position does not exist'
+  POSITION_NOT_EXIST: 'The position does not exist',
+  PUSH_NOTIFICATION_SUCCESSFULLY: 'Push notification successfully'
 };
 export const MAIL_TEMPLATE = {
   VERIFY_EMAIL_TEMPLATE: 'verify-email',
