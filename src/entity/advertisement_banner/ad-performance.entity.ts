@@ -8,7 +8,7 @@ import {
   
   @Entity({ name: 'AD_PERFORMANCE' })
   export class AdPerformance {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryGeneratedColumn('uuid', { name: 'ID' })
     id: string;
   
     @Column('varchar', {

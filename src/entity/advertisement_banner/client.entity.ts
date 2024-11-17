@@ -8,8 +8,15 @@ import {
   
   @Entity({ name: 'CLIENT' })
   export class Client {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryGeneratedColumn('uuid', { name: 'ID' })
     id: string;
+
+    @Column('varchar', {
+      length: 36,
+      nullable: false,
+      name: 'USER_RID',
+    })
+    userRid: string;
   
     @Column('varchar', {
       length: 255,

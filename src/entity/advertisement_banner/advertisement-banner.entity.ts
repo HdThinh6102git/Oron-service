@@ -8,7 +8,7 @@ import {
   
   @Entity({ name: 'ADVERTISEMENT_BANNER' })
   export class AdvertisementBanner {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryGeneratedColumn('uuid', { name: 'ID' })
     id: string;
   
     @Column('varchar', {

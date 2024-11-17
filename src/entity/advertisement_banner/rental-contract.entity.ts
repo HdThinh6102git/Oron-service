@@ -8,7 +8,7 @@ import {
   
   @Entity({ name: 'RENTAL_CONTRACT' })
   export class RentalContract {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryGeneratedColumn('uuid', { name: 'ID' })
     id: string;
   
     @Column('varchar', {
@@ -56,13 +56,6 @@ import {
       name: 'STATUS_CD',
     })
     statusCd: string;
-  
-    @Column('varchar', {
-      length: 20,
-      nullable: true,
-      name: 'PAYMENT_STATUS_CD',
-    })
-    paymentStatusCd: string;
   
     @Column('varchar', {
       length: 36,

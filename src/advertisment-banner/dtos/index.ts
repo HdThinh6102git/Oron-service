@@ -2,3 +2,8 @@ export * from './create-advertisement-position-input.dto';
 export * from './advertisement-position-output.dto';
 export * from './update-advertisement-position-input.dto';
 export * from './advertisement-position-filter.dto';
+export * from './create-advertisement-banner-input.dto';
+export * from './advertisement-banner-output.dto';
+export * from './create-client-input.dto';
+export * from './create-rental-contract.dto';
+export * from './create-advertisement-banner-request.dto';
