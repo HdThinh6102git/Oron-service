@@ -36,7 +36,7 @@ export class AdvertisementPositionController {
     return await this.advertisementPositionService.getPositionById(positionId);
   }
 
-  @Get('/filter')
+  @Get('')
   @UseGuards(JwtCommonAuthGuard)
   public async getPositions(
     @Query() query: PositionFilter,

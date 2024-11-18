@@ -19,7 +19,7 @@
     "start": "nest start",
     "start:prod": "nest build && node dist/app.js",
     "afterstart:dev": "copyfiles -u 1 src/oron-service-firebase-adminsdk-jpw76-8def68ae16.json dist",
-    "start:dev": "npm run afterstart:dev && nest start --watch ",
+    "start:dev": "nest start --watch",
     "start-micro:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:repl": "nest start --entryFile repl",

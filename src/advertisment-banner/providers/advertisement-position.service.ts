@@ -166,18 +166,19 @@ export class AdvertisementPositionService {
         createDate: 'DESC',
       },
     });
-    // const count = await this.advertisementPositionRepo.count({
-    //   where: wheres,
-    //   order: {
-    //     createDate: 'DESC',
-    //   },
-    // });
+    const count = await this.advertisementPositionRepo.count({
+      where: wheres,
+      order: {
+        createDate: 'DESC',
+      },
+    });
     const positionsOutput = plainToInstance(AdvertisementPositionOutput, positions, {
       excludeExtraneousValues: true,
     });
+   
     return {
       listData: positionsOutput,
-      total: 1,
+      total: count,
     };
   }
 }

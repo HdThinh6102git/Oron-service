@@ -2,10 +2,12 @@ import { AdvertisementBanner, AdvertismentPosition, Client, RentalContract } fro
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, DataSource } from "typeorm";
-import { AdvertisementBannerOutput, CreateAdvertisementBannerRequestInput } from "../dtos";
-import { BaseApiResponse } from "src/shared/dtos";
+import { AdvertisementBannerFilter, AdvertisementBannerFilterOutput, AdvertisementBannerOutput,  CreateAdvertisementBannerRequestInput } from "../dtos";
+import { BaseApiResponse, BasePaginationResponse, } from "src/shared/dtos";
 import { MESSAGES } from "src/shared/constants";
-import { differenceInDays } from 'date-fns'; // Thư viện hỗ trợ tính toán ngày
+import { differenceInDays } from 'date-fns'; // library support compute days difference
+import { plainToInstance } from "class-transformer";
+
 
 @Injectable()
 export class AdvertisementBannerService {
@@ -16,7 +18,7 @@ export class AdvertisementBannerService {
     private clientRepo: Repository<Client>,
     @InjectRepository(RentalContract)
     private rentalContractRepo: Repository<RentalContract>,
-    private readonly dataSource: DataSource // Inject DataSource để quản lý transaction
+    private readonly dataSource: DataSource // Inject DataSource to management transaction and call function from database
   ) {}
 
   public async createNewAdvertisementBanner(
@@ -128,4 +130,45 @@ export class AdvertisementBannerService {
       await queryRunner.release();
     }
   }
+
+  public async getAdvertisementBanners(
+    filter: AdvertisementBannerFilter,
+  ): Promise<BasePaginationResponse<AdvertisementBannerFilterOutput>> {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    try {
+      const result = await queryRunner.query(
+        `SELECT * FROM get_advertisement_banners(
+          $1, $2, $3, $4, $5, $6, $7, $8
+        )`,
+        [
+          filter.positionName || null,
+          filter.startDate || null,
+          filter.endDate || null,
+          filter.contractStatusCd || null,
+          filter.bannerName || null,
+          filter.clientName || null,
+          filter.clientContactNumber || null,
+          filter.userId || null,
+        ],
+      );
+      // Transform raw results to DTO
+      
+      const data: AdvertisementBannerFilterOutput[] = result.map((item: any) =>
+        plainToInstance(AdvertisementBannerFilterOutput, item, {
+          excludeExtraneousValues: true,
+        }),
+      );
+      
+      return {
+        listData: data,
+        total: 1,
+      };
+    }catch (error) {
+      throw new Error(`Failed to fetch advertisement banners`);
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
 }

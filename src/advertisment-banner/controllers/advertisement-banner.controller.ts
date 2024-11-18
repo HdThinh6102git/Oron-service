@@ -1,9 +1,9 @@
-import { Body, Controller, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Post, Query, UseGuards } from "@nestjs/common";
 import { AdvertisementBannerService } from "../providers";
-import { JwtAuthGuard } from "src/auth/guards";
+import { JwtAuthGuard, JwtCommonAuthGuard } from "src/auth/guards";
 import { ReqContext, RequestContext } from "src/shared/request-context";
-import { BaseApiResponse } from "src/shared/dtos";
-import { AdvertisementBannerOutput, CreateAdvertisementBannerRequestInput } from "../dtos";
+import { BaseApiResponse, BasePaginationResponse, } from "src/shared/dtos";
+import { AdvertisementBannerFilter,  AdvertisementBannerFilterOutput,  AdvertisementBannerOutput, CreateAdvertisementBannerRequestInput } from "../dtos";
 
 
 @Controller('advertisement-banner')
@@ -18,4 +18,13 @@ export class AdvertisementBannerController {
   ): Promise<BaseApiResponse<AdvertisementBannerOutput>> {
     return await this.advertisementBannerService.createNewAdvertisementBanner(ctx.user.id, body);
   }
+
+  @Get('/filter')
+  @UseGuards(JwtCommonAuthGuard)
+  public async getAdvertisementBanners(
+    @Query() query: AdvertisementBannerFilter,
+  ): Promise<BasePaginationResponse<AdvertisementBannerFilterOutput>> {
+    return await this.advertisementBannerService.getAdvertisementBanners(query);
+  }
+
 }

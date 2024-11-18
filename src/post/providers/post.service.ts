@@ -364,6 +364,7 @@ export class PostService {
       },
       relations: ['user', 'category'],
     });
+    console.log(posts)
     const count = await this.postRepo.count({
       where: wheres,
       order: {
