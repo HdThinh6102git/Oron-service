@@ -1,9 +1,9 @@
 import { AdvertisementBanner, AdvertismentPosition, Client, RentalContract } from "#entity/advertisement_banner";
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, DataSource } from "typeorm";
-import { AdvertisementBannerFilter, AdvertisementBannerFilterOutput, AdvertisementBannerOutput,  CreateAdvertisementBannerRequestInput } from "../dtos";
-import { BaseApiResponse, BasePaginationResponse, } from "src/shared/dtos";
+import { AdvertisementBannerFilter, AdvertisementBannerFilterOutput, AdvertisementBannerOutput,  CreateAdvertisementBannerRequestInput, UpdateAdvertisementBannerInput } from "../dtos";
+import { BaseApiResponse, BaseApiResponseWithoutData, BasePaginationResponse, } from "src/shared/dtos";
 import { MESSAGES } from "src/shared/constants";
 import { differenceInDays } from 'date-fns'; // library support compute days difference
 import { plainToInstance } from "class-transformer";
@@ -171,4 +171,44 @@ export class AdvertisementBannerService {
     }
   }
 
+  public async updateAdvertisementBanner(
+    userId: string,
+    input: UpdateAdvertisementBannerInput,
+    bannerId: string,
+  ): Promise<BaseApiResponseWithoutData> {
+    //Check if banner exist based on id
+    const bannerExist = await this.advertisementBannerRepo.findOne({
+      where: {
+        id: bannerId,
+        sysFlag: '1'
+      },
+    });
+    if (!bannerExist) {
+      throw new NotFoundException({
+        error: true,
+        message: MESSAGES.BANNER_NOT_EXIST,
+        code: 4,
+      });
+    }
+    // Check and update if field exists
+    if (input.bannerName) {
+      bannerExist.bannerName = input.bannerName;
+    }
+    if(input.redirectUrl){
+      bannerExist.redirectUrl = input.redirectUrl;
+    }
+    if(input.statusCd){
+      bannerExist.statusCd = input.statusCd;
+    }
+    if(input.bannerName || input.redirectUrl || input.statusCd){
+      bannerExist.modifyBy = userId;
+      bannerExist.modifyDate = new Date();
+      await this.advertisementBannerRepo.save(bannerExist);
+    }
+    return {
+      error: false,
+      message: MESSAGES.UPDATE_SUCCEED,
+      code: 0,
+    };
+  }
 }

@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from "@nestjs/common";
 import { AdvertisementBannerService } from "../providers";
 import { JwtAuthGuard, JwtCommonAuthGuard } from "src/auth/guards";
 import { ReqContext, RequestContext } from "src/shared/request-context";
-import { BaseApiResponse, BasePaginationResponse, } from "src/shared/dtos";
-import { AdvertisementBannerFilter,  AdvertisementBannerFilterOutput,  AdvertisementBannerOutput, CreateAdvertisementBannerRequestInput } from "../dtos";
+import { BaseApiResponse, BaseApiResponseWithoutData, BasePaginationResponse, } from "src/shared/dtos";
+import { AdvertisementBannerFilter,  AdvertisementBannerFilterOutput,  AdvertisementBannerOutput, CreateAdvertisementBannerRequestInput, UpdateAdvertisementBannerInput } from "../dtos";
 import { ROLE } from "src/auth/constants";
 
 
@@ -31,6 +31,16 @@ export class AdvertisementBannerController {
       query.userId = ctx.user.id;
     }
     return await this.advertisementBannerService.getAdvertisementBanners(query);
+  }
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard)
+  public async updatePosition(
+    @ReqContext() ctx: RequestContext,
+    @Param('id') bannerId: string,
+    @Body() body: UpdateAdvertisementBannerInput,
+  ): Promise<BaseApiResponseWithoutData> {
+    return await this.advertisementBannerService.updateAdvertisementBanner(ctx.user.id, body, bannerId);
   }
 
 }

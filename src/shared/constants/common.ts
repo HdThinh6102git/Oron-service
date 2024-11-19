@@ -71,7 +71,8 @@ export const MESSAGES = {
   ROLE_NOT_FOUND: 'role_not_found',
   POSITION_NAME_EXIST: 'The position name existed',
   POSITION_NOT_EXIST: 'The position does not exist',
-  PUSH_NOTIFICATION_SUCCESSFULLY: 'Push notification successfully'
+  PUSH_NOTIFICATION_SUCCESSFULLY: 'Push notification successfully',
+  BANNER_NOT_EXIST: 'The banner does not exist'
 };
 export const MAIL_TEMPLATE = {
   VERIFY_EMAIL_TEMPLATE: 'verify-email',

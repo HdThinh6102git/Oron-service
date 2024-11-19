@@ -9,3 +9,4 @@ export * from './create-rental-contract.dto';
 export * from './create-advertisement-banner-request.dto';
 export * from './advertisement-banner-filter.dto';
 export * from './advertisement-banner-filter-output.dto';
+export * from './update-advertisement-banner-input.dto';
