@@ -274,7 +274,10 @@ export class UserService {
 
   public async findUserByEmailOrPhone(username: string): Promise<User> {
     const user: any = await this.userRepository.findOne({
-      where: [{ phoneNumber: username }, { email: ILike(username) }, {sysFlag: '1'}],
+      where: { 
+        email: ILike(username),
+        sysFlag: '1' 
+      },
       relations: ['role'],
     });
     return user;
