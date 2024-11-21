@@ -72,7 +72,8 @@ export const MESSAGES = {
   POSITION_NAME_EXIST: 'The position name existed',
   POSITION_NOT_EXIST: 'The position does not exist',
   PUSH_NOTIFICATION_SUCCESSFULLY: 'Push notification successfully',
-  BANNER_NOT_EXIST: 'The banner does not exist'
+  BANNER_NOT_EXIST: 'The banner does not exist',
+  CONTRACT_NOT_EXIST: 'The contract does not exist'
 };
 export const MAIL_TEMPLATE = {
   VERIFY_EMAIL_TEMPLATE: 'verify-email',

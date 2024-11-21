@@ -35,7 +35,7 @@ export class AdvertisementBannerController {
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
-  public async updatePosition(
+  public async updateAdvertisementBanner(
     @ReqContext() ctx: RequestContext,
     @Param('id') bannerId: string,
     @Body() body: UpdateAdvertisementBannerInput,

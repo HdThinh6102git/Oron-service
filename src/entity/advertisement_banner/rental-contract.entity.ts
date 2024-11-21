@@ -7,12 +7,12 @@ import {
   } from 'typeorm';
   
   export enum CONTRACT_STATUS_CD {
-    PENDING_FOR_APPROVAL = 1,
-    PENDING_FOR_PAYMENT = 2,
-    REJECTED = 3,
-    APPROVED = 4,
-    USER_CANCELLED_REQUEST = 5,
-    USER_CANCELLED_APPROVED_BANNER = 6
+    PENDING_FOR_APPROVAL = '1',
+    PENDING_FOR_PAYMENT = '2',
+    REJECTED = '3',
+    APPROVED = '4',
+    USER_CANCELLED_REQUEST = '5',
+    USER_CANCELLED_APPROVED_BANNER = '6'
   }
 
   @Entity({ name: 'RENTAL_CONTRACT' })
