@@ -1,4 +1,4 @@
-import { AdvertisementBanner, AdvertismentPosition, Client, RentalContract } from "#entity/advertisement_banner";
+import { AdvertisementBanner, AdvertismentPosition, Client, CONTRACT_STATUS_CD, RentalContract } from "#entity/advertisement_banner";
 import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, DataSource } from "typeorm";
@@ -208,6 +208,68 @@ export class AdvertisementBannerService {
     return {
       error: false,
       message: MESSAGES.UPDATE_SUCCEED,
+      code: 0,
+    };
+  }
+
+  public async deleteAdvertisementBanner(
+    bannerId: string,
+    userId: string,
+  ): Promise<BaseApiResponseWithoutData> {
+    //Check if banner exist based on id and user id
+    const bannerExist = await this.advertisementBannerRepo.findOne({
+      where: {
+        id: bannerId,
+        sysFlag: '1',
+        createBy: userId
+      },
+    });
+    if (!bannerExist) {
+      throw new NotFoundException({
+        error: true,
+        message: MESSAGES.BANNER_NOT_EXIST,
+        code: 4,
+      });
+    }
+    //Check if contract exist based on id and user id
+    const contractExist = await this.rentalContractRepo.findOne({
+      where: {
+        bannerRid: bannerId,
+        sysFlag: '1',
+        createBy: userId
+      },
+    });
+    if (!contractExist) {
+      throw new NotFoundException({
+        error: true,
+        message: MESSAGES.CONTRACT_NOT_EXIST,
+        code: 4,
+      });
+    }
+    //Check if contract is not pending for approval
+    if(contractExist.statusCd != CONTRACT_STATUS_CD.PENDING_FOR_APPROVAL){
+      throw new HttpException(
+        {
+          error: true,
+          message: 'Can not delete banner with status is not pending for approval.',
+          code: 4,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    //soft delete contract
+    contractExist.sysFlag = '0'; //soft delete 
+    contractExist.modifyBy = userId;
+    contractExist.modifyDate = new Date();
+    await this.rentalContractRepo.save(contractExist);
+    //soft delete banner
+    bannerExist.sysFlag = '0'; //soft delete 
+    bannerExist.modifyBy = userId;
+    bannerExist.modifyDate = new Date();
+    await this.advertisementBannerRepo.save(bannerExist);
+    return {
+      error: false,
+      message: MESSAGES.DELETED_SUCCEED,
       code: 0,
     };
   }

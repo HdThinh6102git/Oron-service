@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from "@nestjs/common";
 import { AdvertisementBannerService } from "../providers";
 import { JwtAuthGuard, JwtCommonAuthGuard } from "src/auth/guards";
 import { ReqContext, RequestContext } from "src/shared/request-context";
@@ -41,6 +41,15 @@ export class AdvertisementBannerController {
     @Body() body: UpdateAdvertisementBannerInput,
   ): Promise<BaseApiResponseWithoutData> {
     return await this.advertisementBannerService.updateAdvertisementBanner(ctx.user.id, body, bannerId);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  public async deleteAdvertisementBanner(
+    @Param('id') bannerId: string,
+    @ReqContext() ctx: RequestContext,
+  ): Promise<BaseApiResponseWithoutData> {
+    return this.advertisementBannerService.deleteAdvertisementBanner(bannerId, ctx.user.id);
   }
 
 }
