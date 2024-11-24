@@ -235,12 +235,41 @@ export class CommentService {
         createdAt: 'DESC',
       },
     });
+  
     const count = await this.commentRepo.count({
       where: { post: { id: post.id }, status: COMMENT_STATUS.ACTIVE, level: 0 },
     });
     const commentsOutput = plainToInstance(CommentOutput, comments, {
       excludeExtraneousValues: true,
     });
+
+    // Loop comment out put then find the total child comment and oldest comment's owner
+    for (const comment of commentsOutput) {
+      // find the total  child comments
+      const childCount = await this.commentRepo.count({
+        where: { parentId: comment.id, status: COMMENT_STATUS.ACTIVE, sysFlag: '1' },
+      });
+    
+      // find  userId of oldest hild comment 
+      const oldestChild = await this.commentRepo.findOne({
+        where: { parentId: comment.id, status: COMMENT_STATUS.ACTIVE, sysFlag: '1' },
+        order: { createdAt: 'ASC' },
+      });
+      // assign 
+      if(oldestChild){
+        const user = await this.userRepo.findOne({
+          where: {
+            id: oldestChild.createBy
+          }
+        })
+        if(user){
+          comment.oldestChildOwnerName = user.name;
+        } 
+      }else{
+        comment.oldestChildOwnerName = "";
+      }
+      comment.totalChild = childCount;
+    }
     return {
       listData: commentsOutput,
       total: count,
@@ -265,6 +294,33 @@ export class CommentService {
     const commentsOutput = plainToInstance(CommentOutput, comments, {
       excludeExtraneousValues: true,
     });
+    // Loop comment out put then find the total child comment and oldest comment's owner
+    for (const comment of commentsOutput) {
+      // find the total  child comments
+      const childCount = await this.commentRepo.count({
+        where: { parentId: comment.id, status: COMMENT_STATUS.ACTIVE, sysFlag: '1' },
+      });
+    
+      // find  userId of oldest hild comment 
+      const oldestChild = await this.commentRepo.findOne({
+        where: { parentId: comment.id, status: COMMENT_STATUS.ACTIVE, sysFlag: '1' },
+        order: { createdAt: 'ASC' },
+      });
+      // assign 
+      if(oldestChild){
+        const user = await this.userRepo.findOne({
+          where: {
+            id: oldestChild.createBy
+          }
+        })
+        if(user){
+          comment.oldestChildOwnerName = user.name;
+        } 
+      }else{
+        comment.oldestChildOwnerName = "";
+      }
+      comment.totalChild = childCount;
+    }
     return {
       listData: commentsOutput,
       total: count,

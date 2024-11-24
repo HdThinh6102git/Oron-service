@@ -19,18 +19,22 @@ export class CommentOutput {
   @Expose()
   public postId: string;
 
-  // @Expose()
-  // @Type(() => Number)
-  // public status: number;
+  @Expose()
+  @Type(() => Number)
+  public status: number;
 
-  // @Expose()
-  // @Type(() => UserOutputDto)
-  // user: UserOutputDto;
+  @Expose()
+  @Type(() => Number)
+  public totalChild: number;
 
-  // @Expose()
-  // @ApiProperty()
-  // @Type(() => PostOutput)
-  // post: PostOutput;
+  @Expose()
+  public oldestChildOwnerName: string;
+
+  @Expose()
+  public createBy: string;
+
+  @Expose()
+  public modifyBy: string;
 
   @Expose()
   @Type(() => Date)
