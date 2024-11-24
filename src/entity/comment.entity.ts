@@ -33,6 +33,18 @@ export class Comment {
   })
   status: number;
 
+  @Column('varchar', {
+    nullable: true,
+    name: 'parent_id',
+  })
+  parentId: string;
+
+  @Column('numeric', {
+    nullable: true,
+    name: 'parent_level',
+  })
+  parentLevel: number;
+
   @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',

@@ -1,14 +1,17 @@
-import { IsNotEmpty, IsString } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateCommentInput {
   @IsNotEmpty()
-  @ApiProperty()
   @IsString()
   description: string;
 
   @IsNotEmpty()
-  @ApiProperty()
   @IsString()
   postId: string;
+
+  @IsOptional()
+  parentId: string;
+
+  @IsOptional()
+  parentLevel: number;
 }

@@ -59,6 +59,12 @@ export class CommentService {
         code: 4,
       });
     }
+    
+    //Parent Id is exist 
+    if(input.parentId){
+      input.parentLevel = input.parentLevel + 1;
+    }
+
     const comment = await this.commentRepo.save({
       ...input,
       post: post,
