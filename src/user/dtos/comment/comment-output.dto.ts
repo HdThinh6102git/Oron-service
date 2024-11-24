@@ -1,39 +1,42 @@
 import { Expose, Type } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
-import { UserOutputDto } from '../user-output.dto';
-import { PostOutput } from '../../../post/dtos';
 
 export class CommentOutput {
   @Expose()
-  @ApiProperty()
   public id: string;
 
   @Expose()
-  @ApiProperty()
   public description: string;
 
   @Expose()
-  @ApiProperty()
-  @Type(() => Number)
-  public status: number;
+  public parentId: string;
 
   @Expose()
-  @ApiProperty()
-  @Type(() => UserOutputDto)
-  user: UserOutputDto;
+  public parentLevel: string;
 
   @Expose()
-  @ApiProperty()
-  @Type(() => PostOutput)
-  post: PostOutput;
+  public userId: string;
 
   @Expose()
-  @ApiProperty()
+  public postId: string;
+
+  // @Expose()
+  // @Type(() => Number)
+  // public status: number;
+
+  // @Expose()
+  // @Type(() => UserOutputDto)
+  // user: UserOutputDto;
+
+  // @Expose()
+  // @ApiProperty()
+  // @Type(() => PostOutput)
+  // post: PostOutput;
+
+  @Expose()
   @Type(() => Date)
   public createdAt: Date;
 
   @Expose()
-  @ApiProperty()
   @Type(() => Date)
   public updatedAt: Date;
 }

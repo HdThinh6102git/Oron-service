@@ -33,6 +33,14 @@ export class Comment {
   })
   status: number;
 
+  // Add to column in entity used for output values
+  
+  @Column('uuid', { name: 'user_id' })
+  public userId: string;
+
+  @Column('uuid', { name: 'post_id' })
+  public postId: string;
+
   @Column('varchar', {
     nullable: true,
     name: 'parent_id',
