@@ -3,7 +3,7 @@ import { AdvertisementBannerService } from "../providers";
 import { JwtAuthGuard, JwtCommonAuthGuard } from "src/auth/guards";
 import { ReqContext, RequestContext } from "src/shared/request-context";
 import { BaseApiResponse, BaseApiResponseWithoutData, BasePaginationResponse, } from "src/shared/dtos";
-import { AdvertisementBannerFilter,  AdvertisementBannerFilterOutput,  AdvertisementBannerOutput, CreateAdvertisementBannerRequestInput, UpdateAdvertisementBannerInput } from "../dtos";
+import { ActiveAdvertisementBannerFilter, ActiveAdvertisementBannerOutput, AdvertisementBannerFilter,  AdvertisementBannerFilterOutput,  AdvertisementBannerOutput, CreateAdvertisementBannerRequestInput, UpdateAdvertisementBannerInput } from "../dtos";
 import { ROLE } from "src/auth/constants";
 
 
@@ -20,17 +20,16 @@ export class AdvertisementBannerController {
     return await this.advertisementBannerService.createNewAdvertisementBanner(ctx.user.id, body);
   }
 
-  @Get('/filter')
+  @Get('/contract/filter')
   @UseGuards(JwtCommonAuthGuard)
-  public async getAdvertisementBanners(
+  public async getAdvertisementBannerContracts(
     @ReqContext() ctx: RequestContext,
     @Query() query: AdvertisementBannerFilter,
   ): Promise<BasePaginationResponse<AdvertisementBannerFilterOutput>> {
-    console.log(ctx.user.role.name)
     if(ctx.user.role.name == ROLE.USER){
       query.userId = ctx.user.id;
     }
-    return await this.advertisementBannerService.getAdvertisementBanners(query);
+    return await this.advertisementBannerService.getAdvertisementBannerContracts(query);
   }
 
   @Patch(':id')
@@ -52,4 +51,11 @@ export class AdvertisementBannerController {
     return this.advertisementBannerService.deleteAdvertisementBanner(bannerId, ctx.user.id);
   }
 
+  @Get('/active')
+  @UseGuards(JwtCommonAuthGuard)
+  public async getActiveAdvertisementBanners(
+    @Query() query: ActiveAdvertisementBannerFilter,
+  ): Promise<BasePaginationResponse<ActiveAdvertisementBannerOutput>> {
+    return await this.advertisementBannerService.getActiveAdvertisementBanners(query);
+  }
 }

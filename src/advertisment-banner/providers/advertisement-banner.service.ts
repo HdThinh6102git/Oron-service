@@ -2,7 +2,7 @@ import { AdvertisementBanner, AdvertismentPosition, Client, CONTRACT_STATUS_CD, 
 import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, DataSource } from "typeorm";
-import { AdvertisementBannerFilter, AdvertisementBannerFilterOutput, AdvertisementBannerOutput,  CreateAdvertisementBannerRequestInput, UpdateAdvertisementBannerInput } from "../dtos";
+import { ActiveAdvertisementBannerFilter, ActiveAdvertisementBannerOutput, AdvertisementBannerFilter, AdvertisementBannerFilterOutput, AdvertisementBannerOutput,  CreateAdvertisementBannerRequestInput, UpdateAdvertisementBannerInput } from "../dtos";
 import { BaseApiResponse, BaseApiResponseWithoutData, BasePaginationResponse, } from "src/shared/dtos";
 import { MESSAGES } from "src/shared/constants";
 import { differenceInDays } from 'date-fns'; // library support compute days difference
@@ -131,7 +131,7 @@ export class AdvertisementBannerService {
     }
   }
 
-  public async getAdvertisementBanners(
+  public async getAdvertisementBannerContracts(
     filter: AdvertisementBannerFilter,
   ): Promise<BasePaginationResponse<AdvertisementBannerFilterOutput>> {
     const queryRunner = this.dataSource.createQueryRunner();
@@ -272,5 +272,46 @@ export class AdvertisementBannerService {
       message: MESSAGES.DELETED_SUCCEED,
       code: 0,
     };
+  }
+
+  public async getActiveAdvertisementBanners(
+    filter: ActiveAdvertisementBannerFilter,
+  ): Promise<BasePaginationResponse<ActiveAdvertisementBannerOutput>>
+  {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    try {
+      const result = await queryRunner.query(
+        `SELECT * FROM get_active_advertisement_banners(
+          $1
+        )`,
+        [
+          filter.positionId || null,
+        ],
+      );
+      if (result.length === 0) {
+        return {
+          listData: [],
+          total: 0,
+        };
+      }
+      const total = result[0]?.total || 0;
+      // Transform raw results to DTO
+      
+      const data: ActiveAdvertisementBannerOutput[] = result.map((item: any) =>
+        plainToInstance(ActiveAdvertisementBannerOutput, item, {
+          excludeExtraneousValues: true,
+        }),
+      );
+      
+      return {
+        listData: data,
+        total: total,
+      };
+    }catch (error) {
+      throw new Error(`Failed to fetch active advertisement banners`);
+    } finally {
+      await queryRunner.release();
+    }
   }
 }
