@@ -35,10 +35,11 @@ export class CommentController {
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
   public async updateComment(
+    @ReqContext() ctx: RequestContext,
     @Param('id') commentId: string,
     @Body() body: UpdateCommentInput,
   ): Promise<BaseApiResponse<CommentOutput>> {
-    return await this.commentService.updateComment(body, commentId);
+    return await this.commentService.updateComment(body, commentId, ctx.user.id);
   }
 
   @Delete(':id')

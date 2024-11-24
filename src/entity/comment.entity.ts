@@ -53,6 +53,20 @@ export class Comment {
   })
   level: number;
 
+  @Column('varchar', {
+    length: 36,
+    nullable: true,
+    name: 'create_by',
+  })
+  createBy: string;
+
+  @Column('varchar', {
+    length: 36,
+    nullable: true,
+    name: 'modify_by',
+  })
+  modifyBy: string;
+
   @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
@@ -65,6 +79,13 @@ export class Comment {
     name: 'updated_at',
   })
   updatedAt: Date;
+
+  @Column('char', {
+    length: 1,
+    nullable: true,
+    name: 'sys_flag',
+  })
+  sysFlag: string;
 
   @ManyToOne(() => Post, (post) => post.comments)
   @JoinColumn({ name: 'post_id', referencedColumnName: 'id' })

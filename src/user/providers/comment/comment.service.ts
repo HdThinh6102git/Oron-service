@@ -67,6 +67,9 @@ export class CommentService {
       input.level = 0;
     }
 
+    input.createBy = userId;
+    input.modifyBy = userId;
+    input.sysFlag = '1';
     const comment = await this.commentRepo.save({
       ...input,
       post: post,
@@ -86,10 +89,12 @@ export class CommentService {
   public async updateComment(
     input: UpdateCommentInput,
     commentId: string,
+    userId: string,
   ): Promise<BaseApiResponse<CommentOutput>> {
     const commentExist = await this.commentRepo.findOne({
       where: {
         id: commentId,
+        sysFlag: '1'
       },
     });
     if (!commentExist) {
@@ -105,13 +110,14 @@ export class CommentService {
     }
     if (typeof input.status === 'number') {
       if (input.status == 0) {
-        commentExist.status = COMMENT_STATUS.IN_ACTIVE;
+        commentExist.status = COMMENT_STATUS.IN_ACTIVE; // Hide the comment by owner 
       }
       if (input.status == 1) {
-        commentExist.status = COMMENT_STATUS.ACTIVE;
+        commentExist.status = COMMENT_STATUS.ACTIVE; 
       }
     }
     //save
+    commentExist.modifyBy = userId;
     const updatedComment = await this.commentRepo.save(commentExist);
     //convert to output
     const commentOutput = plainToClass(CommentOutput, updatedComment, {
@@ -129,35 +135,29 @@ export class CommentService {
     commentId: string,
     userId: string,
   ): Promise<BaseApiResponse<null>> {
-    const commentExist = await this.commentRepo.findOne({
-      where: {
-        id: commentId,
-      },
-    });
-    if (!commentExist) {
-      throw new NotFoundException({
-        error: true,
-        message: MESSAGES.COMMENT_NOT_FOUND,
-        code: 4,
-      });
-    }
+    
     const myComment = await this.commentRepo.findOne({
       where: {
         id: commentId,
         user: { id: userId },
+        sysFlag: '1'
       },
     });
     if (!myComment) {
       throw new HttpException(
         {
           error: true,
-          message: MESSAGES.CAN_NOT_DELETE_OTHER_USER_COMMENT,
+          message: MESSAGES.COMMENT_NOT_FOUND,
           code: 4,
         },
         HttpStatus.BAD_REQUEST,
       );
     }
-    await this.commentRepo.delete(commentId);
+    //Soft delete
+    myComment.sysFlag = '0';
+    myComment.updatedAt = new Date();
+    myComment.modifyBy = userId;
+    await this.commentRepo.save(myComment);
     return {
       error: false,
       data: null,
@@ -171,6 +171,7 @@ export class CommentService {
   ): Promise<BasePaginationResponse<CommentOutput>> {
     const where: any = {
       id: Not(IsNull()),
+      sysFlag: '1'
     };
     if (typeof filter.status === 'number') {
       where['status'] = filter.status;
@@ -227,7 +228,7 @@ export class CommentService {
       });
     }
     const comments = await this.commentRepo.find({
-      where: { post: { id: post.id }, status: COMMENT_STATUS.ACTIVE, level: 0 },
+      where: { post: { id: post.id }, status: COMMENT_STATUS.ACTIVE, level: 0, sysFlag: '1' },
       take: filter.limit,
       skip: filter.skip,
       order: {
@@ -251,7 +252,7 @@ export class CommentService {
     filter: CommentFilter,
   ): Promise<BasePaginationResponse<CommentOutput>> {
     const comments = await this.commentRepo.find({
-      where: { parentId: parentId, status: COMMENT_STATUS.ACTIVE},
+      where: { parentId: parentId, status: COMMENT_STATUS.ACTIVE, sysFlag: '1'},
       take: filter.limit,
       skip: filter.skip,
       order: {

@@ -16,4 +16,10 @@ export class CreateCommentInput {
   parentLevel: number;
 
   level: number;
+
+  createBy: string; 
+
+  modifyBy: string;
+
+  sysFlag: string;
 }
