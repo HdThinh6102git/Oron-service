@@ -1,7 +1,7 @@
-import { Controller, Get, Query, UseGuards } from "@nestjs/common";
+import { Controller, Get, Param, Query, UseGuards } from "@nestjs/common";
 import { ClientService } from "../providers";
 import { JwtAdminAuthGuard } from "src/auth/guards";
-import { BasePaginationResponse } from "src/shared/dtos";
+import { BaseApiResponse, BasePaginationResponse } from "src/shared/dtos";
 import { ClientFilter, ClientOutput } from "../dtos";
 
 @Controller('client')
@@ -14,5 +14,13 @@ export class ClientController {
     @Query() query: ClientFilter,
   ): Promise<BasePaginationResponse<ClientOutput>> {
     return this.clientService.getClients(query);
+  }
+
+  @Get(':id')
+  @UseGuards(JwtAdminAuthGuard)
+  public async getClientById(
+    @Param('id') clientId: string,
+  ): Promise<BaseApiResponse<ClientOutput>> {
+    return await this.clientService.getClientById(clientId);
   }
 }

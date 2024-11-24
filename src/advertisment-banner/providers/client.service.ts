@@ -1,15 +1,17 @@
 import { Client} from "#entity/advertisement_banner";
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { DataSource} from "typeorm";
+import { DataSource, Repository} from "typeorm";
 import { ClientFilter, ClientOutput } from "../dtos";
-import { BasePaginationResponse } from "src/shared/dtos";
-import { plainToInstance } from "class-transformer";
+import { BaseApiResponse, BasePaginationResponse } from "src/shared/dtos";
+import { plainToClass, plainToInstance } from "class-transformer";
+import { MESSAGES } from "src/shared/constants";
 
 @Injectable()
 export class ClientService {
   constructor(
     @InjectRepository(Client)
+    private clientRepo: Repository<Client>,
     private readonly dataSource: DataSource
   ) {}
 
@@ -90,6 +92,28 @@ export class ClientService {
     };
   }
   
-
+  public async getClientById(
+    clientId: string,
+  ): Promise<BaseApiResponse<ClientOutput>> {
+    const client = await this.clientRepo.findOne({
+      where: { id: clientId, sysFlag: '1' },
+    });
+    if (!client) {
+      throw new NotFoundException({
+        error: true,
+        message: MESSAGES.CLIENT_NOT_EXIST,
+        code: 4,
+      });
+    }
+    const clientOutput = plainToClass(ClientOutput, client, {
+      excludeExtraneousValues: true,
+    });
+    return {
+      error: false,
+      data: clientOutput,
+      message: MESSAGES.GET_SUCCEED,
+      code: 0,
+    };
+  }
   
 }
