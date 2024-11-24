@@ -62,7 +62,9 @@ export class CommentService {
     
     //Parent Id is exist 
     if(input.parentId){
-      input.parentLevel = input.parentLevel + 1;
+      input.level = input.parentLevel + 1;
+    }else{
+      input.level = 0;
     }
 
     const comment = await this.commentRepo.save({
@@ -208,7 +210,7 @@ export class CommentService {
     };
   }
 
-  public async getCommentsByPostId(
+  public async getRootCommentsByPostId(
     postId: string,
     filter: CommentFilter,
   ): Promise<BasePaginationResponse<CommentOutput>> {
@@ -225,16 +227,39 @@ export class CommentService {
       });
     }
     const comments = await this.commentRepo.find({
-      where: { post: { id: post.id }, status: COMMENT_STATUS.ACTIVE },
+      where: { post: { id: post.id }, status: COMMENT_STATUS.ACTIVE, level: 0 },
       take: filter.limit,
       skip: filter.skip,
       order: {
         createdAt: 'DESC',
       },
-      relations: ['user', 'post'],
     });
     const count = await this.commentRepo.count({
-      where: { post: { id: post.id }, status: COMMENT_STATUS.ACTIVE },
+      where: { post: { id: post.id }, status: COMMENT_STATUS.ACTIVE, level: 0 },
+    });
+    const commentsOutput = plainToInstance(CommentOutput, comments, {
+      excludeExtraneousValues: true,
+    });
+    return {
+      listData: commentsOutput,
+      total: count,
+    };
+  }
+
+  public async getChildCommentsByCommentId(
+    parentId: string,
+    filter: CommentFilter,
+  ): Promise<BasePaginationResponse<CommentOutput>> {
+    const comments = await this.commentRepo.find({
+      where: { parentId: parentId, status: COMMENT_STATUS.ACTIVE},
+      take: filter.limit,
+      skip: filter.skip,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+    const count = await this.commentRepo.count({
+      where: { parentId: parentId, status: COMMENT_STATUS.ACTIVE },
     });
     const commentsOutput = plainToInstance(CommentOutput, comments, {
       excludeExtraneousValues: true,

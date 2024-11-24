@@ -11,7 +11,7 @@ export class CommentOutput {
   public parentId: string;
 
   @Expose()
-  public parentLevel: string;
+  public level: number;
 
   @Expose()
   public userId: string;

@@ -14,4 +14,6 @@ export class CreateCommentInput {
 
   @IsOptional()
   parentLevel: number;
+
+  level: number;
 }

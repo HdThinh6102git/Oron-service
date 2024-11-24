@@ -58,11 +58,19 @@ export class CommentController {
   }
 
   @Get('/post/:postId')
-  public async getCommentsByPostId(
+  public async getRootCommentsByPostId(
     @Param('postId') postId: string,
     @Query() query: CommentFilter,
   ): Promise<BasePaginationResponse<CommentOutput>> {
-    return await this.commentService.getCommentsByPostId(postId, query);
+    return await this.commentService.getRootCommentsByPostId(postId, query);
+  }
+
+  @Get('/parent/:parentId')
+  public async getChildCommentsByCommentId(
+    @Param('parentId') parentId: string,
+    @Query() query: CommentFilter,
+  ): Promise<BasePaginationResponse<CommentOutput>> {
+    return await this.commentService.getChildCommentsByCommentId(parentId, query);
   }
 
   @Get('/post/:postId/user')

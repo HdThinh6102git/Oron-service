@@ -49,9 +49,9 @@ export class Comment {
 
   @Column('numeric', {
     nullable: true,
-    name: 'parent_level',
+    name: 'level',
   })
-  parentLevel: number;
+  level: number;
 
   @CreateDateColumn({
     nullable: false,
