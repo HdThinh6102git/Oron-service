@@ -1,4 +1,5 @@
 import { Expose, Type } from 'class-transformer';
+import { CommentUserOutputDto } from './comment-user-output.dto';
 
 export class CommentOutput {
   @Expose()
@@ -29,6 +30,10 @@ export class CommentOutput {
 
   @Expose()
   public oldestChildOwnerName: string;
+
+  @Expose()
+  @Type(() => CommentUserOutputDto)
+  user: CommentUserOutputDto;
 
   @Expose()
   public createBy: string;

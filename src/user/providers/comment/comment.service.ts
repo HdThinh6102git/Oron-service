@@ -234,6 +234,7 @@ export class CommentService {
       order: {
         createdAt: 'DESC',
       },
+      relations: ['user'],
     });
   
     const count = await this.commentRepo.count({
@@ -287,6 +288,7 @@ export class CommentService {
       order: {
         createdAt: 'DESC',
       },
+      relations: ['user'],
     });
     const count = await this.commentRepo.count({
       where: { parentId: parentId, status: COMMENT_STATUS.ACTIVE },
