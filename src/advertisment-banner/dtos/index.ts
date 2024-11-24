@@ -13,3 +13,5 @@ export * from './update-advertisement-banner-input.dto';
 export * from './update-rental-contract-input.dto';
 export * from './active-advertisement-banner-output.dto';
 export * from './active-advertisement-banner-filter.dto';
+export * from './client-filter.dto';
+export * from './client-output.dto';
