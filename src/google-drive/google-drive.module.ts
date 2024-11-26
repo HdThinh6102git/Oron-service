@@ -1,0 +1,13 @@
+import { Module } from '@nestjs/common';
+import * as controllers from './controllers';
+import * as providers from './providers';
+import { AuthModule } from '../auth';
+@Module({
+    imports: [
+      AuthModule,
+    ],
+    controllers: Object.values(controllers),
+    providers: Object.values(providers),
+    exports: Object.values(providers),
+  })
+  export class GoogleDriveModule {}
