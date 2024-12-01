@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from "@nestjs/common";
 import { AdvertisementPositionService } from "../providers";
-import { JwtAdminAuthGuard, JwtCommonAuthGuard } from "src/auth/guards";
+import { JwtAdminAuthGuard, JwtAuthGuard, JwtCommonAuthGuard } from "src/auth/guards";
 import { BaseApiResponse, BasePaginationResponse } from "src/shared/dtos";
-import { AdvertisementPositionOutput, CreateAdvertisementPositionInput, PositionFilter, UpdateAdvertisementPositionInput } from "../dtos";
+import { AdvertisementPositionOutput, CreateAdvertisementPositionInput, PositionFilter, UpdateAdvertisementPositionInput, UserPositionFilter, UserPositionOutput } from "../dtos";
 import { ReqContext, RequestContext } from "src/shared/request-context";
 
 @Controller('advertisement-position')
@@ -42,5 +42,13 @@ export class AdvertisementPositionController {
     @Query() query: PositionFilter,
   ): Promise<BasePaginationResponse<AdvertisementPositionOutput>> {
     return this.advertisementPositionService.getPositions(query);
+  }
+
+  @Get('/user/filter')
+  @UseGuards(JwtAuthGuard)
+  public async getUserPositions(
+    @Query() query: UserPositionFilter,
+  ): Promise<BasePaginationResponse<UserPositionOutput>> {
+    return this.advertisementPositionService.getUserPositions(query);
   }
 }

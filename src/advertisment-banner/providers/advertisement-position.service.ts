@@ -2,8 +2,8 @@
 import { AdvertismentPosition } from "#entity/advertisement_banner/advertisement-position.entity";
 import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { ILike, In, Not, Repository } from "typeorm";
-import { AdvertisementPositionOutput, CreateAdvertisementPositionInput, PositionFilter, UpdateAdvertisementPositionInput } from "../dtos";
+import { DataSource, ILike, In, Not, Repository } from "typeorm";
+import { AdvertisementPositionOutput, CreateAdvertisementPositionInput, PositionFilter, UpdateAdvertisementPositionInput, UserPositionFilter, UserPositionOutput } from "../dtos";
 import { BaseApiResponse, BasePaginationResponse } from "src/shared/dtos";
 import { MESSAGES } from "src/shared/constants";
 import { plainToClass, plainToInstance } from "class-transformer";
@@ -14,6 +14,7 @@ export class AdvertisementPositionService {
   constructor(
     @InjectRepository(AdvertismentPosition)
     private advertisementPositionRepo: Repository<AdvertismentPosition>,
+    private readonly dataSource: DataSource
   ) {}
 
   public async createNewPosition(
@@ -181,4 +182,56 @@ export class AdvertisementPositionService {
       total: count,
     };
   }
+
+  public async getUserPositions(
+    filter: UserPositionFilter,
+  ): Promise<BasePaginationResponse<UserPositionOutput>> {
+
+     // Extract start and end dates from the filter
+     const { selectedStartDate, selectedEndDate, skip, limit } = filter;
+
+     // Prepare query to call the PostgreSQL function
+     const query = `
+       SELECT * 
+       FROM get_advertisement_positions($1, $2)
+       LIMIT $3 OFFSET $4
+     `;
+    console.log("vaooo dayyyyyy");
+     // Execute the query with the parameters
+     const positions = await this.dataSource.query(query, [
+       selectedStartDate,
+       selectedEndDate,
+       limit,
+       skip,
+     ]);
+
+     console.log(positions);
+ 
+     // Fetch total count of rows (for pagination)
+    //  const countQuery = `
+    //    SELECT COUNT(*) 
+    //    FROM get_advertisement_positions($1, $2)
+    //  `;
+    //  const countResult = await this.dataSource.query(countQuery, [
+    //    selectedStartDate,
+    //    selectedEndDate,
+    //  ]);
+    //  const count = parseInt(countResult[0].count, 10);
+ 
+     // Transform raw data into the expected output format
+     
+ 
+     const data: UserPositionOutput[] = positions.map((item: any) =>
+      plainToInstance(UserPositionOutput, item, {
+        excludeExtraneousValues: true,
+      }),
+    );
+     // Return paginated response
+     return {
+       listData: data,
+       total: 1,
+     };
+  }
+  
+
 }

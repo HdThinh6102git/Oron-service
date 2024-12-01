@@ -15,3 +15,5 @@ export * from './active-advertisement-banner-output.dto';
 export * from './active-advertisement-banner-filter.dto';
 export * from './client-filter.dto';
 export * from './client-output.dto';
+export * from './user-position-filter.dto';
+export * from './user-advertisement-position-output.dto';
