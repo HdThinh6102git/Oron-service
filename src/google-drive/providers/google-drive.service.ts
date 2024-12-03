@@ -19,12 +19,12 @@ export class GoogleDriveService {
     }
 
 
-    // Kiểm tra và tạo thư mục nếu cần
-    async ensureFolder(folderName: string): Promise<string> {
+    // create folder if not exist
+    async ensureFolderBackup(parentFolderName: string): Promise<string> {
       try {
-        // Tìm thư mục theo tên
+        // find folder based on name
         const response = await this.driveClient.files.list({
-          q: `mimeType='application/vnd.google-apps.folder' and name='${folderName}' and trashed=false`,
+          q: `mimeType='application/vnd.google-apps.folder' and name='${parentFolderName}' and trashed=false`,
           fields: 'files(id, name)',
           spaces: 'drive',
         });
@@ -34,16 +34,15 @@ export class GoogleDriveService {
           if (!folder.id) {
             throw new Error('Failed to create folder: Folder ID is undefined');
           }
-          console.log(`Folder "${folderName}" already exists with ID: ${folder.id}`);
-          
+          //Return folder id if exist
           return folder.id;
           
         }
 
-        // Nếu không tìm thấy, tạo thư mục mới
+        //create new folder if not exist
         const createResponse = await this.driveClient.files.create({
           requestBody: {
-            name: folderName,
+            name: parentFolderName,
             mimeType: 'application/vnd.google-apps.folder',
           },
           fields: 'id',
@@ -53,14 +52,104 @@ export class GoogleDriveService {
         if (!newFolderId) {
           throw new Error('Failed to create folder: Folder ID is undefined');
         }
-    
-        console.log(`Folder "${folderName}" created with ID: ${newFolderId}`);
+        //return new folder id
         return newFolderId;
         
       } catch (error) {
         console.error('Error ensuring folder:', error);
         throw error;
       }
+    }
+
+    async ensureFolder(parentFolderName: string, childFolderName: string = ''): Promise<string> {
+      try {
+        // Step 1: Handle Case 01: parentFolderName only
+        if (parentFolderName && !childFolderName) {
+          const parentFolderId = await this.findOrCreateFolder(parentFolderName);
+          return parentFolderId;
+        }
+    
+        // Step 2: Handle Case 02: parentFolderName and childFolderName
+        if (parentFolderName && childFolderName) {
+          // Find or create parent folder
+          const parentFolderId = await this.findOrCreateFolder(parentFolderName);
+    
+          // Find child folder within the parent folder
+          const childFolderId = await this.findFolderInParent(childFolderName, parentFolderId);
+    
+          if (childFolderId) {
+            return childFolderId; // Return child folder ID if it exists
+          }
+    
+          // Create new child folder in the parent folder
+          const newChildFolderId = await this.createFolder(childFolderName, parentFolderId);
+          return newChildFolderId;
+        }
+    
+        throw new Error('Invalid parameters: parentFolderName is required.');
+    
+      } catch (error) {
+        console.error('Error ensuring folder:', error);
+        throw error;
+      }
+    }
+
+    private async findOrCreateFolder(folderName: string): Promise<string> {
+      const response = await this.driveClient.files.list({
+        q: `mimeType='application/vnd.google-apps.folder' and name='${folderName}' and trashed=false`,
+        fields: 'files(id, name)',
+        spaces: 'drive',
+      });
+    
+      const folder = response.data.files?.[0];
+      if (folder?.id) {
+        return folder.id; // Return folder ID if it exists
+      }
+    
+      // Create a new folder if not found
+      const createResponse = await this.driveClient.files.create({
+        requestBody: {
+          name: folderName,
+          mimeType: 'application/vnd.google-apps.folder',
+        },
+        fields: 'id',
+      });
+    
+      const newFolderId = createResponse.data.id;
+      if (!newFolderId) {
+        throw new Error('Failed to create folder: Folder ID is undefined');
+      }
+    
+      return newFolderId; // Return new folder ID
+    }
+
+    private async findFolderInParent(folderName: string, parentFolderId: string): Promise<string | null> {
+      const response = await this.driveClient.files.list({
+        q: `mimeType='application/vnd.google-apps.folder' and name='${folderName}' and '${parentFolderId}' in parents and trashed=false`,
+        fields: 'files(id, name)',
+        spaces: 'drive',
+      });
+    
+      const folder = response.data.files?.[0];
+      return folder?.id || null; // Return folder ID or null if not found
+    }
+
+    private async createFolder(folderName: string, parentFolderId: string): Promise<string> {
+      const createResponse = await this.driveClient.files.create({
+        requestBody: {
+          name: folderName,
+          mimeType: 'application/vnd.google-apps.folder',
+          parents: [parentFolderId],
+        },
+        fields: 'id',
+      });
+    
+      const newFolderId = createResponse.data.id;
+      if (!newFolderId) {
+        throw new Error('Failed to create folder: Folder ID is undefined');
+      }
+    
+      return newFolderId; // Return new folder ID
     }
 
     public async uploadFile(

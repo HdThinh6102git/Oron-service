@@ -1,18 +1,21 @@
 import {
     Column,
     Entity,
-    PrimaryGeneratedColumn,
     CreateDateColumn,
     UpdateDateColumn,
+    PrimaryColumn,
   } from 'typeorm';
   
   @Entity({ name: 'FILE' })
   export class File {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryColumn({
+      name: 'ID',
+      type: 'varchar',
+      length: 36,
+    })
     id: string;
   
-    @Column('varchar', {
-      length: 255,
+    @Column('text', {
       nullable: true,
       name: 'NAME',
     })
@@ -25,8 +28,7 @@ import {
     })
     alternativeText: string;
   
-    @Column('varchar', {
-      length: 255,
+    @Column('text', {
       nullable: true,
       name: 'URL',
     })

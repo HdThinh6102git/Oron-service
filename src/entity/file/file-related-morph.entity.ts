@@ -1,14 +1,18 @@
 import {
     Column,
     Entity,
-    PrimaryGeneratedColumn,
     CreateDateColumn,
     UpdateDateColumn,
+    PrimaryColumn,
   } from 'typeorm';
   
   @Entity({ name: 'FILE_RELATED_MORPH' })
   export class FileRelatedMorph {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryColumn({
+      name: 'ID',
+      type: 'varchar',
+      length: 36,
+    })
     id: string;
   
     @Column('varchar', {

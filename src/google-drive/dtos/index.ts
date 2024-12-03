@@ -1,0 +1,1 @@
+export * from './upload-specific-file-input.dto';

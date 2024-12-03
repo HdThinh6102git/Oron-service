@@ -19,6 +19,7 @@ import { SavedPost } from '#entity/post/saved-post.entity';
 import { PostRegistration } from '#entity/post-registration.entity';
 import { Review } from '#entity/review.entity';
 import { UserConnection } from '#entity/user/user-connection.entity';
+import { File, FileRelatedMorph } from '#entity/file';
 @Module({
   imports: [
     TypeOrmModule.forFeature([
@@ -36,6 +37,8 @@ import { UserConnection } from '#entity/user/user-connection.entity';
       PostRegistration,
       Review,
       UserConnection,
+      File,
+      FileRelatedMorph
     ]),
     forwardRef(() => AuthModule),
     UserModule,
