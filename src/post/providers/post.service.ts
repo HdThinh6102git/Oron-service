@@ -11,7 +11,7 @@ import {
   Post,
   POST_STATUS,
 } from '#entity/post/post.entity';
-import { BaseApiResponse, BasePaginationResponse } from '../../shared/dtos';
+import { BaseApiResponse, BasePaginationResponse, FileOutput } from '../../shared/dtos';
 import { MESSAGES } from '../../shared/constants';
 import { plainToClass, plainToInstance } from 'class-transformer';
 import {
@@ -38,6 +38,7 @@ import {
 import { ReactionOutput, UserOutputDto } from '../../user/dtos';
 import { Review } from '#entity/review.entity';
 import { UserConnection } from '#entity/user/user-connection.entity';
+import { FileRelatedMorph, File } from '#entity/file';
 
 @Injectable()
 export class PostService {
@@ -66,6 +67,10 @@ export class PostService {
     private reviewRepo: Repository<Review>,
     @InjectRepository(UserConnection)
     private userConnectionRepo: Repository<UserConnection>,
+    @InjectRepository(File)
+    private fileRepo: Repository<File>,
+    @InjectRepository(FileRelatedMorph)
+    private fileRelatedMorphRepo: Repository<FileRelatedMorph>,
   ) {}
   public async createNewPost(
     input: CreatePostInput,
@@ -422,6 +427,30 @@ export class PostService {
       postsOutput[i].currentUserReaction = currentUserReactionOutput;
       postsOutput[i].totalComments = totalComments;
       postsOutput[i].totalReactions = totalReactions;
+      //Get fileRid related file data
+      const fileRelatedMorphs = await this.fileRelatedMorphRepo.find({
+        where: {
+          relatedRid: postsOutput[i].id,
+          sysFlag: '1'
+        },
+      });
+      // Extract file IDs
+      const fileRids = fileRelatedMorphs.map((morph) => morph.fileRid);
+      // Fetch all files in one query
+      const files = await this.fileRepo.find({
+        where: {
+          id: In(fileRids),
+          sysFlag: '1',
+        },
+      });
+      // Get files url 
+      const imageArray = files.map((file) =>
+        plainToInstance(FileOutput, {
+          url: file.url,
+          alternativeText: file.alternativeText,
+        }),
+      );
+      postsOutput[i].image = imageArray;
     }
     return {
       listData: postsOutput,
@@ -480,6 +509,30 @@ export class PostService {
         user: { id: userId },
       },
     });
+    //Get fileRid related file data
+    const fileRelatedMorphs = await this.fileRelatedMorphRepo.find({
+      where: {
+        relatedRid: postId,
+        sysFlag: '1'
+      },
+    });
+    // Extract file IDs
+    const fileRids = fileRelatedMorphs.map((morph) => morph.fileRid);
+    // Fetch all files in one query
+    const files = await this.fileRepo.find({
+      where: {
+        id: In(fileRids),
+        sysFlag: '1',
+      },
+    });
+    // Get files
+    const imageArray = files.map((file) =>
+      plainToInstance(FileOutput, {
+        url: file.url,
+        alternativeText: file.alternativeText,
+      }),
+    );
+    
     const currentUserReactionOutput = plainToInstance(
       ReactionOutput,
       currentUserReaction,
@@ -495,6 +548,7 @@ export class PostService {
     postOutput.currentUserReaction = currentUserReactionOutput;
     postOutput.totalComments = totalComments;
     postOutput.totalReactions = totalReactions;
+    postOutput.image = imageArray;
     return {
       error: false,
       data: postOutput,

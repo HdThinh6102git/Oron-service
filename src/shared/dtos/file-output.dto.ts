@@ -1,6 +1,6 @@
 export class FileOutput {
     
-    public bannerName: string;
+    public url: string;
 
-    public redirectUrl: string;
+    public alternativeText: string;
 }
