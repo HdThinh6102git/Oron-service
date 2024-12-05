@@ -383,6 +383,7 @@ export class PostService {
       const totalComments = await this.commentRepo.count({
         where: {
           post: { id: postsOutput[i].id },
+          sysFlag: '1'
         },
       });
       const totalReactions = await this.reactionRepo.count({
@@ -479,6 +480,7 @@ export class PostService {
     const totalComments = await this.commentRepo.count({
       where: {
         post: { id: postId },
+        sysFlag: '1'
       },
     });
     const totalReactions = await this.reactionRepo.count({
