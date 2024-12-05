@@ -10,48 +10,48 @@ import {
 import { User } from './user/user.entity';
 import { Report } from './report.entity';
 
-@Entity({ name: 'report_response', schema: process.env.DB_SCHEMA })
+@Entity({ name: 'REPORT_RESPONSE', schema: process.env.DB_SCHEMA })
 export class ReportResponse {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('uuid', { name: 'ID' })
   id: string;
 
   @Column('varchar', {
     nullable: false,
-    name: 'title',
+    name: 'TITLE',
   })
   title: string;
 
   @Column('text', {
     nullable: false,
-    name: 'description',
+    name: 'DESCRIPTION',
   })
   description: string;
 
   @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
-    name: 'created_at',
+    name: 'CREATED_AT',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
     nullable: true,
-    name: 'updated_at',
+    name: 'UPDATED_AT',
   })
   updatedAt: Date;
 
   @Column({
     nullable: true,
-    name: 'deleted_at',
+    name: 'DELETED_AT',
     type: 'timestamptz',
   })
   deletedAt: Date | null;
 
   @ManyToOne(() => User, (user) => user.reportResponses)
-  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'USER_ID', referencedColumnName: 'id' })
   user: User;
 
   @ManyToOne(() => Report, (report) => report.reportResponses)
-  @JoinColumn({ name: 'report_id', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'REPORT_ID', referencedColumnName: 'id' })
   report: Report;
 }

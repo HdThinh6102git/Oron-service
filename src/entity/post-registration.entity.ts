@@ -16,20 +16,20 @@ export enum POST_REGISTRATION_STATUS {
   WAITING_RECEIPT = 3,
   RECEIVED = 4,
 }
-@Entity({ name: 'post_registration', schema: process.env.DB_SCHEMA })
+@Entity({ name: 'POST_REGISTRATION', schema: process.env.DB_SCHEMA })
 export class PostRegistration {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('uuid', { name: 'ID' })
   id: string;
 
   @Column('text', {
     nullable: false,
-    name: 'message',
+    name: 'MESSAGE',
   })
   message: string;
 
   @Column('numeric', {
     nullable: false,
-    name: 'status',
+    name: 'STATUS',
     default: POST_REGISTRATION_STATUS.WAITING_CONFIRMATION,
   })
   status: number;
@@ -37,21 +37,21 @@ export class PostRegistration {
   @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
-    name: 'created_at',
+    name: 'CREATED_AT',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
     nullable: true,
-    name: 'updated_at',
+    name: 'UPDATED_AT',
   })
   updatedAt: Date;
 
   @ManyToOne(() => Post, (post) => post.comments)
-  @JoinColumn({ name: 'post_id', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'POST_ID', referencedColumnName: 'id' })
   post: Post;
 
   @ManyToOne(() => User, (user) => user.comments)
-  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'USER_ID', referencedColumnName: 'id' })
   user: User;
 }

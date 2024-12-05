@@ -13,27 +13,27 @@ export enum CATEGORY_STATUS {
   ACTIVE = 1,
 }
 
-@Entity({ name: 'category', schema: process.env.DB_SCHEMA })
+@Entity({ name: 'CATEGORY', schema: process.env.DB_SCHEMA })
 export class Category {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('uuid', { name: 'ID' })
   id: string;
 
   @Column('varchar', {
     nullable: false,
-    name: 'name',
+    name: 'NAME',
     unique: true,
   })
   name: string;
 
   @Column('text', {
     nullable: false,
-    name: 'description',
+    name: 'DESCRIPTION',
   })
   description: string;
 
   @Column('numeric', {
     nullable: false,
-    name: 'status',
+    name: 'STATUS',
     default: CATEGORY_STATUS.ACTIVE,
   })
   status: number;
@@ -41,19 +41,19 @@ export class Category {
   @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
-    name: 'created_at',
+    name: 'CREATED_AT',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
     nullable: true,
-    name: 'updated_at',
+    name: 'UPDATED_AT',
   })
   updatedAt: Date;
 
   @Column({
     nullable: true,
-    name: 'deleted_at',
+    name: 'DELETED_AT',
     type: 'timestamptz',
   })
   deletedAt: Date | null;

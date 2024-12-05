@@ -27,78 +27,78 @@ export enum USER_STATUS {
   IN_ACTIVE = '0',
   ACTIVE = '1',
 }
-@Entity({ name: 'user', schema: process.env.DB_SCHEMA })
+@Entity({ name: 'USER', schema: process.env.DB_SCHEMA })
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('uuid',{ name: 'ID' })
   id: string;
 
-  @Column('varchar', { nullable: false, name: 'username' })
+  @Column('varchar', { nullable: false, name: 'USERNAME' })
   username: string;
 
-  @Column('varchar', { nullable: false, name: 'password' })
+  @Column('varchar', { nullable: false, name: 'PASSWORD' })
   password: string;
 
-  @Column('varchar', { nullable: true, name: 'name' })
+  @Column('varchar', { nullable: true, name: 'NAME' })
   name: string;
 
-  @Column('text', { nullable: true, name: 'full_address' })
+  @Column('text', { nullable: true, name: 'FULL_ADDRESS' })
   fullAddress: string;
 
-  @Column('text', { nullable: true, name: 'specific_address' })
+  @Column('text', { nullable: true, name: 'SPECIFIC_ADDRESS' })
   specificAddress: string;
 
-  @Column('varchar', { nullable: true, name: 'phone_number' })
+  @Column('varchar', { nullable: true, name: 'PHONE_NUMBER' })
   phoneNumber: string;
 
-  @Column('varchar', { nullable: true, name: 'email' })
+  @Column('varchar', { nullable: true, name: 'EMAIL' })
   email: string;
 
-  @Column('varchar', { nullable: true, name: 'profile_pic' })
+  @Column('varchar', { nullable: true, name: 'PROFILE_PIC' })
   profilePic: string;
 
-  @Column('varchar', { nullable: true, name: 'background_pic' })
+  @Column('varchar', { nullable: true, name: 'BACKGROUND_PIC' })
   backgroundPic: string;
 
   @Column('boolean', {
     nullable: false,
-    name: 'is_verify_phone',
+    name: 'IS_VERIFY_PHONE',
     default: false,
   })
   isVerifyPhone: boolean;
 
   @Column('boolean', {
     nullable: false,
-    name: 'is_verify_email',
+    name: 'IS_VERIFY_EMAIL',
     default: false,
   })
   isVerifyEmail: boolean;
 
   @Column('varchar', {
     nullable: false,
-    name: 'status',
+    name: 'STATUS',
     default: USER_STATUS.ACTIVE,
   })
   status: string;
 
-  @Column('varchar', { nullable: true, name: 'refresh_token' })
+  @Column('varchar', { nullable: true, name: 'REFRESH_TOKEN' })
   refreshToken: string;
 
   @Column('timestamp', {
     nullable: true,
-    name: 'last_login',
+    name: 'LAST_LOGIN',
   })
   lastLogin: Date;
 
   @Column('varchar', {
     nullable: true,
-    name: 'email_verify_code',
+    name: 'EMAIL_VERIFY_CODE',
   })
   emailVerifyCode: string;
 
-  @Column({ type: 'numeric', nullable: true, name: 'verification_time' })
+  @Column({ type: 'numeric', nullable: true, name: 'VERIFICATION_TIME' })
   verificationTime: number;
 
-  @Column('varchar', { nullable: true, name: 'phone_verify_code' })
+  @Column('varchar', { nullable: true, name: 'PHONE_VERIFY_CODE' })
   phoneVerifyCode: string;
 
   @Column({
@@ -120,10 +120,10 @@ export class User extends BaseEntity {
   })
   relatedUrl: string;
 
-  @Column('varchar', { length: 36, nullable: true, name: 'create_by' })
+  @Column('varchar', { length: 36, nullable: true, name: 'CREATE_BY' })
   createBy: string;
 
-  @Column('varchar', { length: 36, nullable: true, name: 'modify_by' })
+  @Column('varchar', { length: 36, nullable: true, name: 'MODIFY_BY' })
   modifyBy: string;
 
   @Column('char', {
@@ -136,30 +136,30 @@ export class User extends BaseEntity {
   @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
-    name: 'created_at',
+    name: 'CREATED_AT',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
     nullable: true,
-    name: 'updated_at',
+    name: 'UPDATED_AT',
   })
   updatedAt: Date;
 
   @ManyToOne(() => Role, (role) => role.users)
-  @JoinColumn({ name: 'role_id', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'ROLE_ID', referencedColumnName: 'id' })
   role: Role;
 
   @ManyToOne(() => Province, (province) => province.users)
-  @JoinColumn({ name: 'province_id', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'PROVINCE_ID', referencedColumnName: 'id' })
   province: Province;
 
   @ManyToOne(() => District, (district) => district.users)
-  @JoinColumn({ name: 'district_id', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'DISTRICT_ID', referencedColumnName: 'id' })
   district: District;
 
   @ManyToOne(() => Ward, (ward) => ward.users)
-  @JoinColumn({ name: 'ward_id', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'WARD_ID', referencedColumnName: 'id' })
   ward: Ward;
 
   @OneToMany(() => Post, (post) => post.user)

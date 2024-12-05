@@ -2,13 +2,13 @@ import { IsNotEmpty } from "class-validator";
 
 export class PushNotificationInput {
     @IsNotEmpty()
-    userId: string;
+    userRid: string;
 
     @IsNotEmpty()
     title: string;
 
     @IsNotEmpty()
-    itemId: string;
+    itemRid: string;
 
     @IsNotEmpty()
     content: string;

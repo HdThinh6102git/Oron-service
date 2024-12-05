@@ -466,6 +466,8 @@ export class PostService {
       where: { id: postId, deletedAt: IsNull() },
       relations: ['user', 'category'],
     });
+    //Get related creator data
+    
     if (!post) {
       throw new NotFoundException({
         error: true,

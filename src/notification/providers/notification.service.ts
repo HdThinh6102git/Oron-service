@@ -53,7 +53,7 @@ export class NotificationService {
         // Get FCM tokens of the user (Notification's Receiver)
         const fcmTokens = await this.fcmTokenRepo.find({
             where: {
-                userRid: input.userId,
+                userRid: input.userRid,
                 sysFlag: '1'
             },
         });

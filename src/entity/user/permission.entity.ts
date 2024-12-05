@@ -11,17 +11,17 @@ export enum PERMISSION_STATUS {
   ACTIVE = 'ACTIVE',
 }
 
-@Entity({ name: 'permission', schema: process.env.DB_SCHEMA })
+@Entity({ name: 'PERMISSION', schema: process.env.DB_SCHEMA })
 export class Permission {
-  @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
+  @PrimaryGeneratedColumn({ type: 'int', name: 'ID' })
   id: number;
 
-  @Column('varchar', { nullable: false, length: 255, name: 'permission_name' })
+  @Column('varchar', { nullable: false, length: 255, name: 'PERMISSION_NAME' })
   name: string;
 
   @Column('varchar', {
     nullable: false,
-    name: 'status',
+    name: 'STATUS',
     default: PERMISSION_STATUS.ACTIVE,
   })
   status: string;
@@ -29,13 +29,13 @@ export class Permission {
   @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
-    name: 'created_at',
+    name: 'CREATED_AT',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
     nullable: true,
-    name: 'updated_at',
+    name: 'UPDATED_AT',
   })
   updatedAt: Date;
 }

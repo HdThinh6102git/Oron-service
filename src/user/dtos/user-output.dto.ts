@@ -68,7 +68,7 @@ export class UserOutputDto {
 
   @Expose()
   @Transform(({ value }) => value?.toISOString().split('T')[0], { toPlainOnly: true })
-  public birthDate: string; // Đổi kiểu thành string để phản ánh định dạng
+  public birthDate: string; 
 
   @Expose()
   public genderCD: string;

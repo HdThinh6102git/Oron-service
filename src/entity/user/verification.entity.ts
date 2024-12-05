@@ -8,36 +8,36 @@ import {
 export enum VERIFICATION_TYPE {
   FORGOT_PASSWORD = 'FORGOT_PASSWORD',
 }
-@Entity({ name: 'verification', schema: process.env.DB_SCHEMA })
+@Entity({ name: 'VERIFICATION', schema: process.env.DB_SCHEMA })
 export class Verification {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('uuid', { name: 'ID' })
   id: string;
 
   @Column('varchar', {
     nullable: false,
-    name: 'verification_code',
+    name: 'VERIFICATION_CODE',
   })
   verificationCode: string;
 
   @Column('varchar', {
     nullable: false,
-    name: 'user_id',
+    name: 'USER_ID',
   })
   userId: string;
 
   @Column('varchar', {
     nullable: false,
-    name: 'type',
+    name: 'TYPE',
   })
   type: string;
 
-  @Column({ type: 'numeric', nullable: true, name: 'verification_time' })
+  @Column({ type: 'numeric', nullable: true, name: 'VERIFICATION_TIME' })
   verificationTime: number;
 
   @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
-    name: 'created_at',
+    name: 'CREATED_AT',
   })
   createdAt: Date;
 }

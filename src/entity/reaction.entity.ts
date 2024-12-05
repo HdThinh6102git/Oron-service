@@ -14,29 +14,29 @@ export enum REACTION_TYPE {
   HAHA = 2,
   ANGRY = 3,
 }
-@Entity({ name: 'reaction', schema: process.env.DB_SCHEMA })
+@Entity({ name: 'REACTION', schema: process.env.DB_SCHEMA })
 export class Reaction {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('uuid', { name: 'ID' })
   id: string;
 
   @Column('numeric', {
     nullable: false,
-    name: 'type',
+    name: 'TYPE',
   })
   type: number;
 
   @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
-    name: 'created_at',
+    name: 'CREATED_AT',
   })
   createdAt: Date;
 
   @ManyToOne(() => User, (user) => user.reactions)
-  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'USER_ID', referencedColumnName: 'id' })
   user: User;
 
   @ManyToOne(() => Post, (post) => post.reactions)
-  @JoinColumn({ name: 'post_id', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'POST_ID', referencedColumnName: 'id' })
   post: Post;
 }

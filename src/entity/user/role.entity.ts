@@ -16,17 +16,17 @@ export enum ROLE_STATUS {
   ACTIVE = 'ACTIVE',
 }
 
-@Entity({ name: 'role', schema: process.env.DB_SCHEMA })
+@Entity({ name: 'ROLE', schema: process.env.DB_SCHEMA })
 export class Role {
-  @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
+  @PrimaryGeneratedColumn({ type: 'int', name: 'ID' })
   id: number;
 
-  @Column('varchar', { nullable: false, name: 'role_name' })
+  @Column('varchar', { nullable: false, name: 'ROLE_NAME' })
   name: string;
 
   @Column('varchar', {
     nullable: false,
-    name: 'status',
+    name: 'STATUS',
     default: ROLE_STATUS.ACTIVE,
   })
   status: string;
@@ -34,13 +34,13 @@ export class Role {
   @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
-    name: 'created_at',
+    name: 'CREATED_AT',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
     nullable: true,
-    name: 'updated_at',
+    name: 'UPDATED_AT',
   })
   updatedAt: Date;
 

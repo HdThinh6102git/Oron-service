@@ -15,83 +15,83 @@ export enum COMMENT_STATUS {
   ACTIVE = 1,
 }
 
-@Entity({ name: 'comment', schema: process.env.DB_SCHEMA })
+@Entity({ name: 'COMMENT', schema: process.env.DB_SCHEMA })
 export class Comment {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('uuid', { name: 'ID' })
   id: string;
 
   @Column('text', {
     nullable: false,
-    name: 'description',
+    name: 'DESCRIPTION',
   })
   description: string;
 
   @Column('numeric', {
     nullable: false,
-    name: 'status',
+    name: 'STATUS',
     default: COMMENT_STATUS.ACTIVE,
   })
   status: number;
 
   // Add to column in entity used for output values
   
-  @Column('uuid', { name: 'user_id' })
+  @Column('uuid', { name: 'USER_ID' })
   public userId: string;
 
-  @Column('uuid', { name: 'post_id' })
+  @Column('uuid', { name: 'POST_ID' })
   public postId: string;
 
   @Column('varchar', {
     nullable: true,
-    name: 'parent_id',
+    name: 'PARENT_ID',
   })
   parentId: string;
 
   @Column('numeric', {
     nullable: true,
-    name: 'level',
+    name: 'LEVEL',
   })
   level: number;
 
   @Column('varchar', {
     length: 36,
     nullable: true,
-    name: 'create_by',
+    name: 'CREATE_BY',
   })
   createBy: string;
 
   @Column('varchar', {
     length: 36,
     nullable: true,
-    name: 'modify_by',
+    name: 'MODIFY_BY',
   })
   modifyBy: string;
 
   @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
-    name: 'created_at',
+    name: 'CREATED_AT',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
     nullable: true,
-    name: 'updated_at',
+    name: 'UPDATED_AT',
   })
   updatedAt: Date;
 
   @Column('char', {
     length: 1,
     nullable: true,
-    name: 'sys_flag',
+    name: 'SYS_FLAG',
   })
   sysFlag: string;
 
   @ManyToOne(() => Post, (post) => post.comments)
-  @JoinColumn({ name: 'post_id', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'POST_ID', referencedColumnName: 'id' })
   post: Post;
 
   @ManyToOne(() => User, (user) => user.comments)
-  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'USER_ID', referencedColumnName: 'id' })
   user: User;
 }

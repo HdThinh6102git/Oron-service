@@ -9,33 +9,33 @@ import {
 } from 'typeorm';
 import { User } from '../user.entity';
 
-@Entity({ name: 'province', schema: process.env.DB_SCHEMA })
+@Entity({ name: 'PROVINCE', schema: process.env.DB_SCHEMA })
 export class Province {
-  @PrimaryColumn('varchar', { nullable: false, name: 'id' })
+  @PrimaryColumn('varchar', { nullable: false, name: 'ID' })
   id: string;
 
-  @Column('varchar', { nullable: false, name: 'name' })
+  @Column('varchar', { nullable: false, name: 'NAME' })
   name: string;
 
-  @Column('varchar', { nullable: false, name: 'level' })
+  @Column('varchar', { nullable: false, name: 'LEVEL' })
   level: string;
 
   @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
-    name: 'created_at',
+    name: 'CREATED_AT',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
     nullable: true,
-    name: 'updated_at',
+    name: 'UPDATED_AT',
   })
   updatedAt: Date;
 
   @DeleteDateColumn({
     nullable: true,
-    name: 'deleted_at',
+    name: 'DELETED_AT',
   })
   deletedAt: Date;
 
