@@ -94,7 +94,6 @@ export class RenameAllExistingTablesToBeUpperCase1733305410054 implements Migrat
         await queryRunner.renameColumn('USER', 'phone_verify_code', 'PHONE_VERIFY_CODE');
         await queryRunner.renameColumn('USER', 'create_by', 'CREATE_BY');
         await queryRunner.renameColumn('USER', 'modify_by', 'MODIFY_BY');
-        await queryRunner.renameColumn('USER', 'sys_flag', 'SYS_FLAG');
         await queryRunner.renameColumn('USER', 'created_at', 'CREATED_AT');
         await queryRunner.renameColumn('USER', 'updated_at', 'UPDATED_AT');
         await queryRunner.renameColumn('USER', 'role_id', 'ROLE_ID');
@@ -326,9 +325,6 @@ export class RenameAllExistingTablesToBeUpperCase1733305410054 implements Migrat
         await queryRunner.renameColumn('user', 'EMAIL_VERIFY_CODE', 'email_verify_code');
         await queryRunner.renameColumn('user', 'VERIFICATION_TIME', 'verification_time');
         await queryRunner.renameColumn('user', 'PHONE_VERIFY_CODE', 'phone_verify_code');
-        await queryRunner.renameColumn('user', 'BIRTH_DATE', 'birth_date');
-        await queryRunner.renameColumn('user', 'GENDER_CD', 'gender_cd');
-        await queryRunner.renameColumn('user', 'RELATED_URL', 'related_url');
         await queryRunner.renameColumn('user', 'CREATE_BY', 'create_by');
         await queryRunner.renameColumn('user', 'MODIFY_BY', 'modify_by');
         await queryRunner.renameColumn('user', 'CREATED_AT', 'created_at');
