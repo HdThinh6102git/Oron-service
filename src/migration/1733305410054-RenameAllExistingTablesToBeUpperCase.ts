@@ -92,9 +92,6 @@ export class RenameAllExistingTablesToBeUpperCase1733305410054 implements Migrat
         await queryRunner.renameColumn('USER', 'email_verify_code', 'EMAIL_VERIFY_CODE');
         await queryRunner.renameColumn('USER', 'verification_time', 'VERIFICATION_TIME');
         await queryRunner.renameColumn('USER', 'phone_verify_code', 'PHONE_VERIFY_CODE');
-        await queryRunner.renameColumn('USER', 'birth_date', 'BIRTH_DATE');
-        await queryRunner.renameColumn('USER', 'gender_cd', 'GENDER_CD');
-        await queryRunner.renameColumn('USER', 'related_url', 'RELATED_URL');
         await queryRunner.renameColumn('USER', 'create_by', 'CREATE_BY');
         await queryRunner.renameColumn('USER', 'modify_by', 'MODIFY_BY');
         await queryRunner.renameColumn('USER', 'sys_flag', 'SYS_FLAG');

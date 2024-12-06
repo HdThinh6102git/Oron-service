@@ -1,7 +1,6 @@
 import {
   Column,
   CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   OneToMany,
   PrimaryColumn,
@@ -20,24 +19,42 @@ export class Province {
   @Column('varchar', { nullable: false, name: 'LEVEL' })
   level: string;
 
-  @CreateDateColumn({
-    nullable: false,
-    default: () => 'CURRENT_TIMESTAMP',
-    name: 'CREATED_AT',
+  @Column('varchar', {
+    length: 36,
+    nullable: true,
+    name: 'CREATE_BY',
   })
-  createdAt: Date;
+  createBy: string;
+
+  @Column('varchar', {
+    length: 36,
+    nullable: true,
+    name: 'MODIFY_BY',
+  })
+  modifyBy: string;
+
+  @CreateDateColumn({
+    type: 'timestamp',
+    nullable: true,
+    name: 'CREATE_DATE',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createDate: Date;
 
   @UpdateDateColumn({
+    type: 'timestamp',
     nullable: true,
-    name: 'UPDATED_AT',
+    name: 'MODIFY_DATE',
+    onUpdate: 'CURRENT_TIMESTAMP',
   })
-  updatedAt: Date;
+  modifyDate: Date;
 
-  @DeleteDateColumn({
+  @Column('char', {
+    length: 1,
     nullable: true,
-    name: 'DELETED_AT',
+    name: 'SYS_FLAG',
   })
-  deletedAt: Date;
+  sysFlag: string;
 
   @OneToMany(() => User, (user) => user.province)
   users: User[];
