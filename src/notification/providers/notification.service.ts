@@ -47,36 +47,47 @@ export class NotificationService {
     };
 
     public async pushNotification(
-        userId: string, 
+        userId: string,
         input: PushNotificationInput
     ): Promise<BaseApiResponseWithoutData> {
-        // Get FCM tokens of the user (Notification's Receiver)
+        // Lấy danh sách token FCM của user
         const fcmTokens = await this.fcmTokenRepo.find({
             where: {
                 userRid: input.userRid,
-                sysFlag: '1'
+                sysFlag: '1',
             },
         });
     
-        // Save notification info
+        // Lưu thông tin thông báo
         input.createBy = userId;
         input.modifyBy = userId;
         input.sysFlag = '1';
         await this.notificationRepo.save(input);
     
-        // Loop and push notification for all active FCM tokens of the user
+        // Kiểm tra token
+        if (!fcmTokens || fcmTokens.length === 0) {
+            return {
+                error: true,
+                message: MESSAGES.NO_FCM_TOKENS_FOUND,
+                code: 1,
+            };
+        }
+    
+        // Gửi thông báo cho từng token
         try {
             for (const tokenData of fcmTokens) {
-                const token = tokenData.deviceToken; 
-                await firebase
-                    .messaging()
-                    .send({
+                const token = tokenData.deviceToken;
+                try {
+                    await firebase.messaging().send({
                         notification: {
                             title: input.title,
                             body: input.content,
                         },
                         token: token,
-                        data: {},
+                        data: {
+                            // Các dữ liệu thêm nếu cần
+                            userRid: input.userRid,
+                        },
                         android: {
                             priority: 'high',
                             notification: {
@@ -90,24 +101,40 @@ export class NotificationService {
                             },
                             payload: {
                                 aps: {
-                                    contentAvailable: true,
+                                    alert: {
+                                        title: input.title,
+                                        body: input.content,
+                                    },
                                     sound: 'default',
                                 },
                             },
                         },
-                    })
-                    .catch((error: any) => {
-                        console.error(`Failed to send notification to token ${token}:`, error);
+                        webpush: {
+                            headers: {
+                                TTL: '4500', // Thời gian sống của thông báo
+                            },
+                            // Không cần thêm nội dung `notification` vào đây vì đã có `notification` chính
+                        },
                     });
+                } catch (error) {
+                    console.error(`Failed to send notification to token ${token}:`, error);
+                }
             }
         } catch (error) {
-            console.log("Error in sending push notifications:", error);
+            console.error("Error in sending push notifications:", error);
+            return {
+                error: true,
+                message: MESSAGES.PUSH_NOTIFICATION_FAILED,
+                code: 2,
+            };
         }
+    
         return {
-            error: false,           
-            message: MESSAGES.PUSH_NOTIFICATION_SUCCESSFULLY, 
-            code: 0                 
+            error: false,
+            message: MESSAGES.PUSH_NOTIFICATION_SUCCESSFULLY,
+            code: 0,
         };
-    };
+    }
+    
     
 }

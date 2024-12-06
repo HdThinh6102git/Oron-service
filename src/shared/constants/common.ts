@@ -72,9 +72,11 @@ export const MESSAGES = {
   POSITION_NAME_EXIST: 'The position name existed',
   POSITION_NOT_EXIST: 'The position does not exist',
   PUSH_NOTIFICATION_SUCCESSFULLY: 'Push notification successfully',
+  PUSH_NOTIFICATION_FAILED: 'Push notification failed',
   BANNER_NOT_EXIST: 'The banner does not exist',
   CONTRACT_NOT_EXIST: 'The contract does not exist',
-  CLIENT_NOT_EXIST: 'The client does not exist'
+  CLIENT_NOT_EXIST: 'The client does not exist',
+  NO_FCM_TOKENS_FOUND: 'No FCM Tokens Found'
 };
 export const MAIL_TEMPLATE = {
   VERIFY_EMAIL_TEMPLATE: 'verify-email',
