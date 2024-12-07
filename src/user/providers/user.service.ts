@@ -419,6 +419,7 @@ export class UserService {
       const userWithPhoneExist = await this.userRepository.findOne({
         where: {
           phoneNumber: input.phoneNumber,
+          id: Not(userId),
           sysFlag: '1'
         },
       });
