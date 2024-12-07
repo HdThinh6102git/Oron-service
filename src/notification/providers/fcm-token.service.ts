@@ -23,6 +23,7 @@ export class FcmTokenService {
       input.createBy = userId
       input.modifyBy = userId
       input.sysFlag = '1'
+      input.latestActiveDate = new Date();
       const fcmToken = await this.fcmTokenRepo.save(input);
       const fcmTokenOutput = plainToInstance(FcmTokenOutput, {
         user_rid: fcmToken.userRid,

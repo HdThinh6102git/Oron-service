@@ -12,4 +12,6 @@ export class CreateFcmTokenInput {
     
     sysFlag: string;
 
+    latestActiveDate: Date;
+
 }
