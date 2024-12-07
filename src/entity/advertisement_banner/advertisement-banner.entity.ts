@@ -6,49 +6,49 @@ import {
     UpdateDateColumn,
   } from 'typeorm';
   
-  @Entity({ name: 'ADVERTISEMENT_BANNER' })
+  @Entity({ name: 'advertisement_banner' })
   export class AdvertisementBanner {
-    @PrimaryGeneratedColumn('uuid', { name: 'ID' })
+    @PrimaryGeneratedColumn('uuid')
     id: string;
   
     @Column('varchar', {
       length: 255,
       nullable: false,
-      name: 'BANNER_NAME',
+      name: 'banner_name',
     })
     bannerName: string;
   
     @Column('text', {
       nullable: true,
-      name: 'REDIRECT_URL',
+      name: 'redirect_url',
     })
     redirectUrl: string;
   
     @Column('varchar', {
       length: 20,
       nullable: true,
-      name: 'STATUS_CD',
+      name: 'status_cd',
     })
     statusCd: string;
   
     @Column('varchar', {
       length: 36,
       nullable: true,
-      name: 'CREATE_BY',
+      name: 'create_by',
     })
     createBy: string;
   
     @Column('varchar', {
       length: 36,
       nullable: true,
-      name: 'MODIFY_BY',
+      name: 'modify_by',
     })
     modifyBy: string;
   
     @CreateDateColumn({
       type: 'timestamp',
       nullable: true,
-      name: 'CREATE_DATE',
+      name: 'create_date',
       default: () => 'CURRENT_TIMESTAMP',
     })
     createDate: Date;
@@ -56,7 +56,7 @@ import {
     @UpdateDateColumn({
       type: 'timestamp',
       nullable: true,
-      name: 'MODIFY_DATE',
+      name: 'modify_date',
       onUpdate: 'CURRENT_TIMESTAMP',
     })
     modifyDate: Date;
@@ -64,7 +64,7 @@ import {
     @Column('char', {
       length: 1,
       nullable: true,
-      name: 'SYS_FLAG',
+      name: 'sys_flag',
     })
     sysFlag: string;
   }

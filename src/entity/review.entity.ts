@@ -15,48 +15,48 @@ export enum REVIEW_STATUS {
   ACTIVE = 1,
 }
 
-@Entity({ name: 'REVIEW', schema: process.env.DB_SCHEMA })
+@Entity({ name: 'review', schema: process.env.DB_SCHEMA })
 export class Review {
-  @PrimaryGeneratedColumn('uuid', { name: 'ID' })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('text', {
     nullable: false,
-    name: 'DESCRIPTION',
+    name: 'description',
   })
   description: string;
 
   @Column('numeric', {
     nullable: false,
-    name: 'STATUS',
+    name: 'status',
     default: REVIEW_STATUS.ACTIVE,
   })
   status: number;
 
   @Column('numeric', {
     nullable: true,
-    name: 'NUMBER_STAR',
+    name: 'number_star',
   })
   numberStar: number;
 
   @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
-    name: 'CREATED_AT',
+    name: 'created_at',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
     nullable: true,
-    name: 'UPDATED_AT',
+    name: 'updated_at',
   })
   updatedAt: Date;
 
   @ManyToOne(() => Post, (post) => post.reviews)
-  @JoinColumn({ name: 'POST_ID', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'post_id', referencedColumnName: 'id' })
   post: Post;
 
   @ManyToOne(() => User, (user) => user.reviews)
-  @JoinColumn({ name: 'USER_ID', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   user: User;
 }

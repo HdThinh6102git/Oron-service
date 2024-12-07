@@ -15,82 +15,82 @@ import {
     USER_CANCELLED_APPROVED_BANNER = '6'
   }
 
-  @Entity({ name: 'RENTAL_CONTRACT' })
+  @Entity({ name: 'rental_contract' })
   export class RentalContract {
-    @PrimaryGeneratedColumn('uuid', { name: 'ID' })
+    @PrimaryGeneratedColumn('uuid')
     id: string;
   
     @Column('varchar', {
       length: 36,
       nullable: false,
-      name: 'CLIENT_RID',
+      name: 'client_rid',
     })
     clientRid: string;
   
     @Column('varchar', {
       length: 36,
       nullable: false,
-      name: 'POSITION_RID',
+      name: 'position_rid',
     })
     positionRid: string;
   
     @Column('varchar', {
       length: 36,
       nullable: false,
-      name: 'BANNER_RID',
+      name: 'banner_rid',
     })
     bannerRid: string;
   
     @Column('date', {
       nullable: true,
-      name: 'START_DATE',
+      name: 'start_date',
     })
     startDate: Date;
   
     @Column('date', {
       nullable: true,
-      name: 'END_DATE',
+      name: 'end_date',
     })
     endDate: Date;
   
     @Column('double precision', {
       nullable: true,
-      name: 'TOTAL_COST',
+      name: 'total_cost',
     })
     totalCost: number;
   
     @Column('varchar', {
       length: 20,
       nullable: true,
-      name: 'STATUS_CD',
+      name: 'status_cd',
     })
     statusCd: string;
 
     @Column('varchar', {
       length: 255,
       nullable: true,
-      name: 'REJECT_REASON',
+      name: 'reject_reason',
     })
     rejectReason: string;
   
     @Column('varchar', {
       length: 36,
       nullable: true,
-      name: 'CREATE_BY',
+      name: 'create_by',
     })
     createBy: string;
   
     @Column('varchar', {
       length: 36,
       nullable: true,
-      name: 'MODIFY_BY',
+      name: 'modify_by',
     })
     modifyBy: string;
   
     @CreateDateColumn({
       type: 'timestamp',
       nullable: true,
-      name: 'CREATE_DATE',
+      name: 'create_date',
       default: () => 'CURRENT_TIMESTAMP',
     })
     createDate: Date;
@@ -98,7 +98,7 @@ import {
     @UpdateDateColumn({
       type: 'timestamp',
       nullable: true,
-      name: 'MODIFY_DATE',
+      name: 'modify_date',
       onUpdate: 'CURRENT_TIMESTAMP',
     })
     modifyDate: Date;
@@ -106,7 +106,7 @@ import {
     @Column('char', {
       length: 1,
       nullable: true,
-      name: 'SYS_FLAG',
+      name: 'sys_flag',
     })
     sysFlag: string;
   }

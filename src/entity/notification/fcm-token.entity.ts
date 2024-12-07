@@ -1,49 +1,49 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity({ name: 'FCM_TOKEN' })
+@Entity({ name: 'fcm_token' })
 export class FcmToken {
-    @PrimaryGeneratedColumn('uuid', { name: 'ID' })
+    @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @Column('varchar', {
         length: 255,
         nullable: false,
-        name: 'DEVICE_TOKEN',
+        name: 'device_token',
     })
     deviceToken: string;
 
     @Column('varchar', {
         length: 36,
         nullable: false,
-        name: 'USR_RID',
+        name: 'usr_rid',
     })
     userRid: string;
 
     @Column({
         type: 'timestamp',
         nullable: false,
-        name: 'LATEST_ACTIVE_DATE',
+        name: 'latest_active_date',
     })
     latestActiveDate: Date;
 
     @Column('varchar', {
         length: 36,
         nullable: true,
-        name: 'CREATE_BY',
+        name: 'create_by',
     })
     createBy: string;
     
     @Column('varchar', {
         length: 36,
         nullable: true,
-        name: 'MODIFY_BY',
+        name: 'modify_by',
     })
     modifyBy: string;
     
     @CreateDateColumn({
         type: 'timestamp',
         nullable: true,
-        name: 'CREATE_DATE',
+        name: 'create_date',
         default: () => 'CURRENT_TIMESTAMP',
     })
     createDate: Date;
@@ -51,7 +51,7 @@ export class FcmToken {
     @UpdateDateColumn({
         type: 'timestamp',
         nullable: true,
-        name: 'MODIFY_DATE',
+        name: 'modify_date',
         onUpdate: 'CURRENT_TIMESTAMP',
     })
     modifyDate: Date;
@@ -59,7 +59,7 @@ export class FcmToken {
     @Column('char', {
         length: 1,
         nullable: true,
-        name: 'SYS_FLAG',
+        name: 'sys_flag',
     })
     sysFlag: string;
 }

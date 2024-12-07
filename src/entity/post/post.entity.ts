@@ -28,105 +28,105 @@ export enum FINAL_POST_REGISTRATION_STATUS {
   RECEIVED = 4,
 }
 
-@Entity({ name: 'POST', schema: process.env.DB_SCHEMA })
+@Entity({ name: 'post', schema: process.env.DB_SCHEMA })
 export class Post {
-  @PrimaryGeneratedColumn('uuid',{ name: 'ID' })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('text', {
     nullable: false,
-    name: 'DESCRIPTION',
+    name: 'description',
   })
   description: string;
 
   @Column('varchar', {
     nullable: true,
-    name: 'IMAGE_URL',
+    name: 'image_url',
   })
   imageURL: string;
 
   @Column('varchar', {
     nullable: true,
-    name: 'VIDEO_URL',
+    name: 'video_url',
   })
   videoURL: string;
 
   @Column('numeric', {
     nullable: false,
-    name: 'STATUS',
+    name: 'status',
     default: POST_STATUS.PUBLIC,
   })
   status: number;
 
   @Column('numeric', {
     nullable: false,
-    name: 'FINAL_REGISTRATION_STATUS',
+    name: 'final_registration_status',
     default: FINAL_POST_REGISTRATION_STATUS.AVAILABLE,
   })
   finalRegistrationStatus: number;
 
   @Column('varchar', {
     nullable: true,
-    name: 'PROVINCE_ID',
+    name: 'province_id',
   })
   provinceId: string;
 
   @Column('varchar', {
     nullable: true,
-    name: 'DISTRICT_ID',
+    name: 'district_id',
   })
   districtId: string;
 
   @Column('varchar', {
     nullable: true,
-    name: 'WARD_ID',
+    name: 'ward_id',
   })
   wardId: string;
 
-  @Column('text', { nullable: true, name: 'FULL_ADDRESS' })
+  @Column('text', { nullable: true, name: 'full_address' })
   fullAddress: string;
 
-  @Column('text', { nullable: true, name: 'SPECIFIC_ADDRESS' })
+  @Column('text', { nullable: true, name: 'specific_address' })
   specificAddress: string;
 
   @Column('varchar', {
     nullable: true,
-    name: 'RECEIVER_ID',
+    name: 'receiver_id',
   })
   receiverId: string;
 
-  @Column('varchar', { length: 36, nullable: true, name: 'CREATE_BY' })
+  @Column('varchar', { length: 36, nullable: true, name: 'create_by' })
   createBy: string;
 
-  @Column('varchar', { length: 36, nullable: true, name: 'MODIFY_BY' })
+  @Column('varchar', { length: 36, nullable: true, name: 'modify_by' })
   modifyBy: string;
 
   @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
-    name: 'CREATED_AT',
+    name: 'created_at',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
     nullable: true,
-    name: 'UPDATED_AT',
+    name: 'updated_at',
   })
   updatedAt: Date;
 
   @Column({
     nullable: true,
-    name: 'DELETED_AT',
+    name: 'deleted_at',
     type: 'timestamptz',
   })
   deletedAt: Date | null;
 
   @ManyToOne(() => User, (user) => user.posts)
-  @JoinColumn({ name: 'USER_ID', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   user: User;
 
   @ManyToOne(() => Category, (category) => category.posts)
-  @JoinColumn({ name: 'CATEGORY_ID', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'category_id', referencedColumnName: 'id' })
   category: Category;
 
   @OneToMany(() => Comment, (comment) => comment.post)

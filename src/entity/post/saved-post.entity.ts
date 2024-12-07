@@ -8,23 +8,23 @@ import {
 import { User } from '../user/user.entity';
 import { Post } from './post.entity';
 
-@Entity({ name: 'SAVED_POST', schema: process.env.DB_SCHEMA })
+@Entity({ name: 'saved_post', schema: process.env.DB_SCHEMA })
 export class SavedPost {
-  @PrimaryGeneratedColumn('uuid', { name: 'ID' })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @CreateDateColumn({
     nullable: false,
     default: () => 'DATE(CURRENT_TIMESTAMP)',
-    name: 'CREATED_AT',
+    name: 'created_at',
   })
   createdAt: Date;
 
   @ManyToOne(() => User, (user) => user.savedPosts)
-  @JoinColumn({ name: 'USER_ID', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   user: User;
 
   @ManyToOne(() => Post, (post) => post.savedPosts)
-  @JoinColumn({ name: 'POST_ID', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'post_id', referencedColumnName: 'id' })
   post: Post;
 }

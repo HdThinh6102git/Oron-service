@@ -6,64 +6,64 @@ import {
     UpdateDateColumn,
   } from 'typeorm';
   
-  @Entity({ name: 'CLIENT' })
+  @Entity({ name: 'client' })
   export class Client {
-    @PrimaryGeneratedColumn('uuid', { name: 'ID' })
+    @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @Column('varchar', {
       length: 36,
       nullable: false,
-      name: 'USER_RID',
+      name: 'user_rid',
     })
     userRid: string;
   
     @Column('varchar', {
       length: 255,
       nullable: false,
-      name: 'NAME',
+      name: 'name',
     })
     name: string;
   
     @Column('varchar', {
       length: 50,
       nullable: false,
-      name: 'CONTACT_NUM',
+      name: 'contact_num',
     })
     contactNum: string;
   
     @Column('varchar', {
       length: 255,
       nullable: false,
-      name: 'EMAIL_ADDRESS',
+      name: 'email_address',
     })
     emailAddress: string;
   
     @Column('varchar', {
       length: 50,
       nullable: false,
-      name: 'PAYMENT_METHOD',
+      name: 'payment_method',
     })
     paymentMethod: string;
   
     @Column('varchar', {
       length: 36,
       nullable: true,
-      name: 'CREATE_BY',
+      name: 'create_by',
     })
     createBy: string;
   
     @Column('varchar', {
       length: 36,
       nullable: true,
-      name: 'MODIFY_BY',
+      name: 'modify_by',
     })
     modifyBy: string;
   
     @CreateDateColumn({
       type: 'timestamp',
       nullable: true,
-      name: 'CREATE_DATE',
+      name: 'create_date',
       default: () => 'CURRENT_TIMESTAMP',
     })
     createDate: Date;
@@ -71,7 +71,7 @@ import {
     @UpdateDateColumn({
       type: 'timestamp',
       nullable: true,
-      name: 'MODIFY_DATE',
+      name: 'modify_date',
       onUpdate: 'CURRENT_TIMESTAMP',
     })
     modifyDate: Date;
@@ -79,7 +79,7 @@ import {
     @Column('char', {
       length: 1,
       nullable: true,
-      name: 'SYS_FLAG',
+      name: 'sys_flag',
     })
     sysFlag: string;
   }

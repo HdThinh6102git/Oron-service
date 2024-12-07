@@ -14,35 +14,35 @@ export enum USER_CONNECTION_TYPE {
   BE_FRIEND = 1,
 }
 
-@Entity({ name: 'USER_CONNECTION', schema: process.env.DB_SCHEMA })
+@Entity({ name: 'user_connection', schema: process.env.DB_SCHEMA })
 export class UserConnection {
-  @PrimaryGeneratedColumn('uuid', { name: 'ID' })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('numeric', {
     nullable: false,
-    name: 'TYPE',
+    name: 'type',
   })
   type: number;
 
   @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
-    name: 'CREATED_AT',
+    name: 'created_at',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
     nullable: true,
-    name: 'UPDATED_AT',
+    name: 'updated_at',
   })
   updatedAt: Date;
 
   @ManyToOne(() => User, (user) => user.followerConnections)
-  @JoinColumn({ name: 'FOLLOWER_ID', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'follower_id', referencedColumnName: 'id' })
   follower: User;
 
   @ManyToOne(() => User, (user) => user.followedConnections)
-  @JoinColumn({ name: 'FOLLOWED_ID', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'followed_id', referencedColumnName: 'id' })
   followed: User;
 }

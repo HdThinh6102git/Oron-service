@@ -6,67 +6,67 @@ import {
     UpdateDateColumn,
   } from 'typeorm';
   
-  @Entity({ name: 'AD_PERFORMANCE' })
+  @Entity({ name: 'ad_performance' })
   export class AdPerformance {
-    @PrimaryGeneratedColumn('uuid', { name: 'ID' })
+    @PrimaryGeneratedColumn('uuid')
     id: string;
   
     @Column('varchar', {
       length: 36,
       nullable: false,
-      name: 'BANNER_RID',
+      name: 'banner_rid',
     })
     bannerRid: string;
   
     @Column('varchar', {
       length: 36,
       nullable: false,
-      name: 'CONTRACT_RID',
+      name: 'contract_rid',
     })
     contractRid: string;
   
     @Column('date', {
       nullable: true,
-      name: 'DAY_OF_RECORDED',
+      name: 'day_of_recorded',
     })
     dayOfRecorded: Date;
   
     @Column('int', {
       nullable: true,
-      name: 'IMPRESSIONS',
+      name: 'impressions',
     })
     impressions: number;
   
     @Column('int', {
       nullable: true,
-      name: 'CLICKS',
+      name: 'clicks',
     })
     clicks: number;
   
     @Column('int', {
       nullable: true,
-      name: 'ACTIONS',
+      name: 'actions',
     })
     actions: number;
   
     @Column('varchar', {
       length: 36,
       nullable: true,
-      name: 'CREATE_BY',
+      name: 'create_by',
     })
     createBy: string;
   
     @Column('varchar', {
       length: 36,
       nullable: true,
-      name: 'MODIFY_BY',
+      name: 'modify_by',
     })
     modifyBy: string;
   
     @CreateDateColumn({
       type: 'timestamp',
       nullable: true,
-      name: 'CREATE_DATE',
+      name: 'create_date',
       default: () => 'CURRENT_TIMESTAMP',
     })
     createDate: Date;
@@ -74,7 +74,7 @@ import {
     @UpdateDateColumn({
       type: 'timestamp',
       nullable: true,
-      name: 'MODIFY_DATE',
+      name: 'modify_date',
       onUpdate: 'CURRENT_TIMESTAMP',
     })
     modifyDate: Date;
@@ -82,7 +82,7 @@ import {
     @Column('char', {
       length: 1,
       nullable: true,
-      name: 'SYS_FLAG',
+      name: 'sys_flag',
     })
     sysFlag: string;
   }

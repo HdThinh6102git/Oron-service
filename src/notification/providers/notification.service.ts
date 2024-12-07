@@ -76,7 +76,13 @@ export class NotificationService {
         // Gửi thông báo cho từng token
         try {
             for (const tokenData of fcmTokens) {
+                
                 const token = tokenData.deviceToken;
+                console.log("token", token, "/n"); 
+
+                console.log("title",input.title, "/n" )
+                console.log("content", input.content, "/n")
+
                 try {
                     await firebase.messaging().send({
                         notification: {

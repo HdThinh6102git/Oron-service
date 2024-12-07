@@ -8,35 +8,35 @@ import {
 } from 'typeorm';
 import { User } from '../user.entity';
 
-@Entity({ name: 'PROVINCE', schema: process.env.DB_SCHEMA })
+@Entity({ name: 'province', schema: process.env.DB_SCHEMA })
 export class Province {
-  @PrimaryColumn('varchar', { nullable: false, name: 'ID' })
+  @PrimaryColumn('varchar', { nullable: false, name: 'id' })
   id: string;
 
-  @Column('varchar', { nullable: false, name: 'NAME' })
+  @Column('varchar', { nullable: false, name: 'name' })
   name: string;
 
-  @Column('varchar', { nullable: false, name: 'LEVEL' })
+  @Column('varchar', { nullable: false, name: 'level' })
   level: string;
 
   @Column('varchar', {
     length: 36,
     nullable: true,
-    name: 'CREATE_BY',
+    name: 'create_by',
   })
   createBy: string;
 
   @Column('varchar', {
     length: 36,
     nullable: true,
-    name: 'MODIFY_BY',
+    name: 'modify_by',
   })
   modifyBy: string;
 
   @CreateDateColumn({
     type: 'timestamp',
     nullable: true,
-    name: 'CREATE_DATE',
+    name: 'create_date',
     default: () => 'CURRENT_TIMESTAMP',
   })
   createDate: Date;
@@ -44,7 +44,7 @@ export class Province {
   @UpdateDateColumn({
     type: 'timestamp',
     nullable: true,
-    name: 'MODIFY_DATE',
+    name: 'modify_date',
     onUpdate: 'CURRENT_TIMESTAMP',
   })
   modifyDate: Date;
@@ -52,7 +52,7 @@ export class Province {
   @Column('char', {
     length: 1,
     nullable: true,
-    name: 'SYS_FLAG',
+    name: 'sys_flag',
   })
   sysFlag: string;
 

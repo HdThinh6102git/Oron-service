@@ -6,10 +6,10 @@ import {
     PrimaryColumn,
   } from 'typeorm';
   
-  @Entity({ name: 'FILE_RELATED_MORPH' })
+  @Entity({ name: 'file_related_morph' })
   export class FileRelatedMorph {
     @PrimaryColumn({
-      name: 'ID',
+      name: 'id',
       type: 'varchar',
       length: 36,
     })
@@ -18,42 +18,42 @@ import {
     @Column('varchar', {
       length: 36,
       nullable: true,
-      name: 'RELATED_RID',
+      name: 'related_rid',
     })
     relatedRid: string;
   
     @Column('varchar', {
       length: 255,
       nullable: true,
-      name: 'RELATED_TYPE',
+      name: 'related_type',
     })
     relatedType: string;
   
     @Column('varchar', {
       length: 36,
       nullable: true,
-      name: 'FILE_RID',
+      name: 'file_rid',
     })
     fileRid: string;
   
     @Column('varchar', {
       length: 36,
       nullable: true,
-      name: 'CREATE_BY',
+      name: 'create_by',
     })
     createBy: string;
   
     @Column('varchar', {
       length: 36,
       nullable: true,
-      name: 'MODIFY_BY',
+      name: 'modify_by',
     })
     modifyBy: string;
   
     @CreateDateColumn({
       type: 'timestamp',
       nullable: true,
-      name: 'CREATE_DATE',
+      name: 'create_date',
       default: () => 'CURRENT_TIMESTAMP',
     })
     createDate: Date;
@@ -61,7 +61,7 @@ import {
     @UpdateDateColumn({
       type: 'timestamp',
       nullable: true,
-      name: 'MODIFY_DATE',
+      name: 'modify_date',
       onUpdate: 'CURRENT_TIMESTAMP',
     })
     modifyDate: Date;
@@ -69,7 +69,7 @@ import {
     @Column('char', {
       length: 1,
       nullable: true,
-      name: 'SYS_FLAG',
+      name: 'sys_flag',
     })
     sysFlag: string;
   }

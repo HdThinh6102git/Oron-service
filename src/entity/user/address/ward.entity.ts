@@ -9,37 +9,37 @@ import {
 } from 'typeorm';
 import { User } from '../user.entity';
 
-@Entity({ name: 'WARD', schema: process.env.DB_SCHEMA })
+@Entity({ name: 'ward', schema: process.env.DB_SCHEMA })
 export class Ward {
-  @PrimaryColumn('varchar', { nullable: false, name: 'ID' })
+  @PrimaryColumn('varchar', { nullable: false, name: 'id' })
   id: string;
 
-  @Column('varchar', { nullable: false, name: 'NAME' })
+  @Column('varchar', { nullable: false, name: 'name' })
   name: string;
 
-  @Column('varchar', { nullable: false, name: 'LEVEL' })
+  @Column('varchar', { nullable: false, name: 'level' })
   level: string;
 
   @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
-    name: 'CREATED_AT',
+    name: 'created_at',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
     nullable: true,
-    name: 'UPDATED_AT',
+    name: 'updated_at',
   })
   updatedAt: Date;
 
   @DeleteDateColumn({
     nullable: true,
-    name: 'DELETED_AT',
+    name: 'deleted_at',
   })
   deletedAt: Date;
 
-  @Column('varchar', { nullable: false, name: 'DISTRICT_ID' })
+  @Column('varchar', { nullable: false, name: 'district_id' })
   districtId: string;
 
   @OneToMany(() => User, (user) => user.ward)

@@ -11,43 +11,43 @@ import { User } from './user/user.entity';
 import { Post } from './post/post.entity';
 import { ReportResponse } from './report-response.entity';
 
-@Entity({ name: 'REPORT', schema: process.env.DB_SCHEMA })
+@Entity({ name: 'report', schema: process.env.DB_SCHEMA })
 export class Report {
-  @PrimaryGeneratedColumn('uuid', { name: 'ID' })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('varchar', {
     nullable: false,
-    name: 'TITLE',
+    name: 'title',
   })
   title: string;
 
   @Column('text', {
     nullable: false,
-    name: 'DESCRIPTION',
+    name: 'description',
   })
   description: string;
 
   @CreateDateColumn({
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
-    name: 'CREATED_AT',
+    name: 'created_at',
   })
   createdAt: Date;
 
   @Column({
     nullable: true,
-    name: 'DELETED_AT',
+    name: 'deleted_at',
     type: 'timestamptz',
   })
   deletedAt: Date | null;
 
   @ManyToOne(() => User, (user) => user.reports)
-  @JoinColumn({ name: 'USER_ID', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   user: User;
 
   @ManyToOne(() => Post, (post) => post.reports)
-  @JoinColumn({ name: 'POST_ID', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'post_id', referencedColumnName: 'id' })
   post: Post;
 
   @OneToMany(() => ReportResponse, (reportResponse) => reportResponse.report)
