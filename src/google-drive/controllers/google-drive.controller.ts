@@ -156,7 +156,7 @@ export class GoogleDriveController {
     let fileInput = new CreateFileInput();
     fileInput.id = uploadedFile.id;
     fileInput.name = uploadedFile.name;
-    fileInput.url = uploadedFile.webViewLink;
+    fileInput.url = uploadedFile.thumbnailLink;
     fileInput.alternativeText = body.alternativeText;
 
     
