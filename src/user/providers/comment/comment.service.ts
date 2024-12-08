@@ -9,19 +9,23 @@ import { ILike, IsNull, Not, Repository } from 'typeorm';
 import { Comment, COMMENT_STATUS } from '#entity/comment.entity';
 import { Post } from '#entity/post/post.entity';
 import { User } from '#entity/user/user.entity';
-import { BaseApiResponse, BasePaginationResponse } from '../../../shared/dtos';
+import { BaseApiResponse, BasePaginationResponse} from '../../../shared/dtos';
 import {
   CommentFilter,
   CommentOutput,
+  CommentUserOutputDto,
   CreateCommentInput,
   UpdateCommentInput,
 } from '../../dtos';
 import { MESSAGES } from '../../../shared/constants';
 import { plainToClass, plainToInstance } from 'class-transformer';
+import { RELATED_TYPE } from '#entity/file';
+import { FileService } from 'src/shared/providers';
 
 @Injectable()
 export class CommentService {
   constructor(
+    private fileService: FileService,
     @InjectRepository(Comment)
     private commentRepo: Repository<Comment>,
     @InjectRepository(Post)
@@ -75,9 +79,15 @@ export class CommentService {
       post: post,
       user: user,
     });
+    //convert output
     const commentOutput = plainToClass(CommentOutput, comment, {
       excludeExtraneousValues: true,
     });
+    //get user profile picture 
+    const imageProfileObject = await this.fileService.getRelatedFile(userId, RELATED_TYPE.USER_PROFILE);
+    if(imageProfileObject){
+      commentOutput.user.profilePic = imageProfileObject;
+    }
     return {
       error: false,
       data: commentOutput,
@@ -104,6 +114,19 @@ export class CommentService {
         code: 4,
       });
     }
+    const user = await this.userRepo.findOne({
+      where: {
+        id: userId,
+      },
+    });
+    if (!user) {
+      throw new NotFoundException({
+        error: true,
+        data: null,
+        message: MESSAGES.NOT_FOUND_USER,
+        code: 4,
+      });
+    }
     //check data input to update
     if (input.description) {
       commentExist.description = input.description;
@@ -119,10 +142,24 @@ export class CommentService {
     //save
     commentExist.modifyBy = userId;
     const updatedComment = await this.commentRepo.save(commentExist);
+    
     //convert to output
     const commentOutput = plainToClass(CommentOutput, updatedComment, {
       excludeExtraneousValues: true,
     });
+
+    //get user info 
+    const userOutput = plainToClass(CommentUserOutputDto, user, {
+      excludeExtraneousValues: true,
+    });
+    commentOutput.user = userOutput
+
+    //get user profile picture 
+    const imageProfileObject = await this.fileService.getRelatedFile(userId, RELATED_TYPE.USER_PROFILE);
+    if(imageProfileObject){
+      commentOutput.user.profilePic = imageProfileObject;
+    }
+
     return {
       error: false,
       data: commentOutput,
@@ -251,7 +288,7 @@ export class CommentService {
         where: { parentId: comment.id, status: COMMENT_STATUS.ACTIVE, sysFlag: '1' },
       });
     
-      // find  userId of oldest hild comment 
+      // find  userId of oldest child comment 
       const oldestChild = await this.commentRepo.findOne({
         where: { parentId: comment.id, status: COMMENT_STATUS.ACTIVE, sysFlag: '1' },
         order: { createdAt: 'ASC' },
@@ -270,6 +307,12 @@ export class CommentService {
         comment.oldestChildOwnerName = "";
       }
       comment.totalChild = childCount;
+
+      //get user profile pic 
+      const imageProfileObject = await this.fileService.getRelatedFile(comment.userId, RELATED_TYPE.USER_PROFILE);
+      if(imageProfileObject){
+        comment.user.profilePic = imageProfileObject;
+      }
     }
     return {
       listData: commentsOutput,
@@ -322,7 +365,13 @@ export class CommentService {
         comment.oldestChildOwnerName = "";
       }
       comment.totalChild = childCount;
+      //get user profile pic 
+      const imageProfileObject = await this.fileService.getRelatedFile(comment.userId, RELATED_TYPE.USER_PROFILE);
+      if(imageProfileObject){
+        comment.user.profilePic = imageProfileObject;
+      }
     }
+    
     return {
       listData: commentsOutput,
       total: count,
@@ -386,4 +435,5 @@ export class CommentService {
       total: count,
     };
   }
+
 }

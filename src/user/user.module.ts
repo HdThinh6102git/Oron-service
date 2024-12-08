@@ -17,6 +17,7 @@ import { Post } from '#entity/post/post.entity';
 import { PostRegistration } from '#entity/post-registration.entity';
 import { UserConnection } from '#entity/user/user-connection.entity';
 import { FileRelatedMorph, File } from '#entity/file';
+import { FileService } from 'src/shared/providers';
 
 @Module({
   imports: [
@@ -51,7 +52,7 @@ import { FileRelatedMorph, File } from '#entity/file';
     ]),
   ],
   controllers: Object.values(controllers),
-  providers: Object.values(providers),
+  providers: [...Object.values(providers), FileService],
   exports: Object.values(providers),
 })
 export class UserModule {}

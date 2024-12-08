@@ -2,8 +2,9 @@ import { FileRelatedMorph, File } from "#entity/file";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { CreateFileInput, CreateFileRelatedMorphInput} from "../dtos";
+import { CreateFileInput, CreateFileRelatedMorphInput, FileOutput} from "../dtos";
 import { v4 as uuidv4 } from 'uuid';
+import { plainToInstance } from "class-transformer";
 
 @Injectable()
 export class FileService{
@@ -39,6 +40,38 @@ export class FileService{
 
     await this.fileRelatedMorphRepo.save(fileRelatedMorphInput);
 
+  }
+
+  public async getRelatedFile(
+    realtedRid: string,
+    relatedType: string,
+  ): Promise<FileOutput | null> {
+    //Get fileRid related file data
+    const fileRelatedMorph = await this.fileRelatedMorphRepo.findOne({
+      where: {
+        relatedRid: realtedRid,
+        relatedType: relatedType,
+        sysFlag: '1'
+      },
+    });
+    let fileObject = null;
+    if (fileRelatedMorph) {
+      const file = await this.fileRepo.findOne({
+        where: {
+          id: fileRelatedMorph.fileRid,
+          sysFlag: '1',
+        },
+      });
+  
+      // Map file to FileOutput if it exists
+      if (file) {
+        fileObject = plainToInstance(FileOutput, {
+          url: file.url,
+          alternativeText: file.alternativeText,
+        });
+      }
+    }
+    return fileObject;
   }
 
 }
