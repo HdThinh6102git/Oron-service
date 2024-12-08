@@ -1,5 +1,5 @@
 import { Expose, Transform, Type } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
+import { FileOutput } from 'src/shared/dtos';
 
 export class UserProfileOutput {
   @Expose()
@@ -23,12 +23,17 @@ export class UserProfileOutput {
   @Expose()
   public email: string;
 
-  @Expose()
-  @ApiProperty()
-  public profilePic: string;
+  // @Expose()
+  // public profilePic: string;
+
+  // @Expose()
+  // public backgroundPic: string;
 
   @Expose()
-  public backgroundPic: string;
+  public profilePic: FileOutput;
+
+  @Expose()
+  public backgroundPic: FileOutput;
 
   @Expose()
   public isVerifyPhone: boolean;

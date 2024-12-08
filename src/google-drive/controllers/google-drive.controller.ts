@@ -8,6 +8,7 @@ import { FileService } from "src/shared/providers";
 import { JwtAuthGuard } from "src/auth/guards";
 import { ReqContext, RequestContext } from "src/shared/request-context";
 import { CreateFileInput, CreateFileRelatedMorphInput } from "src/shared/dtos";
+import { RELATED_TYPE } from "#entity/file";
 
 @Controller('google-drive')
 export class GoogleDriveController {
@@ -120,17 +121,17 @@ export class GoogleDriveController {
     let childFolderName: string | null = null;
   
     switch (body.relatedType) {
-      case 'post-image':
-        childFolderName = 'post-image';
+      case RELATED_TYPE.POST_IMAGE:
+        childFolderName = RELATED_TYPE.POST_IMAGE;
         break;
-      case 'user-profile':
-        childFolderName = 'user-profile';
+      case RELATED_TYPE.USER_PROFILE:
+        childFolderName = RELATED_TYPE.USER_PROFILE;
         break;
-      case 'user-background':
-        childFolderName = 'user-background';
+      case RELATED_TYPE.USER_BACKGROUND:
+        childFolderName = RELATED_TYPE.USER_BACKGROUND;
         break;
-      case 'advertisement-banner':
-        childFolderName = 'advertisement-banner';
+      case RELATED_TYPE.ADVERTISEMENT_BANNER:
+        childFolderName = RELATED_TYPE.ADVERTISEMENT_BANNER;
         break;
       default:
         throw new Error(`Invalid relatedType: ${body.relatedType}`);

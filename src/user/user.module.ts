@@ -16,6 +16,7 @@ import { Reaction } from '#entity/reaction.entity';
 import { Post } from '#entity/post/post.entity';
 import { PostRegistration } from '#entity/post-registration.entity';
 import { UserConnection } from '#entity/user/user-connection.entity';
+import { FileRelatedMorph, File } from '#entity/file';
 
 @Module({
   imports: [
@@ -45,6 +46,8 @@ import { UserConnection } from '#entity/user/user-connection.entity';
       Post,
       PostRegistration,
       UserConnection,
+      FileRelatedMorph,
+      File
     ]),
   ],
   controllers: Object.values(controllers),

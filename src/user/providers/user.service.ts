@@ -35,6 +35,7 @@ import { ROLE } from '../../auth/constants';
 import {
   BaseApiResponse,
   BasePaginationResponse,
+  FileOutput,
   TopUserPaginationResponse,
 } from '../../shared/dtos';
 import {
@@ -44,6 +45,7 @@ import {
 import { isEmpty } from '@nestjs/common/utils/shared.utils';
 import { Post } from '#entity/post/post.entity';
 import { Review } from '#entity/review.entity';
+import { File, FileRelatedMorph, RELATED_TYPE } from '#entity/file';
 @Injectable()
 export class UserService {
   constructor(
@@ -60,6 +62,10 @@ export class UserService {
     private wardRepository: Repository<Ward>,
     @InjectRepository(UserConnection)
     private userConnectionRepo: Repository<UserConnection>,
+    @InjectRepository(File)
+    private fileRepo: Repository<File>,
+    @InjectRepository(FileRelatedMorph)
+    private fileRelatedMorphRepo: Repository<FileRelatedMorph>,
   ) {}
 
   public async create(data: RegisterInput): Promise<User> {
@@ -330,9 +336,66 @@ export class UserService {
       },
     });
     if (!user) throw new UnauthorizedException();
+
+    //Get fileRid related file data profile picture
+    const fileRelatedMorphProfile = await this.fileRelatedMorphRepo.findOne({
+      where: {
+        relatedRid: userId,
+        relatedType: RELATED_TYPE.USER_PROFILE,
+        sysFlag: '1'
+      },
+    });
+    let imageProfileObject = null;
+    if (fileRelatedMorphProfile) {
+      const file = await this.fileRepo.findOne({
+        where: {
+          id: fileRelatedMorphProfile.fileRid,
+          sysFlag: '1',
+        },
+      });
+  
+      // Map file to FileOutput if it exists
+      if (file) {
+        imageProfileObject = plainToInstance(FileOutput, {
+          url: file.url,
+          alternativeText: file.alternativeText,
+        });
+      }
+    }
+    //Get fileRid related file data background picture
+    const fileRelatedMorphBackground = await this.fileRelatedMorphRepo.findOne({
+      where: {
+        relatedRid: userId,
+        relatedType: RELATED_TYPE.USER_BACKGROUND,
+        sysFlag: '1'
+      },
+    });
+    let imageBackgroundObject = null;
+    if (fileRelatedMorphBackground) {
+      const file = await this.fileRepo.findOne({
+        where: {
+          id: fileRelatedMorphBackground.fileRid,
+          sysFlag: '1',
+        },
+      });
+  
+      // Map file to FileOutput if it exists
+      if (file) {
+        imageBackgroundObject = plainToInstance(FileOutput, {
+          url: file.url,
+          alternativeText: file.alternativeText,
+        });
+      }
+    }
     const output = plainToClass(UserProfileOutput, user, {
       excludeExtraneousValues: true,
     });
+    if(imageProfileObject){
+      output.profilePic = imageProfileObject;
+    }
+    if(imageBackgroundObject){
+      output.backgroundPic = imageBackgroundObject;
+    }
     return {
       error: false,
       data: output,

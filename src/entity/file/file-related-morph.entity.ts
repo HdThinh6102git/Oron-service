@@ -6,6 +6,13 @@ import {
     PrimaryColumn,
   } from 'typeorm';
   
+  export enum RELATED_TYPE {
+    POST_IMAGE = 'post-image',
+    USER_PROFILE = 'user-profile',
+    USER_BACKGROUND = 'user-background',
+    ADVERTISEMENT_BANNER = 'advertisement-banner'
+  }
+
   @Entity({ name: 'file_related_morph' })
   export class FileRelatedMorph {
     @PrimaryColumn({
