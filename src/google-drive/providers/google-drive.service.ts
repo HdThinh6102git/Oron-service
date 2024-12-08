@@ -170,12 +170,15 @@ export class GoogleDriveService {
           const response = await this.driveClient.files.create({
             requestBody: fileMetadata,
             media,
-            fields: 'id, name, webViewLink, webContentLink, thumbnailLink',
+            fields: 'id, name, thumbnailLink',
           });
           if(response.data.id){
             await this.setFilePermissions(response.data.id);
           }
-          
+          if (response.data.thumbnailLink) {
+            const resizedThumbnailLink = response.data.thumbnailLink.replace(/=s\d+/, '=w2000-h2000');
+            response.data.thumbnailLink = resizedThumbnailLink;
+          }
     
           // Optionally delete the file from local storage after upload
           fs.unlinkSync(file.path);
