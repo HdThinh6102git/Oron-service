@@ -121,22 +121,22 @@ export class UserService {
       );
     }
     //check phone exist
-    const userWithPhoneExist = await this.userRepository.findOne({
-      where: {
-        phoneNumber: data.phoneNumber,
-        sysFlag: '1'
-      },
-    });
-    if (userWithPhoneExist)
-      throw new HttpException(
-        {
-          error: true,
-          data: null,
-          message: MESSAGES.PHONE_NUMBER_EXISTS,
-          code: 1,
-        },
-        HttpStatus.BAD_REQUEST,
-      );
+    // const userWithPhoneExist = await this.userRepository.findOne({
+    //   where: {
+    //     phoneNumber: data.phoneNumber,
+    //     sysFlag: '1'
+    //   },
+    // });
+    // if (userWithPhoneExist)
+    //   throw new HttpException(
+    //     {
+    //       error: true,
+    //       data: null,
+    //       message: MESSAGES.PHONE_NUMBER_EXISTS,
+    //       code: 1,
+    //     },
+    //     HttpStatus.BAD_REQUEST,
+    //   );
     //check email exist
     const userWithEmailExist = await this.userRepository.findOne({
       where: {

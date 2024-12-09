@@ -1,7 +1,7 @@
 export const config = {
   db: {
     type: process.env.DB_TYPE || 'postgres',
-    synchronize: false,
+    synchronize: true,
     logging: true,
     host: process.env.DB_HOST || '127.0.0.1',
     port: process.env.DB_PORT || 5432,

@@ -153,7 +153,7 @@ export class AdvertisementBannerService {
         ],
       );
       // Transform raw results to DTO
-      
+      console.log(result)
       const data: AdvertisementBannerFilterOutput[] = result.map((item: any) =>
         plainToInstance(AdvertisementBannerFilterOutput, item, {
           excludeExtraneousValues: true,

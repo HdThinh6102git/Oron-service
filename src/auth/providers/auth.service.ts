@@ -28,7 +28,7 @@ import { MailService } from '../../shared/providers';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BaseApiResponse } from '../../shared/dtos';
-import { isValidEmail, isValidPhone, makeId } from '../../shared/utils/utils';
+import { isValidEmail, makeId } from '../../shared/utils/utils';
 import { Verification } from '#entity/user/verification.entity';
 
 @Injectable()
@@ -88,17 +88,18 @@ export class AuthService {
       );
     }
     //check valid phone number
-    if (!isValidPhone(data.phoneNumber)) {
-      throw new HttpException(
-        {
-          error: true,
-          data: null,
-          message: MESSAGES.WRONG_PHONE_NUMBER_FORMAT,
-          code: 1,
-        },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+
+    // if (!isValidPhone(data.phoneNumber)) {
+    //   throw new HttpException(
+    //     {
+    //       error: true,
+    //       data: null,
+    //       message: MESSAGES.WRONG_PHONE_NUMBER_FORMAT,
+    //       code: 1,
+    //     },
+    //     HttpStatus.BAD_REQUEST,
+    //   );
+    // }
     //create new user
     const createdUser = await this.userService.create(data);
     //convert to user output information

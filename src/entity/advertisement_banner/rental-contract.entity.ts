@@ -41,13 +41,15 @@ import {
     })
     bannerRid: string;
   
-    @Column('date', {
+    @Column({
+      type: 'timestamp',
       nullable: true,
       name: 'start_date',
     })
     startDate: Date;
   
-    @Column('date', {
+    @Column( {
+      type: 'timestamp',
       nullable: true,
       name: 'end_date',
     })

@@ -1,56 +1,37 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class RegisterInput {
-  @ApiProperty()
   @MaxLength(255)
   @IsString()
   @IsNotEmpty()
   username: string;
 
-  @ApiProperty()
   @MaxLength(255)
   @IsString()
   @IsNotEmpty()
   @MinLength(8)
   password: string;
 
-  @ApiProperty()
   @MaxLength(255)
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty()
-  @MaxLength(255)
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   province: string;
 
-  @ApiProperty()
-  @MaxLength(255)
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   district: string;
 
-  @ApiProperty()
-  @MaxLength(255)
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   ward: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   specificAddress: string;
 
-  @ApiProperty()
-  @MaxLength(255)
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   phoneNumber: string;
 
-  @ApiProperty()
   @MaxLength(255)
   @IsString()
   @IsNotEmpty()

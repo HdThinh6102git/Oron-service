@@ -170,7 +170,7 @@ export class GoogleDriveService {
           const response = await this.driveClient.files.create({
             requestBody: fileMetadata,
             media,
-            fields: 'id, name, thumbnailLink',
+            fields: 'id, name,  webViewLink, webContentLink, thumbnailLink',
           });
           if(response.data.id){
             await this.setFilePermissions(response.data.id);
