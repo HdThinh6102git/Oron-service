@@ -12,9 +12,9 @@ import {
   ReviewFilter,
   ReviewOutput,
   UpdateReviewInput,
-} from '../../dtos';
-import { BaseApiResponse, BasePaginationResponse } from '../../../shared/dtos';
-import { MESSAGES } from '../../../shared/constants';
+} from '@modules/user/dtos';
+import { BaseApiResponse, BasePaginationResponse } from '@modules/shared/dtos';
+import { MESSAGES } from '@modules/shared/constants';
 import { User } from '#entity/user/user.entity';
 import {
   POST_REGISTRATION_STATUS,
@@ -22,10 +22,12 @@ import {
 } from '#entity/post-registration.entity';
 import { Post } from '#entity/post/post.entity';
 import { plainToClass, plainToInstance } from 'class-transformer';
-
+import { FileService } from '@modules/shared/providers';
+import { RELATED_TYPE } from '@modules/entity';
 @Injectable()
 export class ReviewService {
   constructor(
+    private fileService: FileService,
     @InjectRepository(Review)
     private reviewRepo: Repository<Review>,
     @InjectRepository(User)
@@ -105,6 +107,11 @@ export class ReviewService {
     const reviewOutput = plainToClass(ReviewOutput, review, {
       excludeExtraneousValues: true,
     });
+    //get user profile picture 
+    const imageProfileObject = await this.fileService.getRelatedFile(userId, RELATED_TYPE.USER_PROFILE);
+    if(imageProfileObject){
+      reviewOutput.user.profilePic = imageProfileObject;
+    }
     return {
       error: false,
       data: reviewOutput,
@@ -149,6 +156,11 @@ export class ReviewService {
     const reviewOutput = plainToClass(ReviewOutput, updatedReview, {
       excludeExtraneousValues: true,
     });
+    //get user profile picture 
+    const imageProfileObject = await this.fileService.getRelatedFile(reviewOutput.user.id, RELATED_TYPE.USER_PROFILE);
+    if(imageProfileObject){
+      reviewOutput.user.profilePic = imageProfileObject;
+    }
     return {
       error: false,
       data: reviewOutput,
@@ -237,6 +249,13 @@ export class ReviewService {
     const reviewsOutput = plainToInstance(ReviewOutput, reviews, {
       excludeExtraneousValues: true,
     });
+    for (const review of reviewsOutput) {
+      //get user profile pic 
+      const imageProfileObject = await this.fileService.getRelatedFile(review.user.id, RELATED_TYPE.USER_PROFILE);
+      if(imageProfileObject){
+        review.user.profilePic = imageProfileObject;
+      }
+    }
     return {
       listData: reviewsOutput,
       total: count,
