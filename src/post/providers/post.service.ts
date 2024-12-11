@@ -11,8 +11,8 @@ import {
   Post,
   POST_STATUS,
 } from '#entity/post/post.entity';
-import { BaseApiResponse, BasePaginationResponse, FileOutput } from '../../shared/dtos';
-import { MESSAGES } from '../../shared/constants';
+import { BaseApiResponse, BasePaginationResponse,} from '@modules/shared/dtos';
+import { MESSAGES } from '@modules/shared/constants';
 import { plainToClass, plainToInstance } from 'class-transformer';
 import {
   CreatePostInput,
@@ -20,7 +20,7 @@ import {
   PostOutput,
   SavedPostOutput,
   UpdatePostInput,
-} from '../dtos';
+} from '@modules/post/dtos';
 import { isEmpty } from '@nestjs/common/utils/shared.utils';
 import { User } from '#entity/user/user.entity';
 import { Category } from '#entity/post/category.entity';
@@ -30,15 +30,16 @@ import { Ward } from '#entity/user/address/ward.entity';
 import { Comment } from '#entity/comment.entity';
 import { Reaction } from '#entity/reaction.entity';
 import { SavedPost } from '#entity/post/saved-post.entity';
-import { SavedPostFilter } from '../dtos/saved-post-filter.dto';
+import { SavedPostFilter } from '@modules/post/dtos/saved-post-filter.dto';
 import {
   POST_REGISTRATION_STATUS,
   PostRegistration,
 } from '#entity/post-registration.entity';
-import { ReactionOutput, UserOutputDto } from '../../user/dtos';
+import { ReactionOutput, UserOutputDto } from '@modules/user/dtos';
 import { Review } from '#entity/review.entity';
 import { UserConnection } from '#entity/user/user-connection.entity';
-import { FileRelatedMorph, File } from '#entity/file';
+import { RELATED_TYPE } from '#entity/file';
+import { FileService } from '@modules/shared/providers';
 
 @Injectable()
 export class PostService {
@@ -67,10 +68,7 @@ export class PostService {
     private reviewRepo: Repository<Review>,
     @InjectRepository(UserConnection)
     private userConnectionRepo: Repository<UserConnection>,
-    @InjectRepository(File)
-    private fileRepo: Repository<File>,
-    @InjectRepository(FileRelatedMorph)
-    private fileRelatedMorphRepo: Repository<FileRelatedMorph>,
+    private fileService: FileService,
   ) {}
   public async createNewPost(
     input: CreatePostInput,
@@ -369,7 +367,7 @@ export class PostService {
       },
       relations: ['user', 'category'],
     });
-    console.log(posts)
+    
     const count = await this.postRepo.count({
       where: wheres,
       order: {
@@ -428,30 +426,11 @@ export class PostService {
       postsOutput[i].currentUserReaction = currentUserReactionOutput;
       postsOutput[i].totalComments = totalComments;
       postsOutput[i].totalReactions = totalReactions;
-      //Get fileRid related file data
-      const fileRelatedMorphs = await this.fileRelatedMorphRepo.find({
-        where: {
-          relatedRid: postsOutput[i].id,
-          sysFlag: '1'
-        },
-      });
-      // Extract file IDs
-      const fileRids = fileRelatedMorphs.map((morph) => morph.fileRid);
-      // Fetch all files in one query
-      const files = await this.fileRepo.find({
-        where: {
-          id: In(fileRids),
-          sysFlag: '1',
-        },
-      });
-      // Get files url 
-      const imageArray = files.map((file) =>
-        plainToInstance(FileOutput, {
-          url: file.url,
-          alternativeText: file.alternativeText,
-        }),
-      );
+      
+      //get image
+      const imageArray = await this.fileService.getRelatedFileArray(postsOutput[i].id, RELATED_TYPE.POST_IMAGE);
       postsOutput[i].image = imageArray;
+  
     }
     return {
       listData: postsOutput,
@@ -513,29 +492,6 @@ export class PostService {
         user: { id: userId },
       },
     });
-    //Get fileRid related file data
-    const fileRelatedMorphs = await this.fileRelatedMorphRepo.find({
-      where: {
-        relatedRid: postId,
-        sysFlag: '1'
-      },
-    });
-    // Extract file IDs
-    const fileRids = fileRelatedMorphs.map((morph) => morph.fileRid);
-    // Fetch all files in one query
-    const files = await this.fileRepo.find({
-      where: {
-        id: In(fileRids),
-        sysFlag: '1',
-      },
-    });
-    // Get files
-    const imageArray = files.map((file) =>
-      plainToInstance(FileOutput, {
-        url: file.url,
-        alternativeText: file.alternativeText,
-      }),
-    );
     
     const currentUserReactionOutput = plainToInstance(
       ReactionOutput,
@@ -552,6 +508,8 @@ export class PostService {
     postOutput.currentUserReaction = currentUserReactionOutput;
     postOutput.totalComments = totalComments;
     postOutput.totalReactions = totalReactions;
+    //get image
+    const imageArray = await this.fileService.getRelatedFileArray(postOutput.id, RELATED_TYPE.POST_IMAGE);
     postOutput.image = imageArray;
     return {
       error: false,

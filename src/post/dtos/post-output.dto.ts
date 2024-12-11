@@ -1,7 +1,7 @@
 import { Expose, Type } from 'class-transformer';
-import { ReactionOutput, UserOutputDto } from '../../user/dtos';
-import { CategoryOutput } from './category';
-import { FileOutput } from 'src/shared/dtos';
+import { ReactionOutput, UserOutputDto } from '@modules/user/dtos';
+import { CategoryOutput } from '@modules/post/dtos/category';
+import { FileOutput } from '@modules/shared/dtos';
 
 export class PostOutput {
   @Expose()
@@ -11,7 +11,7 @@ export class PostOutput {
   public description: string;
 
   @Expose()
-  public image: FileOutput[];
+  public image: FileOutput[] | null;
 
   @Expose()
   @Type(() => Number)

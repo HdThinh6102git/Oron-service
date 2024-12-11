@@ -1,8 +1,8 @@
 import { FileRelatedMorph, File } from "#entity/file";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { CreateFileInput, CreateFileRelatedMorphInput, FileOutput} from "../dtos";
+import { In, Repository } from "typeorm";
+import { CreateFileInput, CreateFileRelatedMorphInput, FileOutput} from "@modules/shared/dtos";
 import { v4 as uuidv4 } from 'uuid';
 import { plainToInstance } from "class-transformer";
 
@@ -74,4 +74,36 @@ export class FileService{
     return fileObject;
   }
 
+  public async getRelatedFileArray(
+    realtedRid: string,
+    relatedType: string,
+  ): Promise<FileOutput[] | null> {
+    //Get fileRid related file data
+    const fileRelatedMorphs = await this.fileRelatedMorphRepo.find({
+      where: {
+        relatedRid: realtedRid,
+        relatedType: relatedType,
+        sysFlag: '1'
+      },
+    });
+    // Extract file IDs
+    const fileRids = fileRelatedMorphs.map((morph) => morph.fileRid);
+    // Fetch all files in one query
+    const files = await this.fileRepo.find({
+      where: {
+        id: In(fileRids),
+        sysFlag: '1',
+      },
+    });
+    let fileArray = [];
+    // Get files url 
+    fileArray = files.map((file) =>
+      plainToInstance(FileOutput, {
+        url: file.url,
+        alternativeText: file.alternativeText,
+      }),
+    );
+    
+    return fileArray;
+  }
 }

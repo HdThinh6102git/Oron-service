@@ -16,6 +16,7 @@ import { PostRegistration } from '#entity/post-registration.entity';
 import { Review } from '#entity/review.entity';
 import { UserConnection } from '#entity/user/user-connection.entity';
 import { FileRelatedMorph, File } from '#entity/file';
+import { FileService } from '@modules/shared/providers';
 @Module({
   imports: [
     TypeOrmModule.forFeature([
@@ -37,7 +38,7 @@ import { FileRelatedMorph, File } from '#entity/file';
     AuthModule,
   ],
   controllers: Object.values(controllers),
-  providers: Object.values(providers),
+  providers: [...Object.values(providers), FileService],
   exports: Object.values(providers),
 })
 export class PostModule {}

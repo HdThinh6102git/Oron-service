@@ -4,6 +4,7 @@
     "paths": {
       // https://docs.nestjs.com/cli/scripts#build
       // https://nodejs.org/api/packages.html#imports
+      "@modules/*": ["./src/*"],
       "#entity/*": ["./src/entity/*"],
     },
     "target": "ES2019",
