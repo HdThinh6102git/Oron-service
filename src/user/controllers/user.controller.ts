@@ -9,12 +9,12 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ReqContext, RequestContext } from '../../shared/request-context';
+import { ReqContext, RequestContext } from '@modules/shared/request-context';
 import {
   BaseApiResponse,
   BasePaginationResponse,
   TopUserPaginationResponse,
-} from '../../shared/dtos';
+} from '@modules/shared/dtos';
 import {
   ChangePasswordDto,
   FriendFilter,
@@ -25,9 +25,9 @@ import {
   UserFilter,
   UserOutputDto,
   UserProfileOutput,
-} from '../dtos';
-import { UserService } from '../providers';
-import { JwtAuthGuard, JwtCommonAuthGuard, JwtAdminAuthGuard } from '../../auth/guards';
+} from '@modules/user/dtos';
+import { UserService } from '@modules/user/providers';
+import { JwtAuthGuard, JwtCommonAuthGuard, JwtAdminAuthGuard } from '@modules/auth/guards';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}

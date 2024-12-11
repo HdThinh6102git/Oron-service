@@ -10,9 +10,9 @@ import { User, USER_STATUS } from '#entity/user/user.entity';
 import { ILike, In, IsNull, Not, Repository } from 'typeorm';
 import { Role } from '#entity/user/role.entity';
 import { ConfigService } from '@nestjs/config';
-import { RegisterInput } from '../../auth/dtos';
+import { RegisterInput } from '@modules/auth/dtos';
 import * as bcrypt from 'bcrypt';
-import { MESSAGES, TYPE_PIC } from '../../shared/constants';
+import { MESSAGES, TYPE_PIC } from '@modules/shared/constants';
 
 import {
   AdminOutput,
@@ -26,18 +26,18 @@ import {
   UserFilter,
   UserOutputDto,
   UserProfileOutput,
-} from '../dtos';
+} from '@modules/user/dtos';
 import { plainToClass, plainToInstance } from 'class-transformer';
 import { Province } from '#entity/user/address/province.entity';
 import { District } from '#entity/user/address/district.entity';
 import { Ward } from '#entity/user/address/ward.entity';
-import { ROLE } from '../../auth/constants';
+import { ROLE } from '@modules/auth/constants';
 import {
   BaseApiResponse,
   BasePaginationResponse,
   FileOutput,
   TopUserPaginationResponse,
-} from '../../shared/dtos';
+} from '@modules/shared/dtos';
 import {
   USER_CONNECTION_TYPE,
   UserConnection,
@@ -46,6 +46,7 @@ import { isEmpty } from '@nestjs/common/utils/shared.utils';
 import { Post } from '#entity/post/post.entity';
 import { Review } from '#entity/review.entity';
 import { File, FileRelatedMorph, RELATED_TYPE } from '#entity/file';
+import { FileService } from '@modules/shared/providers';
 @Injectable()
 export class UserService {
   constructor(
@@ -66,6 +67,7 @@ export class UserService {
     private fileRepo: Repository<File>,
     @InjectRepository(FileRelatedMorph)
     private fileRelatedMorphRepo: Repository<FileRelatedMorph>,
+    private fileService: FileService,
   ) {}
 
   public async create(data: RegisterInput): Promise<User> {
@@ -982,13 +984,25 @@ export class UserService {
         createdAt: 'DESC',
       },
     });
-    console.log(users)
+    
     const count = await this.userRepository.count({
       where: wheres,
     });
     const usersOutput = plainToInstance(UserOutputDto, users, {
       excludeExtraneousValues: true,
     });
+    for (let i = 0; i < usersOutput.length; i++) {
+      //get user profile pic 
+      const imageProfileObject = await this.fileService.getRelatedFile(usersOutput[i].id, RELATED_TYPE.USER_PROFILE);
+      if(imageProfileObject){
+        usersOutput[i].profilePic = imageProfileObject;
+      }
+      //get user background pic 
+      const imageBackgroundObject = await this.fileService.getRelatedFile(usersOutput[i].id, RELATED_TYPE.USER_BACKGROUND);
+      if(imageBackgroundObject){
+        usersOutput[i].backgroundPic = imageBackgroundObject;
+      }
+    }
     return {
       listData: usersOutput,
       total: count,

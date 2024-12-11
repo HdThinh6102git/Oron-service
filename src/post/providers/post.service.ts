@@ -719,6 +719,9 @@ export class PostService {
     const savedPostOutput = plainToClass(SavedPostOutput, savedPost, {
       excludeExtraneousValues: true,
     });
+    //get image
+    const imageArray = await this.fileService.getRelatedFileArray(savedPostOutput.id, RELATED_TYPE.POST_IMAGE);
+    savedPostOutput.post.image = imageArray;
     return {
       error: false,
       data: savedPostOutput,

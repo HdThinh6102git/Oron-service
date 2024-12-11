@@ -1,6 +1,6 @@
 import { Expose, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { PostOutput } from './post-output.dto';
+import { PostOutput } from '@modules/post/dtos/post-output.dto';
 
 export class SavedPostOutput {
   @Expose()
