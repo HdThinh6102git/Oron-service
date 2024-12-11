@@ -1,5 +1,6 @@
 import { Expose, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
+import { FileOutput } from '@modules/shared/dtos';
 
 export class TopUserOutput {
   @Expose()
@@ -12,7 +13,7 @@ export class TopUserOutput {
 
   @Expose()
   @ApiProperty()
-  public profilePic: string;
+  public profilePic: FileOutput | null;
 
   @Expose()
   @ApiProperty()

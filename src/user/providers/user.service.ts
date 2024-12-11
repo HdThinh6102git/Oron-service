@@ -35,7 +35,6 @@ import { ROLE } from '@modules/auth/constants';
 import {
   BaseApiResponse,
   BasePaginationResponse,
-  FileOutput,
   TopUserPaginationResponse,
 } from '@modules/shared/dtos';
 import {
@@ -45,7 +44,7 @@ import {
 import { isEmpty } from '@nestjs/common/utils/shared.utils';
 import { Post } from '#entity/post/post.entity';
 import { Review } from '#entity/review.entity';
-import { File, FileRelatedMorph, RELATED_TYPE } from '#entity/file';
+import { RELATED_TYPE } from '#entity/file';
 import { FileService } from '@modules/shared/providers';
 @Injectable()
 export class UserService {
@@ -63,10 +62,6 @@ export class UserService {
     private wardRepository: Repository<Ward>,
     @InjectRepository(UserConnection)
     private userConnectionRepo: Repository<UserConnection>,
-    @InjectRepository(File)
-    private fileRepo: Repository<File>,
-    @InjectRepository(FileRelatedMorph)
-    private fileRelatedMorphRepo: Repository<FileRelatedMorph>,
     private fileService: FileService,
   ) {}
 
@@ -339,65 +334,21 @@ export class UserService {
     });
     if (!user) throw new UnauthorizedException();
 
-    //Get fileRid related file data profile picture
-    const fileRelatedMorphProfile = await this.fileRelatedMorphRepo.findOne({
-      where: {
-        relatedRid: userId,
-        relatedType: RELATED_TYPE.USER_PROFILE,
-        sysFlag: '1'
-      },
-    });
-    let imageProfileObject = null;
-    if (fileRelatedMorphProfile) {
-      const file = await this.fileRepo.findOne({
-        where: {
-          id: fileRelatedMorphProfile.fileRid,
-          sysFlag: '1',
-        },
-      });
-  
-      // Map file to FileOutput if it exists
-      if (file) {
-        imageProfileObject = plainToInstance(FileOutput, {
-          url: file.url,
-          alternativeText: file.alternativeText,
-        });
-      }
-    }
-    //Get fileRid related file data background picture
-    const fileRelatedMorphBackground = await this.fileRelatedMorphRepo.findOne({
-      where: {
-        relatedRid: userId,
-        relatedType: RELATED_TYPE.USER_BACKGROUND,
-        sysFlag: '1'
-      },
-    });
-    let imageBackgroundObject = null;
-    if (fileRelatedMorphBackground) {
-      const file = await this.fileRepo.findOne({
-        where: {
-          id: fileRelatedMorphBackground.fileRid,
-          sysFlag: '1',
-        },
-      });
-  
-      // Map file to FileOutput if it exists
-      if (file) {
-        imageBackgroundObject = plainToInstance(FileOutput, {
-          url: file.url,
-          alternativeText: file.alternativeText,
-        });
-      }
-    }
+    
     const output = plainToClass(UserProfileOutput, user, {
       excludeExtraneousValues: true,
     });
+    //get user profile pic 
+    const imageProfileObject = await this.fileService.getRelatedFile(output.id, RELATED_TYPE.USER_PROFILE);
     if(imageProfileObject){
       output.profilePic = imageProfileObject;
     }
+    //get user background pic 
+    const imageBackgroundObject = await this.fileService.getRelatedFile(output.id, RELATED_TYPE.USER_BACKGROUND);
     if(imageBackgroundObject){
       output.backgroundPic = imageBackgroundObject;
     }
+    
     return {
       error: false,
       data: output,
@@ -534,6 +485,16 @@ export class UserService {
     const userOutput = plainToClass(UserProfileOutput, updatedUser, {
       excludeExtraneousValues: true,
     });
+    //get user profile pic 
+    const imageProfileObject = await this.fileService.getRelatedFile(userOutput.id, RELATED_TYPE.USER_PROFILE);
+    if(imageProfileObject){
+      userOutput.profilePic = imageProfileObject;
+    }
+    //get user background pic 
+    const imageBackgroundObject = await this.fileService.getRelatedFile(userOutput.id, RELATED_TYPE.USER_BACKGROUND);
+    if(imageBackgroundObject){
+      userOutput.backgroundPic = imageBackgroundObject;
+    }
     return {
       error: false,
       data: userOutput,
@@ -786,6 +747,18 @@ export class UserService {
     const friendsOutput = plainToInstance(UserOutputDto, friends, {
       excludeExtraneousValues: true,
     });
+    for (let i = 0; i < friendsOutput.length; i++) {
+      //get user profile pic 
+      const imageProfileObject = await this.fileService.getRelatedFile(friendsOutput[i].id, RELATED_TYPE.USER_PROFILE);
+      if(imageProfileObject){
+        friendsOutput[i].profilePic = imageProfileObject;
+      }
+      //get user background pic 
+      const imageBackgroundObject = await this.fileService.getRelatedFile(friendsOutput[i].id, RELATED_TYPE.USER_BACKGROUND);
+      if(imageBackgroundObject){
+        friendsOutput[i].backgroundPic = imageBackgroundObject;
+      }
+    }
     const count = await this.userRepository.count({
       where: {
         ...where,
@@ -865,6 +838,18 @@ export class UserService {
     const followersOutput = plainToInstance(UserOutputDto, followers, {
       excludeExtraneousValues: true,
     });
+    for (let i = 0; i < followersOutput.length; i++) {
+      //get user profile pic 
+      const imageProfileObject = await this.fileService.getRelatedFile(followersOutput[i].id, RELATED_TYPE.USER_PROFILE);
+      if(imageProfileObject){
+        followersOutput[i].profilePic = imageProfileObject;
+      }
+      //get user background pic 
+      const imageBackgroundObject = await this.fileService.getRelatedFile(followersOutput[i].id, RELATED_TYPE.USER_BACKGROUND);
+      if(imageBackgroundObject){
+        followersOutput[i].backgroundPic = imageBackgroundObject;
+      }
+    }
     const count = await this.userRepository.count({
       where: {
         ...where,
@@ -943,6 +928,18 @@ export class UserService {
     const followingsOutput = plainToInstance(UserOutputDto, followings, {
       excludeExtraneousValues: true,
     });
+    for (let i = 0; i < followingsOutput.length; i++) {
+      //get user profile pic 
+      const imageProfileObject = await this.fileService.getRelatedFile(followingsOutput[i].id, RELATED_TYPE.USER_PROFILE);
+      if(imageProfileObject){
+        followingsOutput[i].profilePic = imageProfileObject;
+      }
+      //get user background pic 
+      const imageBackgroundObject = await this.fileService.getRelatedFile(followingsOutput[i].id, RELATED_TYPE.USER_BACKGROUND);
+      if(imageBackgroundObject){
+        followingsOutput[i].backgroundPic = imageBackgroundObject;
+      }
+    }
     const count = await this.userRepository.count({
       where: {
         ...where,
@@ -1036,6 +1033,14 @@ export class UserService {
     const topUsersOutput = plainToInstance(TopUserOutput, topUsers, {
       excludeExtraneousValues: true,
     });
+    for (let i = 0; i < topUsersOutput.length; i++) {
+      //get user profile pic 
+      const imageProfileObject = await this.fileService.getRelatedFile(topUsersOutput[i].id, RELATED_TYPE.USER_PROFILE);
+      if(imageProfileObject){
+        topUsersOutput[i].profilePic = imageProfileObject;
+      }
+      
+    }
     return {
       listData: topUsersOutput,
     };
@@ -1114,6 +1119,16 @@ export class UserService {
     const userOutput = plainToClass(UserOutputDto, user, {
       excludeExtraneousValues: true,
     });
+    //get user profile pic 
+    const imageProfileObject = await this.fileService.getRelatedFile(userOutput.id, RELATED_TYPE.USER_PROFILE);
+    if(imageProfileObject){
+      userOutput.profilePic = imageProfileObject;
+    }
+    //get user background pic 
+    const imageBackgroundObject = await this.fileService.getRelatedFile(userOutput.id, RELATED_TYPE.USER_BACKGROUND);
+    if(imageBackgroundObject){
+      userOutput.backgroundPic = imageBackgroundObject;
+    }
     return {
       error: false,
       data: userOutput,
