@@ -1,5 +1,5 @@
 import { Expose, Type } from 'class-transformer';
-import { CommentUserOutputDto } from './comment-user-output.dto';
+import { CommentUserOutputDto } from '@modules/user/dtos/comment';
 
 export class CommentOutput {
   @Expose()

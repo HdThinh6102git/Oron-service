@@ -9,18 +9,18 @@ import { ILike, IsNull, Not, Repository } from 'typeorm';
 import { Comment, COMMENT_STATUS } from '#entity/comment.entity';
 import { Post } from '#entity/post/post.entity';
 import { User } from '#entity/user/user.entity';
-import { BaseApiResponse, BasePaginationResponse} from '../../../shared/dtos';
+import { BaseApiResponse, BasePaginationResponse} from '@modules/shared/dtos';
 import {
   CommentFilter,
   CommentOutput,
   CommentUserOutputDto,
   CreateCommentInput,
   UpdateCommentInput,
-} from '../../dtos';
-import { MESSAGES } from '../../../shared/constants';
+} from '@modules/user/dtos';
+import { MESSAGES } from '@modules/shared/constants';
 import { plainToClass, plainToInstance } from 'class-transformer';
 import { RELATED_TYPE } from '#entity/file';
-import { FileService } from 'src/shared/providers';
+import { FileService } from '@modules/shared/providers';
 
 @Injectable()
 export class CommentService {

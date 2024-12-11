@@ -405,8 +405,14 @@ export class PostService {
         const reviewer = plainToInstance(UserOutputDto, postReview.user, {
           excludeExtraneousValues: true,
         });
+        //get reviewer profile pic 
+        const imageProfileObject = await this.fileService.getRelatedFile(postReview.user.id, RELATED_TYPE.USER_PROFILE);
+        if(imageProfileObject){
+          reviewer.profilePic = imageProfileObject;
+        }
         postsOutput[i].reviewStar = postReview.numberStar;
         postsOutput[i].reviewer = reviewer;
+        
       } else {
         postsOutput[i].reviewStar = 0;
         postsOutput[i].reviewer = null;
@@ -430,6 +436,12 @@ export class PostService {
       //get image
       const imageArray = await this.fileService.getRelatedFileArray(postsOutput[i].id, RELATED_TYPE.POST_IMAGE);
       postsOutput[i].image = imageArray;
+
+      //get user profile pic 
+      const imageProfileObject = await this.fileService.getRelatedFile(postsOutput[i].user.id, RELATED_TYPE.USER_PROFILE);
+      if(imageProfileObject){
+        postsOutput[i].user.profilePic = imageProfileObject;
+      }
   
     }
     return {
@@ -511,6 +523,11 @@ export class PostService {
     //get image
     const imageArray = await this.fileService.getRelatedFileArray(postOutput.id, RELATED_TYPE.POST_IMAGE);
     postOutput.image = imageArray;
+    //get user profile pic 
+    const imageProfileObject = await this.fileService.getRelatedFile(postOutput.user.id, RELATED_TYPE.USER_PROFILE);
+    if(imageProfileObject){
+      postOutput.user.profilePic = imageProfileObject;
+    }
     return {
       error: false,
       data: postOutput,
@@ -790,6 +807,16 @@ export class PostService {
     const postsOutput = plainToInstance(PostOutput, posts, {
       excludeExtraneousValues: true,
     });
+    for (let i = 0; i < postsOutput.length; i++) {
+      //get image
+      const imageArray = await this.fileService.getRelatedFileArray(postsOutput[i].id, RELATED_TYPE.POST_IMAGE);
+      postsOutput[i].image = imageArray;
+      //get user profile pic 
+      const imageProfileObject = await this.fileService.getRelatedFile(postsOutput[i].user.id, RELATED_TYPE.USER_PROFILE);
+      if(imageProfileObject){
+        postsOutput[i].user.profilePic = imageProfileObject;
+      }
+    }
     return {
       listData: postsOutput,
       total: count,
