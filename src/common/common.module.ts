@@ -1,7 +1,7 @@
 import { Global, Module, NestModule } from '@nestjs/common';
 // MiddlewareConsumer, 
 // import { LoggerContextMiddleware } from './middleware';
-import * as providers from './providers';
+import * as providers from '@modules/common/providers';
 
 const services = Object.values(providers);
 
