@@ -1,10 +1,10 @@
 import { CONTRACT_STATUS_CD, RentalContract } from "#entity/advertisement_banner";
 import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { BaseApiResponseWithoutData } from "src/shared/dtos";
+import { BaseApiResponseWithoutData } from "@modules/shared/dtos";
 import { Repository } from "typeorm";
-import { UpdateRentalContractInput } from "../dtos";
-import { MESSAGES } from "src/shared/constants";
+import { UpdateRentalContractInput } from "@modules/advertisment-banner/dtos";
+import { MESSAGES } from "@modules/shared/constants";
 
 @Injectable()
 export class RentalContractService {

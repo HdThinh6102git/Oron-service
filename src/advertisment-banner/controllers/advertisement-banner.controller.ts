@@ -1,10 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from "@nestjs/common";
-import { AdvertisementBannerService } from "../providers";
-import { JwtAuthGuard, JwtCommonAuthGuard } from "src/auth/guards";
-import { ReqContext, RequestContext } from "src/shared/request-context";
-import { BaseApiResponse, BaseApiResponseWithoutData, BasePaginationResponse, } from "src/shared/dtos";
-import { ActiveAdvertisementBannerFilter, ActiveAdvertisementBannerOutput, AdvertisementBannerFilter,  AdvertisementBannerFilterOutput,  AdvertisementBannerOutput, CreateAdvertisementBannerRequestInput, UpdateAdvertisementBannerInput } from "../dtos";
-import { ROLE } from "src/auth/constants";
+import { AdvertisementBannerService } from "@modules/advertisment-banner/providers";
+import { JwtAuthGuard, JwtCommonAuthGuard } from "@modules/auth/guards";
+import { ReqContext, RequestContext } from "@modules/shared/request-context";
+import { BaseApiResponse, BaseApiResponseWithoutData, BasePaginationResponse, } from "@modules/shared/dtos";
+import { ActiveAdvertisementBannerFilter, ActiveAdvertisementBannerOutput, AdvertisementBannerFilter,  AdvertisementBannerFilterOutput,  AdvertisementBannerOutput, CreateAdvertisementBannerRequestInput, UpdateAdvertisementBannerInput } from "@modules/advertisment-banner/dtos";
+import { ROLE } from "@modules/auth/constants";
 
 
 @Controller('advertisement-banner')

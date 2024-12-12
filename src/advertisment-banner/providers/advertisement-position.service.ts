@@ -3,9 +3,9 @@ import { AdvertismentPosition } from "#entity/advertisement_banner/advertisement
 import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DataSource, ILike, In, Not, Repository } from "typeorm";
-import { AdvertisementPositionOutput, CreateAdvertisementPositionInput, PositionFilter, UpdateAdvertisementPositionInput, UserPositionFilter, UserPositionOutput } from "../dtos";
-import { BaseApiResponse, BasePaginationResponse } from "src/shared/dtos";
-import { MESSAGES } from "src/shared/constants";
+import { AdvertisementPositionOutput, CreateAdvertisementPositionInput, PositionFilter, UpdateAdvertisementPositionInput, UserPositionFilter, UserPositionOutput } from "@modules/advertisment-banner/dtos";
+import { BaseApiResponse, BasePaginationResponse } from "@modules/shared/dtos";
+import { MESSAGES } from "@modules/shared/constants";
 import { plainToClass, plainToInstance } from "class-transformer";
 import { isEmpty } from "@nestjs/common/utils/shared.utils";
 

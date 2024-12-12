@@ -1,6 +1,6 @@
 import { POSITION_STATUS_CD } from "#entity/advertisement_banner/advertisement-position.entity";
 import { IsEnum, IsOptional } from "class-validator";
-import { PaginationParamsDto } from "src/shared/dtos";
+import { PaginationParamsDto } from "@modules/shared/dtos";
 
 export class PositionFilter extends PaginationParamsDto {
 

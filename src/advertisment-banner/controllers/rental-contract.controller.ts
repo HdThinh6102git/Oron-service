@@ -1,9 +1,9 @@
 import { Body, Controller, Param, Patch, UseGuards } from "@nestjs/common";
-import { RentalContractService } from "../providers";
-import { JwtAdminAuthGuard } from "src/auth/guards";
-import { ReqContext, RequestContext } from "src/shared/request-context";
-import { UpdateRentalContractInput } from "../dtos";
-import { BaseApiResponseWithoutData } from "src/shared/dtos";
+import { RentalContractService } from "@modules/advertisment-banner/providers";
+import { JwtAdminAuthGuard } from "@modules/auth/guards";
+import { ReqContext, RequestContext } from "@modules/shared/request-context";
+import { UpdateRentalContractInput } from "@modules/advertisment-banner/dtos";
+import { BaseApiResponseWithoutData } from "@modules/shared/dtos";
 
 
 @Controller('rental-contract')

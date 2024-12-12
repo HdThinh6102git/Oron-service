@@ -1,8 +1,8 @@
 import { Controller, Get, Param, Query, UseGuards } from "@nestjs/common";
-import { ClientService } from "../providers";
-import { JwtAdminAuthGuard } from "src/auth/guards";
-import { BaseApiResponse, BasePaginationResponse } from "src/shared/dtos";
-import { ClientFilter, ClientOutput } from "../dtos";
+import { ClientService } from "@modules/advertisment-banner/providers";
+import { JwtAdminAuthGuard } from "@modules/auth/guards";
+import { BaseApiResponse, BasePaginationResponse } from "@modules/shared/dtos";
+import { ClientFilter, ClientOutput } from "@modules/advertisment-banner/dtos";
 
 @Controller('client')
 export class ClientController {

@@ -1,7 +1,7 @@
 import { IsNotEmpty } from "class-validator";
-import { CreateAdvertisementBannerInput } from "./create-advertisement-banner-input.dto";
-import { CreateClientInput } from "./create-client-input.dto";
-import { CreateRentalContractInput } from "./create-rental-contract.dto";
+import { CreateAdvertisementBannerInput } from "@modules/advertisment-banner/dtos/create-advertisement-banner-input.dto"; 
+import { CreateClientInput } from "@modules/advertisment-banner/dtos/create-client-input.dto";
+import { CreateRentalContractInput } from "@modules/advertisment-banner/dtos/create-rental-contract.dto";
 
 export class CreateAdvertisementBannerRequestInput {
 

@@ -1,5 +1,5 @@
 import { IsOptional } from "class-validator";
-import { PaginationParamsDto } from "src/shared/dtos";
+import { PaginationParamsDto } from "@modules/shared/dtos";
 
 export class ClientFilter extends PaginationParamsDto {
 

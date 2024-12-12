@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from "@nestjs/common";
-import { AdvertisementPositionService } from "../providers";
-import { JwtAdminAuthGuard, JwtAuthGuard, JwtCommonAuthGuard } from "src/auth/guards";
-import { BaseApiResponse, BasePaginationResponse } from "src/shared/dtos";
-import { AdvertisementPositionOutput, CreateAdvertisementPositionInput, PositionFilter, UpdateAdvertisementPositionInput, UserPositionFilter, UserPositionOutput } from "../dtos";
-import { ReqContext, RequestContext } from "src/shared/request-context";
+import { AdvertisementPositionService } from "@modules/advertisment-banner/providers";
+import { JwtAdminAuthGuard, JwtAuthGuard, JwtCommonAuthGuard } from "@modules/auth/guards";
+import { BaseApiResponse, BasePaginationResponse } from "@modules/shared/dtos";
+import { AdvertisementPositionOutput, CreateAdvertisementPositionInput, PositionFilter, UpdateAdvertisementPositionInput, UserPositionFilter, UserPositionOutput } from "@modules/advertisment-banner/dtos";
+import { ReqContext, RequestContext } from "@modules/shared/request-context";
 
 @Controller('advertisement-position')
 export class AdvertisementPositionController {

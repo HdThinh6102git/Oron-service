@@ -2,10 +2,10 @@ import { Client} from "#entity/advertisement_banner";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DataSource, Repository} from "typeorm";
-import { ClientFilter, ClientOutput } from "../dtos";
-import { BaseApiResponse, BasePaginationResponse } from "src/shared/dtos";
+import { ClientFilter, ClientOutput } from "@modules/advertisment-banner/dtos";
+import { BaseApiResponse, BasePaginationResponse } from "@modules/shared/dtos";
 import { plainToClass, plainToInstance } from "class-transformer";
-import { MESSAGES } from "src/shared/constants";
+import { MESSAGES } from "@modules/shared/constants";
 
 @Injectable()
 export class ClientService {

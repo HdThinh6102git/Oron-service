@@ -1,6 +1,6 @@
 import { CONTRACT_STATUS_CD } from "#entity/advertisement_banner";
 import { IsEnum, IsOptional } from "class-validator";
-import { PaginationParamsDto } from "src/shared/dtos";
+import { PaginationParamsDto } from "@modules/shared/dtos";
 
 export class AdvertisementBannerFilter extends PaginationParamsDto {
 
