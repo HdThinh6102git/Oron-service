@@ -1,3 +1,4 @@
+import { FileOutput } from "@modules/shared/dtos";
 import { Expose, Type } from "class-transformer";
 
 export class AdvertisementBannerFilterOutput {
@@ -9,10 +10,16 @@ export class AdvertisementBannerFilterOutput {
     public bannerName: string;
 
     @Expose()
+    public bannerId: string;
+
+    @Expose()
     public positionName: string;
 
     @Expose()
     public positionDimention: string;
+
+    @Expose()
+    public image: FileOutput | null;
 
     @Expose()
     @Type(() => Date)

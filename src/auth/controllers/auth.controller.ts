@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 
-import { AuthService } from '../providers';
+import { AuthService } from '@modules/auth/providers';
 import {
   AuthRegisterOutput,
   AuthTokenOutput,
@@ -8,10 +8,10 @@ import {
   RegisterInput,
   ResendMailDto,
   VerificationUser,
-} from '../dtos';
-import { BaseApiResponse } from '../../shared/dtos';
-import { UserProfileOutput } from '../../user/dtos';
-import { MailService } from '../../shared/providers';
+} from '@modules/auth/dtos';
+import { BaseApiResponse } from '@modules/shared/dtos';
+import { UserProfileOutput } from '@modules/user/dtos';
+import { MailService } from '@modules/shared/providers';
 
 @Controller('auth')
 export class AuthController {

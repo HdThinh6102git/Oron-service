@@ -13,12 +13,12 @@ import {
   CreateReactionInput,
   ReactionFilter,
   ReactionOutput,
-} from '../../dtos';
+} from '@modules/user/dtos';
 import {
   BaseApiResponse,
   ReactionPaginationResponse,
-} from '../../../shared/dtos';
-import { MESSAGES } from '../../../shared/constants';
+} from '@modules/shared/dtos';
+import { MESSAGES } from '@modules/shared/constants';
 import { plainToClass, plainToInstance } from 'class-transformer';
 
 @Injectable()

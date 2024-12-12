@@ -10,25 +10,25 @@ import {
   AuthTokenOutput,
   RegisterInput,
   VerificationUser,
-} from '../dtos';
+} from '@modules/auth/dtos';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from '../../user/providers';
+import { UserService } from '@modules/user/providers';
 import bcrypt from 'bcrypt';
-import { UserOutputDto, UserProfileOutput } from '../../user/dtos';
+import { UserOutputDto, UserProfileOutput } from '@modules/user/dtos';
 import { plainToClass, plainToInstance } from 'class-transformer';
-import { convertMilliseconds, generateCode } from '../../user/utils/user.utils';
+import { convertMilliseconds, generateCode } from '@modules/user/utils/user.utils';
 import {
   IS_VERIFIED,
   MESSAGES,
   VERIFICATION_TIME,
-} from '../../shared/constants';
+} from '@modules/shared/constants';
 import { User } from '#entity/user/user.entity';
-import { JwtPayload, Payload, RefreshTokenPayload } from '../auth.interface';
-import { MailService } from '../../shared/providers';
+import { JwtPayload, Payload, RefreshTokenPayload } from '@modules/auth/auth.interface';
+import { MailService } from '@modules/shared/providers';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { BaseApiResponse } from '../../shared/dtos';
-import { isValidEmail, makeId } from '../../shared/utils/utils';
+import { BaseApiResponse } from '@modules/shared/dtos';
+import { isValidEmail, makeId } from '@modules/shared/utils/utils';
 import { Verification } from '#entity/user/verification.entity';
 
 @Injectable()

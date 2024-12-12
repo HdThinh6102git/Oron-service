@@ -3,10 +3,12 @@ import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestj
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, DataSource } from "typeorm";
 import { ActiveAdvertisementBannerFilter, ActiveAdvertisementBannerOutput, AdvertisementBannerFilter, AdvertisementBannerFilterOutput, AdvertisementBannerOutput,  CreateAdvertisementBannerRequestInput, UpdateAdvertisementBannerInput } from "../dtos";
-import { BaseApiResponse, BaseApiResponseWithoutData, BasePaginationResponse, } from "src/shared/dtos";
-import { MESSAGES } from "src/shared/constants";
+import { BaseApiResponse, BaseApiResponseWithoutData, BasePaginationResponse, } from "@modules/shared/dtos";
+import { MESSAGES } from "@modules/shared/constants";
 import { differenceInDays } from 'date-fns'; // library support compute days difference
 import { plainToInstance } from "class-transformer";
+import { FileService } from "@modules/shared/providers";
+import { RELATED_TYPE } from "@modules/entity";
 
 
 @Injectable()
@@ -18,7 +20,8 @@ export class AdvertisementBannerService {
     private clientRepo: Repository<Client>,
     @InjectRepository(RentalContract)
     private rentalContractRepo: Repository<RentalContract>,
-    private readonly dataSource: DataSource // Inject DataSource to management transaction and call function from database
+    private readonly dataSource: DataSource, // Inject DataSource to management transaction and call function from database
+    private fileService: FileService
   ) {}
 
   public async createNewAdvertisementBanner(
@@ -114,7 +117,6 @@ export class AdvertisementBannerService {
         endDate: rentalContract.endDate,
         totalCost: rentalContract.totalCost,
       };
-
       return {
         error: false,
         data: bannerOutput,
@@ -153,13 +155,22 @@ export class AdvertisementBannerService {
         ],
       );
       // Transform raw results to DTO
-      console.log(result)
+      
       const data: AdvertisementBannerFilterOutput[] = result.map((item: any) =>
         plainToInstance(AdvertisementBannerFilterOutput, item, {
           excludeExtraneousValues: true,
         }),
       );
       
+      for (let i = 0; i < data.length; i++) {
+        //get banner image 
+        const imageObject = await this.fileService.getRelatedFile(data[i].bannerId, RELATED_TYPE.ADVERTISEMENT_BANNER);
+        if(imageObject){
+          data[i].image = imageObject;
+        }else{
+          data[i].image = null;
+        }
+      }
       return {
         listData: data,
         total: 1,
@@ -303,7 +314,15 @@ export class AdvertisementBannerService {
           excludeExtraneousValues: true,
         }),
       );
-      
+      for (let i = 0; i < data.length; i++) {
+        //get banner image 
+        const imageObject = await this.fileService.getRelatedFile(data[i].bannerId, RELATED_TYPE.ADVERTISEMENT_BANNER);
+        if(imageObject){
+          data[i].image = imageObject;
+        }else{
+          data[i].image = null;
+        }
+      }
       return {
         listData: data,
         total: total,
