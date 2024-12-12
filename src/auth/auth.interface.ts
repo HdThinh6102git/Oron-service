@@ -1,4 +1,4 @@
-import { RoleOutput } from './dtos';
+import { RoleOutput } from '@modules/auth/dtos';
 
 export interface JwtPayload {
   id: string;

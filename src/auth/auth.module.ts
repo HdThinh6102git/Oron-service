@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
-import { STRATEGY_JWT_AUTH } from './constants/strategy.constant';
-import { UserModule } from '../user';
+import { STRATEGY_JWT_AUTH } from '@modules/auth/constants/strategy.constant';
+import { UserModule } from '@modules/user';
 import { HttpModule } from '@nestjs/axios';
 import { JwtModule } from '@nestjs/jwt';
-import { SharedModule } from '../shared/shared.module';
-import * as providers from './providers';
-import * as controllers from './controllers';
+import { SharedModule } from '@modules/shared/shared.module';
+import * as providers from '@modules/auth/providers';
+import * as controllers from '@modules/auth/controllers';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '#entity/user/user.entity';
 import { Verification } from '#entity/user/verification.entity';

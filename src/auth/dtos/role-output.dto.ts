@@ -1,6 +1,6 @@
 import { Expose, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { PermissionOutput } from './permission-output.dto';
+import { PermissionOutput } from '@modules/auth/dtos/permission-output.dto';
 
 export class RoleOutput {
   @Expose()

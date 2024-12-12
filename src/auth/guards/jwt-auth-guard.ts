@@ -1,5 +1,5 @@
 import { AuthGuard } from '@nestjs/passport';
-import { ROLE, STRATEGY_JWT_AUTH } from '../constants';
+import { ROLE, STRATEGY_JWT_AUTH } from '@modules/auth/constants';
 import {
   CanActivate,
   ExecutionContext,

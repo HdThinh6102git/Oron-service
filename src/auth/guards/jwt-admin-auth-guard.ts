@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ROLE, STRATEGY_JWT_AUTH } from '../constants';
+import { ROLE, STRATEGY_JWT_AUTH } from '@modules/auth/constants';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';

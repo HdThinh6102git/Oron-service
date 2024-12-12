@@ -1,5 +1,5 @@
 import { Expose, Type } from 'class-transformer';
-import { UserOutputDto } from '../../user/dtos';
+import { UserOutputDto } from '@modules/user/dtos';
 
 export class AuthRegisterOutput {
   @Expose()
