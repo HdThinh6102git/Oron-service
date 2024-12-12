@@ -1,3 +1,4 @@
+import { FileOutput } from "@modules/shared/dtos";
 import { Expose } from "class-transformer";
 
 export class NotificationOutput {
@@ -21,4 +22,10 @@ export class NotificationOutput {
 
     @Expose()
     public createBy: string;
+
+    @Expose()
+    public creatorName: string | null;
+
+    @Expose()
+    public creatorProfilePic: FileOutput | null;
 }

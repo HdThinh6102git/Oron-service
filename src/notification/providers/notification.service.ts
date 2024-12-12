@@ -8,12 +8,17 @@ import { Injectable } from "@nestjs/common";
 import { NotificationOutput, PushNotificationInput } from "@modules/notification/dtos";
 import * as firebase from 'firebase-admin';
 import { MESSAGES } from "@modules/shared/constants";
+import { RELATED_TYPE, User } from "@modules/entity";
+import { FileService } from "@modules/shared/providers";
 
 @Injectable()
 export class NotificationService {
     constructor(
         @InjectRepository(Notification) private readonly notificationRepo: Repository<Notification>,
         @InjectRepository(FcmToken) private readonly fcmTokenRepo: Repository<FcmToken>,
+        @InjectRepository(User)
+        private userRepository: Repository<User>,
+        private fileService: FileService,
     ) {}
 
     public async getNotificationsByUserId(
@@ -40,6 +45,25 @@ export class NotificationService {
         const notificationsOutput = plainToInstance(NotificationOutput, notifications, {
             excludeExtraneousValues: true,
         });
+
+        
+        for (let i = 0; i < notificationsOutput.length; i++) {
+            const user = await this.userRepository.findOne({
+                where: { 
+                  id: notificationsOutput[i].createBy,
+                  sysFlag: '1' 
+                },
+            });
+            
+            if(user){
+                notificationsOutput[i].creatorName = user.name
+                const imageProfileObject = await this.fileService.getRelatedFile(notificationsOutput[i].createBy, RELATED_TYPE.USER_PROFILE);
+                if(imageProfileObject){
+                    notificationsOutput[i].creatorProfilePic = imageProfileObject;
+                }
+            }
+            
+        }
         return {
             listData: notificationsOutput,
             total: 1,
