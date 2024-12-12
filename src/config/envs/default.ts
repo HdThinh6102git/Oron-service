@@ -30,4 +30,5 @@ export const config = {
     expiresIn: '30d',
     refreshExpiresIn: '7d',
   },
+  // CLIENT_EMAIL: 'firebase-adminsdk-jpw76@oron-service.iam.gserviceaccount.com'
 };

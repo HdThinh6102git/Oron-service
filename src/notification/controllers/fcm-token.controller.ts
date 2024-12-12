@@ -1,9 +1,9 @@
 import { Body, Controller, Patch, Post, UseGuards } from "@nestjs/common";
-import { FcmTokenService } from "../providers";
-import { JwtAuthGuard } from "src/auth/guards";
-import { ReqContext, RequestContext } from "src/shared/request-context";
-import { BaseApiResponse, BaseApiResponseWithoutData } from "src/shared/dtos";
-import { CreateFcmTokenInput, FcmTokenOutput, UpdateFcmTokenInput } from "../dtos";
+import { FcmTokenService } from "@modules/notification/providers";
+import { JwtAuthGuard } from "@modules/auth/guards";
+import { ReqContext, RequestContext } from "@modules/shared/request-context";
+import { BaseApiResponse, BaseApiResponseWithoutData } from "@modules/shared/dtos";
+import { CreateFcmTokenInput, FcmTokenOutput, UpdateFcmTokenInput } from "@modules/notification/dtos";
 
 
 @Controller('fcm-token')

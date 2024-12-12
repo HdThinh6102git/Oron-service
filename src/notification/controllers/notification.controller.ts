@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Post, Query, UseGuards } from "@nestjs/common";
-import { NotificationService } from "../providers";
-import { BaseApiResponseWithoutData, BasePaginationResponse, PaginationParamsDto } from "src/shared/dtos";
-import { NotificationOutput, PushNotificationInput } from "../dtos";
-import { ReqContext, RequestContext } from "src/shared/request-context";
-import { JwtAuthGuard } from "src/auth/guards";
+import { NotificationService } from "@modules/notification/providers";
+import { BaseApiResponseWithoutData, BasePaginationResponse, PaginationParamsDto } from "@modules/shared/dtos";
+import { NotificationOutput, PushNotificationInput } from "@modules/notification/dtos";
+import { ReqContext, RequestContext } from "@modules/shared/request-context";
+import { JwtAuthGuard } from "@modules/auth/guards";
 
 @Controller('notification')
 export class NotificationController {

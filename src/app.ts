@@ -12,6 +12,7 @@ import type { NestExpressApplication } from '@nestjs/platform-express';
  * https://github.com/nestjs/nest/tree/master/sample
  */
 async function bootstrap(): Promise<string> {
+  
   const isProduction = process.env.NODE_ENV === 'production';
   
   // for http

@@ -2,10 +2,10 @@ import { FcmToken } from "#entity/notification";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { plainToInstance } from "class-transformer";
-import { MESSAGES } from "src/shared/constants";
-import { BaseApiResponse, BaseApiResponseWithoutData } from "src/shared/dtos";
+import { MESSAGES } from "@modules/shared/constants";
+import { BaseApiResponse, BaseApiResponseWithoutData } from "@modules/shared/dtos";
 import { Repository } from "typeorm";
-import { CreateFcmTokenInput, FcmTokenOutput, UpdateFcmTokenInput } from "../dtos";
+import { CreateFcmTokenInput, FcmTokenOutput, UpdateFcmTokenInput } from "@modules/notification/dtos";
 
 
 @Injectable()

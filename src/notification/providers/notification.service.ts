@@ -1,13 +1,13 @@
 import { FcmToken, Notification } from "#entity/notification";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { BaseApiResponseWithoutData, BasePaginationResponse, PaginationParamsDto } from "src/shared/dtos";
+import { BaseApiResponseWithoutData, BasePaginationResponse, PaginationParamsDto } from "@modules/shared/dtos";
 import { isEmpty } from "@nestjs/common/utils/shared.utils";
 import { plainToInstance } from "class-transformer";
 import { Injectable } from "@nestjs/common";
-import { NotificationOutput, PushNotificationInput } from "../dtos";
+import { NotificationOutput, PushNotificationInput } from "@modules/notification/dtos";
 import * as firebase from 'firebase-admin';
-import { MESSAGES } from "src/shared/constants";
+import { MESSAGES } from "@modules/shared/constants";
 
 @Injectable()
 export class NotificationService {
