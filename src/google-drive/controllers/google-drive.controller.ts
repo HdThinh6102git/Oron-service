@@ -77,7 +77,7 @@ export class GoogleDriveController {
         },
       }),
       fileFilter: (req, file, cb) => {
-        const allowedExtArr = ['.jpg', '.png', '.jpeg', '.JPG', '.PNG', '.JPEG'];
+        const allowedExtArr = ['.jpg', '.png', '.jpeg', '.JPG', '.PNG', '.JPEG','.webp', '.WEBP'];
         const ext = path.extname(file.originalname);
         const fileSize = parseInt(req.headers['content-length'], 10);
   
