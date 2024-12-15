@@ -7,8 +7,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from './user/user.entity';
-import { Report } from './report.entity';
+import { 
+  User,
+  Report
+ } from '@modules/entity';
 
 @Entity({ name: 'report_response', schema: process.env.DB_SCHEMA })
 export class ReportResponse {

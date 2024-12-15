@@ -9,19 +9,21 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Role } from './role.entity';
-import { Province } from './address/province.entity';
-import { District } from './address/district.entity';
-import { Ward } from './address/ward.entity';
-import { Post } from '../post/post.entity';
-import { Comment } from '../comment.entity';
-import { Review } from '../review.entity';
-import { Reaction } from '../reaction.entity';
-import { PostRegistration } from '../post-registration.entity';
-import { UserConnection } from './user-connection.entity';
-import { SavedPost } from '../post/saved-post.entity';
-import { Report } from '../report.entity';
-import { ReportResponse } from '../report-response.entity';
+import { 
+  Role,
+  Province,
+  District,
+  Ward,
+  Post,
+  Comment,
+  Review,
+  Reaction,
+  PostRegistration,
+  UserConnection,
+  SavedPost,
+  Report,
+  ReportResponse 
+} from '@modules/entity';
 
 export enum USER_STATUS {
   IN_ACTIVE = '0',

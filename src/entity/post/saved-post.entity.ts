@@ -5,8 +5,10 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '../user/user.entity';
-import { Post } from './post.entity';
+import { 
+  User, 
+  Post 
+} from '@modules/entity';
 
 @Entity({ name: 'saved_post', schema: process.env.DB_SCHEMA })
 export class SavedPost {

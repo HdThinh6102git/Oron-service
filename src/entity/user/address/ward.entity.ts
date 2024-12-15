@@ -7,7 +7,7 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from '../user.entity';
+import { User } from '@modules/entity';
 
 @Entity({ name: 'ward', schema: process.env.DB_SCHEMA })
 export class Ward {

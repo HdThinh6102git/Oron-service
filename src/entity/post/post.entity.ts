@@ -8,14 +8,18 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from '../user/user.entity';
-import { Category } from './category.entity';
-import { Comment } from '../comment.entity';
-import { Review } from '../review.entity';
-import { Reaction } from '../reaction.entity';
-import { PostRegistration } from '../post-registration.entity';
-import { SavedPost } from './saved-post.entity';
-import { Report } from '../report.entity';
+import { 
+  User, 
+  Category,
+  Comment,
+  Review,
+  Reaction,
+  PostRegistration,
+  SavedPost,
+  Report
+ } 
+  from '@modules/entity';
+
 export enum POST_STATUS {
   PRIVATE = 0,
   PUBLIC = 1,

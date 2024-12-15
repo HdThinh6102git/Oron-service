@@ -6,8 +6,11 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from './user/user.entity';
-import { Post } from './post/post.entity';
+import { 
+  User,
+  Post
+ } from '@modules/entity';
+
 export enum REACTION_TYPE {
   LIKE = 0,
   HEART = 1,

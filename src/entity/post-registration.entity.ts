@@ -7,8 +7,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Post } from './post/post.entity';
-import { User } from './user/user.entity';
+import { 
+  Post,
+  User 
+} from '@modules/entity';
+
 export enum POST_REGISTRATION_STATUS {
   WAITING_CONFIRMATION = 1,
   CANCELED = 0,

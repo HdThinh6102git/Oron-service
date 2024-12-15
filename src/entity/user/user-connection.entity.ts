@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from './user.entity';
+import { User } from '@modules/entity';
 
 export enum USER_CONNECTION_TYPE {
   FOLLOW = 0,

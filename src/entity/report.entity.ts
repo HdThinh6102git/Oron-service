@@ -7,9 +7,11 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from './user/user.entity';
-import { Post } from './post/post.entity';
-import { ReportResponse } from './report-response.entity';
+import { 
+  User,
+  Post,
+  ReportResponse
+ } from '@modules/entity';
 
 @Entity({ name: 'report', schema: process.env.DB_SCHEMA })
 export class Report {

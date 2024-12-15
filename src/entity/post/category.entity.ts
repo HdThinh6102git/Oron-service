@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Post } from './post.entity';
+import { Post } from '@modules/entity';
 
 export enum CATEGORY_STATUS {
   IN_ACTIVE = 0,

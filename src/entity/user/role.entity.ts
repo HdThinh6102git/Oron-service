@@ -8,8 +8,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Permission } from './permission.entity';
-import { User } from './user.entity';
+import { 
+  Permission,
+  User
+} 
+from '@modules/entity';
+
 
 export enum ROLE_STATUS {
   IN_ACTIVE = 'IN_ACTIVE',

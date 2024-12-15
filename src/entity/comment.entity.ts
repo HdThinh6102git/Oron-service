@@ -7,8 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Post } from './post/post.entity';
-import { User } from './user/user.entity';
+import { Post, User } from '@modules/entity';
 
 export enum COMMENT_STATUS {
   IN_ACTIVE = 0,
